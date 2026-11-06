@@ -1,0 +1,16 @@
+[
+  {
+    "extension": "D:\\experimen skripsi\\extension\\HeuriShield-URL17-XGBoost",
+    "feature_count": 17,
+    "threshold": 0.45,
+    "snapshot": "model_snapshot_xgboost-url18.json",
+    "passed": true
+  },
+  {
+    "extension": "D:\\experimen terakhir\\extension\\HeuriShield-URL20-XGBoost",
+    "feature_count": 20,
+    "threshold": 0.5,
+    "snapshot": "model_snapshot_xgboost-url20.json",
+    "passed": true
+  }
+]

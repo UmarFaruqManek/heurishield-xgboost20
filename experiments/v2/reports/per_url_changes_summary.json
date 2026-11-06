@@ -1,0 +1,72 @@
+{
+  "XGBoost": {
+    "legitimate": {
+      "previously_wrong_now_correct_at_05": 204,
+      "previously_correct_now_wrong_at_05": 33,
+      "previously_wrong_now_correct_cv_threshold": 86,
+      "previously_correct_now_wrong_cv_threshold": 103
+    },
+    "phishing": {
+      "previously_wrong_now_correct_at_05": 147,
+      "previously_correct_now_wrong_at_05": 66,
+      "previously_wrong_now_correct_cv_threshold": 160,
+      "previously_correct_now_wrong_cv_threshold": 20
+    }
+  },
+  "RandomForest": {
+    "legitimate": {
+      "previously_wrong_now_correct_at_05": 289,
+      "previously_correct_now_wrong_at_05": 15,
+      "previously_wrong_now_correct_cv_threshold": 167,
+      "previously_correct_now_wrong_cv_threshold": 97
+    },
+    "phishing": {
+      "previously_wrong_now_correct_at_05": 134,
+      "previously_correct_now_wrong_at_05": 97,
+      "previously_wrong_now_correct_cv_threshold": 156,
+      "previously_correct_now_wrong_cv_threshold": 58
+    }
+  },
+  "ExtraTrees": {
+    "legitimate": {
+      "previously_wrong_now_correct_at_05": 286,
+      "previously_correct_now_wrong_at_05": 8,
+      "previously_wrong_now_correct_cv_threshold": 99,
+      "previously_correct_now_wrong_cv_threshold": 85
+    },
+    "phishing": {
+      "previously_wrong_now_correct_at_05": 125,
+      "previously_correct_now_wrong_at_05": 93,
+      "previously_wrong_now_correct_cv_threshold": 152,
+      "previously_correct_now_wrong_cv_threshold": 33
+    }
+  },
+  "HistGradientBoosting": {
+    "legitimate": {
+      "previously_wrong_now_correct_at_05": 245,
+      "previously_correct_now_wrong_at_05": 30,
+      "previously_wrong_now_correct_cv_threshold": 86,
+      "previously_correct_now_wrong_cv_threshold": 117
+    },
+    "phishing": {
+      "previously_wrong_now_correct_at_05": 130,
+      "previously_correct_now_wrong_at_05": 50,
+      "previously_wrong_now_correct_cv_threshold": 170,
+      "previously_correct_now_wrong_cv_threshold": 14
+    }
+  },
+  "LogisticRegression": {
+    "legitimate": {
+      "previously_wrong_now_correct_at_05": 235,
+      "previously_correct_now_wrong_at_05": 26,
+      "previously_wrong_now_correct_cv_threshold": 62,
+      "previously_correct_now_wrong_cv_threshold": 212
+    },
+    "phishing": {
+      "previously_wrong_now_correct_at_05": 18,
+      "previously_correct_now_wrong_at_05": 107,
+      "previously_wrong_now_correct_cv_threshold": 68,
+      "previously_correct_now_wrong_cv_threshold": 67
+    }
+  }
+}

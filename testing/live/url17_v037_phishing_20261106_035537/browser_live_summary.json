@@ -1,0 +1,60 @@
+{
+  "generated_at": "2026-11-05T20:47:05.426182+00:00",
+  "mode": "chrome_extension_browser_live",
+  "input": "D:\\experimen terakhir\\data\\evaluation\\phishing_dual_url17_url20_06nov2026.txt",
+  "label": "phishing",
+  "expected_verdict": "DANGEROUS",
+  "total_urls": 300,
+  "evaluated": 118,
+  "correct": 96,
+  "incorrect": 22,
+  "no_analysis": 182,
+  "warning_page_observed": 0,
+  "analysis_status_counts": {
+    "completed": 118,
+    "error_or_challenge_page": 6,
+    "http_error": 137,
+    "no_valid_analysis": 37,
+    "unverified_http_status": 2
+  },
+  "response_category_counts": {
+    "access_challenge": 6,
+    "http_403_denied": 128,
+    "http_451_error": 2,
+    "http_503_error": 2,
+    "http_status_unobserved": 29,
+    "not_found": 8,
+    "page_loaded": 125
+  },
+  "no_analysis_reason_counts": {
+    "access_challenge": 6,
+    "http_403_denied": 128,
+    "http_451_error": 2,
+    "http_503_error": 2,
+    "http_status_unobserved": 29,
+    "model_analysis_missing_after_page_load": 6,
+    "not_found": 8,
+    "unverified_http_status": 1
+  },
+  "redirect_category_counts": {
+    "cross_host": 53,
+    "none": 171,
+    "same_host": 76
+  },
+  "http_error_codes": {
+    "403": 127,
+    "404": 6,
+    "451": 2,
+    "503": 2
+  },
+  "model_analysis_count": 118,
+  "brand_identity_status_counts": {
+    "ambiguous": 7,
+    "identified": 54,
+    "unknown": 57
+  },
+  "brand_identity_guard_count": 0,
+  "evaluation_definition": "Only completed model analyses with observed verdicts count toward accuracy; warning_page_observed is reported separately.",
+  "accuracy_on_evaluated_percent": 81.36,
+  "coverage_percent": 39.33
+}

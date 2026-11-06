@@ -1,0 +1,58 @@
+{
+  "input_file": "D:\\experimen terakhir\\data\\evaluation\\phishing_dual_url17_url20_06nov2026.txt",
+  "urls": 300,
+  "exact_duplicates_removed": 0,
+  "invalid_urls": [],
+  "exact_overlap": {
+    "url17_development": [
+      {
+        "url": "https://trustsenderbyfrt.vercel.app/",
+        "label": "phishing",
+        "split": "not_separated_in_this_file"
+      }
+    ],
+    "url20_training_and_test": [],
+    "historical_archive": [
+      {
+        "url": "https://sharemyhtml.com/p/rmDI-OSKFM",
+        "label": "phishing",
+        "split": "not_separated_in_this_file"
+      },
+      {
+        "url": "https://fkwz.lpicezo.cn/",
+        "label": "phishing",
+        "split": "not_separated_in_this_file"
+      },
+      {
+        "url": "http://2z2z32z.pages.dev/",
+        "label": "phishing",
+        "split": "not_separated_in_this_file"
+      },
+      {
+        "url": "https://atomic-en.uncody.site/",
+        "label": "phishing",
+        "split": "not_separated_in_this_file"
+      },
+      {
+        "url": "https://s.teamivz.com/p/bjr-wvl/KWPVGTSV",
+        "label": "phishing",
+        "split": "not_separated_in_this_file"
+      },
+      {
+        "url": "https://s4w.in/roblox-com-games-8304191830privateServerLinkCode=15920080078090842123854321699",
+        "label": "phishing",
+        "split": "not_separated_in_this_file"
+      },
+      {
+        "url": "http://sp10ct10-pavvek-biz-lurevi.pages.dev/",
+        "label": "phishing",
+        "split": "not_separated_in_this_file"
+      }
+    ]
+  },
+  "input_sha256": "6c64887cda3dd9953c73ed5480608ef02231705661ced5e63da79e44032b137f",
+  "label": "phishing",
+  "label_source": "user-supplied phishing list",
+  "public_urls_opened": 0,
+  "all_valid_urls_retained": true
+}

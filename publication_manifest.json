@@ -1,0 +1,2384 @@
+{
+  "source_project": "D:\\experimen terakhir",
+  "active_extension": "extension/HeuriShield-URL20-XGBoost",
+  "active_model_directory": "experiments/v2/models",
+  "version": "0.4.0",
+  "live_threshold": 0.5,
+  "training_cv_threshold": 0.41,
+  "history_rebuilt_from_redacted_evidence": [
+    {
+      "run": "url17_v037_legitimate_20261106_045736",
+      "records": 500
+    },
+    {
+      "run": "url17_v037_phishing_20261106_035537",
+      "records": 300
+    },
+    {
+      "run": "url20_v040_legitimate_20261106_045725",
+      "records": 500
+    },
+    {
+      "run": "url20_v040_phishing_20261106_035533",
+      "records": 300
+    }
+  ],
+  "file_provenance": [
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/assets/icons/icon128.png",
+      "source_sha256": "988c759006377c7d193977b3efc1911a25f12922d2ed96a5ed60dc8054cb7d3d",
+      "published_sha256": "988c759006377c7d193977b3efc1911a25f12922d2ed96a5ed60dc8054cb7d3d",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/assets/icons/icon16.png",
+      "source_sha256": "1ef8d58c4ac51de0a285bed5e878ca2e9208690c9af477da7195a5fb65200532",
+      "published_sha256": "1ef8d58c4ac51de0a285bed5e878ca2e9208690c9af477da7195a5fb65200532",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/assets/icons/icon32.png",
+      "source_sha256": "7317aba225765f1eba3640a19ad3a40c162688f86bc405dddb90adc7cc9223f2",
+      "published_sha256": "7317aba225765f1eba3640a19ad3a40c162688f86bc405dddb90adc7cc9223f2",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/assets/icons/icon48.png",
+      "source_sha256": "37d3cf4e5d1b0c7bb50a961b52ca455a3447de1a96c9faf6d67f9474af6d4e05",
+      "published_sha256": "37d3cf4e5d1b0c7bb50a961b52ca455a3447de1a96c9faf6d67f9474af6d4e05",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/manifest.json",
+      "source_sha256": "6978445136112643c10751b0119d604f36ab0d7222e5e27749f7e1eb20ab88b1",
+      "published_sha256": "6978445136112643c10751b0119d604f36ab0d7222e5e27749f7e1eb20ab88b1",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/package.json",
+      "source_sha256": "8fcd382fdfde2502895295a9172df34ff166e5f7e9540fa7bea480cd75b795ef",
+      "published_sha256": "8fcd382fdfde2502895295a9172df34ff166e5f7e9540fa7bea480cd75b795ef",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/README.md",
+      "source_sha256": "faa9e070a59556953fab8101d8d36fd2dacc2c59154a00582e0eb867d1a7f4df",
+      "published_sha256": "faa9e070a59556953fab8101d8d36fd2dacc2c59154a00582e0eb867d1a7f4df",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/analyzer/brand/brand-domain-api.js",
+      "source_sha256": "b313bf3d9f55efa39e0edca6882a27297ce300cb37cd12256bdb76a4c96981db",
+      "published_sha256": "b313bf3d9f55efa39e0edca6882a27297ce300cb37cd12256bdb76a4c96981db",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/analyzer/brand/brand-evidence.js",
+      "source_sha256": "dc5c55e70181ab7beab6d57053e404fecbbd78fabd129ad30dccf4b82fbfe00c",
+      "published_sha256": "dc5c55e70181ab7beab6d57053e404fecbbd78fabd129ad30dccf4b82fbfe00c",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/analyzer/brand/brand-features.js",
+      "source_sha256": "979bae2d540abfde5331cd58fd60eeb01f3a2c00eaeadd5e74435b31918b2a1c",
+      "published_sha256": "979bae2d540abfde5331cd58fd60eeb01f3a2c00eaeadd5e74435b31918b2a1c",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/analyzer/brand/brand-identity.js",
+      "source_sha256": "6502bc3210c0d89b5d2aac429e2be8a74edd5a8b801956a7b2b035259c26c2cc",
+      "published_sha256": "6502bc3210c0d89b5d2aac429e2be8a74edd5a8b801956a7b2b035259c26c2cc",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/analyzer/brand/brand-lookup-cache.js",
+      "source_sha256": "1d2eee333072959daf650122125f538f5ba389c8102451ade9be1c789daf4d62",
+      "published_sha256": "1d2eee333072959daf650122125f538f5ba389c8102451ade9be1c789daf4d62",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/analyzer/brand/domain-brand-search.js",
+      "source_sha256": "aa7b6e6c68854ad116f28933c41615be9a84b8f4c783dbd77a0415d77235d759",
+      "published_sha256": "aa7b6e6c68854ad116f28933c41615be9a84b8f4c783dbd77a0415d77235d759",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/analyzer/brand/parent-site-link.js",
+      "source_sha256": "7565ed66d95c2f6fc5a42b1997eb9800d8c3f1685331436eda30515bf1798a34",
+      "published_sha256": "7565ed66d95c2f6fc5a42b1997eb9800d8c3f1685331436eda30515bf1798a34",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/analyzer/correlation/decision-policy.js",
+      "source_sha256": "7627c6e7e6f3f1443e6b259c9db4c2255c884e27833ea6aa2d5f4aabaa8b141e",
+      "published_sha256": "7627c6e7e6f3f1443e6b259c9db4c2255c884e27833ea6aa2d5f4aabaa8b141e",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/analyzer/correlation/evidence-rules.js",
+      "source_sha256": "d296a506cfc1b615fbea2e886ca2588fe2396c895f05f9c92638c2db60701e4e",
+      "published_sha256": "d296a506cfc1b615fbea2e886ca2588fe2396c895f05f9c92638c2db60701e4e",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/analyzer/dom/dom-evidence.js",
+      "source_sha256": "17277b22983afabe9840a9ab3338b9419823537be5fbc756d1129cbcee0326ef",
+      "published_sha256": "17277b22983afabe9840a9ab3338b9419823537be5fbc756d1129cbcee0326ef",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/analyzer/dom/dom-features.js",
+      "source_sha256": "c7c54b9822f89cff6c49847e7549dc7a0b4cf95c42100f3680340ddaf4e2dfb8",
+      "published_sha256": "c7c54b9822f89cff6c49847e7549dc7a0b4cf95c42100f3680340ddaf4e2dfb8",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/analyzer/domain/domain-age-policy.js",
+      "source_sha256": "c16fe429ccad91a6d6cb346c75511d4de13da47702fb3a497301fc123d9d96b3",
+      "published_sha256": "c16fe429ccad91a6d6cb346c75511d4de13da47702fb3a497301fc123d9d96b3",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/analyzer/domain/rdap-features.js",
+      "source_sha256": "063ffbee4e821d8bdf6dfdc0b08ac413f5ea4b82451bacfeacd6fb51e781eb39",
+      "published_sha256": "063ffbee4e821d8bdf6dfdc0b08ac413f5ea4b82451bacfeacd6fb51e781eb39",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/analyzer/domain/url18-age.js",
+      "source_sha256": "14ac8f7b680dd22a9ca38941b14bcb27c911ae5fe86219b02025940459ff4028",
+      "published_sha256": "14ac8f7b680dd22a9ca38941b14bcb27c911ae5fe86219b02025940459ff4028",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/analyzer/feature-assembler.js",
+      "source_sha256": "6dd041d5a7e4cf24431fd338f9b4a091779a4d226f185a86f71957c63f35b5a3",
+      "published_sha256": "6dd041d5a7e4cf24431fd338f9b4a091779a4d226f185a86f71957c63f35b5a3",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/analyzer/README.md",
+      "source_sha256": "66e046562de9e883b73fd80b89dfc0d7046604da12b961799cd5c75b6469bb64",
+      "published_sha256": "66e046562de9e883b73fd80b89dfc0d7046604da12b961799cd5c75b6469bb64",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/analyzer/runtime-analysis.js",
+      "source_sha256": "23de032de4c3c33779d052c440f44c7524d2b1070311f39eb5f1cd8b2533066a",
+      "published_sha256": "23de032de4c3c33779d052c440f44c7524d2b1070311f39eb5f1cd8b2533066a",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/analyzer/sensitive-url-keywords.json",
+      "source_sha256": "9df45d3a77bfd052f9129ddb35d0b21779914cbe3c5a643e07e1b3485419a77f",
+      "published_sha256": "9df45d3a77bfd052f9129ddb35d0b21779914cbe3c5a643e07e1b3485419a77f",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/analyzer/url/url-features.js",
+      "source_sha256": "3263927cf58f0fc9df4da107b6906ff0bd77c1322961df0d8fb3c86efcd6adb6",
+      "published_sha256": "3263927cf58f0fc9df4da107b6906ff0bd77c1322961df0d8fb3c86efcd6adb6",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/analyzer/url/url18-features.js",
+      "source_sha256": "f3aa74ccf14a3df0a35bef1c68cac53fef6e3d8465a0e68449d085d7a9a7069c",
+      "published_sha256": "f3aa74ccf14a3df0a35bef1c68cac53fef6e3d8465a0e68449d085d7a9a7069c",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/analyzer/url/url20-features.js",
+      "source_sha256": "84593bd1ae7069e143714e8170f89f983b5b4d9d27b6b3de402aeab296b72646",
+      "published_sha256": "84593bd1ae7069e143714e8170f89f983b5b4d9d27b6b3de402aeab296b72646",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/background/service-worker.js",
+      "source_sha256": "f459d717de3d4c56946eecc7db55938c0c5312e5638801684e9eed883654e44d",
+      "published_sha256": "f459d717de3d4c56946eecc7db55938c0c5312e5638801684e9eed883654e44d",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/content/dom-brand-observer.js",
+      "source_sha256": "6a94cc1549c78845cb93e43a96b2535a1dcab1966cc8a0319a6f00244b7eab2d",
+      "published_sha256": "6a94cc1549c78845cb93e43a96b2535a1dcab1966cc8a0319a6f00244b7eab2d",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/content/page-dom-snapshot.bundle.js",
+      "source_sha256": "bad8cb46503ad017f8b4d757d821337a01780d89a091ff9234ec61b55140085f",
+      "published_sha256": "bad8cb46503ad017f8b4d757d821337a01780d89a091ff9234ec61b55140085f",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/content/page-dom-snapshot.js",
+      "source_sha256": "b69e9f8c3f864387e2142c420c75557d0265f60cd04089d1996cc29f25951443",
+      "published_sha256": "b69e9f8c3f864387e2142c420c75557d0265f60cd04089d1996cc29f25951443",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/content/score-overlay.js",
+      "source_sha256": "fb1003ccb71249af50f5375d22abead06b899e75bc717fac1134e4e51db3c5d6",
+      "published_sha256": "fb1003ccb71249af50f5375d22abead06b899e75bc717fac1134e4e51db3c5d6",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/dataset/dataset.css",
+      "source_sha256": "83028e7f1ea8899388a1eafaeb04adacb43d1fb6d4ab05a28c6f6b6679726908",
+      "published_sha256": "83028e7f1ea8899388a1eafaeb04adacb43d1fb6d4ab05a28c6f6b6679726908",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/dataset/dataset.html",
+      "source_sha256": "e01c17a9700517bf342c75ab3d41ce488a85bd4984e80709facdf4584e23db53",
+      "published_sha256": "e01c17a9700517bf342c75ab3d41ce488a85bd4984e80709facdf4584e23db53",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/dataset/dataset.js",
+      "source_sha256": "33bdc96ba978707f2e5af851f69e41d483058ac89c6c772cd7cf8b63fd2c9d37",
+      "published_sha256": "33bdc96ba978707f2e5af851f69e41d483058ac89c6c772cd7cf8b63fd2c9d37",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/history/history.css",
+      "source_sha256": "eaa04c71246dd10d3dfa44dbe3dce6418b955b9d26ada6221c71a09ec6352f7b",
+      "published_sha256": "eaa04c71246dd10d3dfa44dbe3dce6418b955b9d26ada6221c71a09ec6352f7b",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/history/history.html",
+      "source_sha256": "af09d6d4b19c8ec6e7119f3f0fdcc1d777cb105cf7d1d4b55d5100a62d9a7f04",
+      "published_sha256": "af09d6d4b19c8ec6e7119f3f0fdcc1d777cb105cf7d1d4b55d5100a62d9a7f04",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/history/history.js",
+      "source_sha256": "15ed94adac91cba0feb97f304afc2d6671b6618889d5dd19d67ff83b0d4eb747",
+      "published_sha256": "15ed94adac91cba0feb97f304afc2d6671b6618889d5dd19d67ff83b0d4eb747",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/model/domain-age-policy.json",
+      "source_sha256": "6cdac163a6381c934dc9d5048bd1c4b19a4a9657a9f1839414132688e9572b22",
+      "published_sha256": "6cdac163a6381c934dc9d5048bd1c4b19a4a9657a9f1839414132688e9572b22",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/model/feature-contract-20.json",
+      "source_sha256": "c0ba20d1e58e34278e7272cf7222b30f2037f81af42d4717deff0588a93d7cae",
+      "published_sha256": "c0ba20d1e58e34278e7272cf7222b30f2037f81af42d4717deff0588a93d7cae",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/model/iana_tld_2026-10-29.txt",
+      "source_sha256": "a9d4a0fd0db2e767971162bae66e491e8d1b3e9bedd42e856c97acd90030cc8f",
+      "published_sha256": "a9d4a0fd0db2e767971162bae66e491e8d1b3e9bedd42e856c97acd90030cc8f",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/model/public_suffix_list_2026-10-29.dat",
+      "source_sha256": "090ed3277ebd1831261dd2c56688f0f410b765bc140b325dc17ccb997dbfacbe",
+      "published_sha256": "090ed3277ebd1831261dd2c56688f0f410b765bc140b325dc17ccb997dbfacbe",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/model/suffix-reference.js",
+      "source_sha256": "e0ef70bcbb47be9e9cd6d1abf02c02773314e822e8631d2c1bb4f4d915289713",
+      "published_sha256": "e0ef70bcbb47be9e9cd6d1abf02c02773314e822e8631d2c1bb4f4d915289713",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/model/xgboost-engine.js",
+      "source_sha256": "a72cb8a1b50258d9415d7c87b9ed4a9e46b4861b60d6319d24f594e89048aaf4",
+      "published_sha256": "a72cb8a1b50258d9415d7c87b9ed4a9e46b4861b60d6319d24f594e89048aaf4",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/model/xgboost-url20.json",
+      "source_sha256": "c35813c72d2f5a196e423d7c9d18bd883206bbab0133111b29306d08a4c0c50e",
+      "published_sha256": "c35813c72d2f5a196e423d7c9d18bd883206bbab0133111b29306d08a4c0c50e",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/options/options.css",
+      "source_sha256": "112efae2a6ed66e59bcf831f521954274d0aa76e46bcc50f9045ce025e4d0926",
+      "published_sha256": "112efae2a6ed66e59bcf831f521954274d0aa76e46bcc50f9045ce025e4d0926",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/options/options.html",
+      "source_sha256": "2ed4712c6f1a6a2805eedda97db220857c50d07f02e0013c6919cabbc85c95b4",
+      "published_sha256": "2ed4712c6f1a6a2805eedda97db220857c50d07f02e0013c6919cabbc85c95b4",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/options/options.js",
+      "source_sha256": "14e177c6145f283b220caf4051b2b3f07714cf6528922cc4aec35d4fb3fa3ede",
+      "published_sha256": "14e177c6145f283b220caf4051b2b3f07714cf6528922cc4aec35d4fb3fa3ede",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/rule/feature-contract-60.json",
+      "source_sha256": "6cb8735fbb5a47ca2eeb7b79747a3d805627145ecef1b4bcbc81bb7003e2cc51",
+      "published_sha256": "6cb8735fbb5a47ca2eeb7b79747a3d805627145ecef1b4bcbc81bb7003e2cc51",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/rule/feature-name-map.json",
+      "source_sha256": "0fa951207ed34c950ad11ee28fdf4a3e269a8d315933df3af9b000c85562e2bb",
+      "published_sha256": "0fa951207ed34c950ad11ee28fdf4a3e269a8d315933df3af9b000c85562e2bb",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/rule/feature-names.js",
+      "source_sha256": "cd00a743f4a2a347d3d3084953e04b8980e264d1dba4f7c5e1bc764809254ebe",
+      "published_sha256": "cd00a743f4a2a347d3d3084953e04b8980e264d1dba4f7c5e1bc764809254ebe",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/rule/PARAMETER.md",
+      "source_sha256": "e4f329da88ca1051fe138bb5eaaa271ba267bb34c9f7c03da21d309bc75f816e",
+      "published_sha256": "e4f329da88ca1051fe138bb5eaaa271ba267bb34c9f7c03da21d309bc75f816e",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/rule/README.md",
+      "source_sha256": "cd173a29c2d75d5cdd2b2c11f34cb727fe3b6590487e86f9bc488c16c575335d",
+      "published_sha256": "cd173a29c2d75d5cdd2b2c11f34cb727fe3b6590487e86f9bc488c16c575335d",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/rule/rulefit-engine-60.json",
+      "source_sha256": "ba7a90a661976c73d4c2ad36f547c586aa48f5f5ddf4d0a05a7743e8f1a52abf",
+      "published_sha256": "ba7a90a661976c73d4c2ad36f547c586aa48f5f5ddf4d0a05a7743e8f1a52abf",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/rule/rulefit-engine.js",
+      "source_sha256": "3d3b925f28a2f90bd90840dd08bb4ad9228b9bd81f3318be1a599b2a80fa69c6",
+      "published_sha256": "3d3b925f28a2f90bd90840dd08bb4ad9228b9bd81f3318be1a599b2a80fa69c6",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/shared/analysis-explanation.js",
+      "source_sha256": "2342e664bc3eaf46c438d85091f3439b0214f3a5a6e444899b129ac7c61953b8",
+      "published_sha256": "2342e664bc3eaf46c438d85091f3439b0214f3a5a6e444899b129ac7c61953b8",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/shared/audit-url.js",
+      "source_sha256": "5798fd057ccbd8990d9abfdfb3f5efc3aed0a5bb98c2747a66cce65c7079ad9a",
+      "published_sha256": "5798fd057ccbd8990d9abfdfb3f5efc3aed0a5bb98c2747a66cce65c7079ad9a",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/shared/brand-claim-guard.js",
+      "source_sha256": "e706ce0680c013a5980928a2ddb49b7f6d295719369ad1acacd10b1cd04bf1fd",
+      "published_sha256": "e706ce0680c013a5980928a2ddb49b7f6d295719369ad1acacd10b1cd04bf1fd",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/shared/brand-features.js",
+      "source_sha256": "0ac7fb064fcd8e85786743bb3cdca302030cda5c8c7f44cb93b63fcc2e0f5655",
+      "published_sha256": "0ac7fb064fcd8e85786743bb3cdca302030cda5c8c7f44cb93b63fcc2e0f5655",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/shared/dom-extractor.browser.js",
+      "source_sha256": "d8e6f8ebb45707840b0a016a39573e5c93c6b1a5fd11a4a1e9f0825c32d686f6",
+      "published_sha256": "d8e6f8ebb45707840b0a016a39573e5c93c6b1a5fd11a4a1e9f0825c32d686f6",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/shared/domain-age.js",
+      "source_sha256": "866beb5ef4b8031e96acb9770e0cd1b493048f287361ed9bc8b136f25ce01b65",
+      "published_sha256": "866beb5ef4b8031e96acb9770e0cd1b493048f287361ed9bc8b136f25ce01b65",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/shared/tldts.js",
+      "source_sha256": "8d458237e49de655cb56ba7a598b5bdba6830eb0dc320a46524a193e80f12dcd",
+      "published_sha256": "8d458237e49de655cb56ba7a598b5bdba6830eb0dc320a46524a193e80f12dcd",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/shared/url-features.js",
+      "source_sha256": "5dd8f0ca29c2b5a1372f99d9affade205333b93de3bfcf1e11e27338ebf9d776",
+      "published_sha256": "5dd8f0ca29c2b5a1372f99d9affade205333b93de3bfcf1e11e27338ebf9d776",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/storage/dataset-collector.js",
+      "source_sha256": "95c432de8cfd59ddb2ef3119d0d08171fbae4a6d1728d1beb560420dd620ed36",
+      "published_sha256": "95c432de8cfd59ddb2ef3119d0d08171fbae4a6d1728d1beb560420dd620ed36",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/storage/dataset-file.js",
+      "source_sha256": "295f4b23b276c7e086d142637ef561e68996bb339cfb783f57afd5fff6765600",
+      "published_sha256": "295f4b23b276c7e086d142637ef561e68996bb339cfb783f57afd5fff6765600",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/storage/settings.js",
+      "source_sha256": "9dc0b6e585dfa596af10c91cc0ab116e8d264a5ba52c2e16057745d2b47c693c",
+      "published_sha256": "9dc0b6e585dfa596af10c91cc0ab116e8d264a5ba52c2e16057745d2b47c693c",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/styles/base.css",
+      "source_sha256": "db768af8e752274ab9483a5a213e379f54f4946966fcd2047d8f744b00cfcf7f",
+      "published_sha256": "db768af8e752274ab9483a5a213e379f54f4946966fcd2047d8f744b00cfcf7f",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/styles/tokens.css",
+      "source_sha256": "2efe89846bc53acf234210b646f198c77c3a0d6e4ab278cd34721327cf06d92e",
+      "published_sha256": "2efe89846bc53acf234210b646f198c77c3a0d6e4ab278cd34721327cf06d92e",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/utils/constants.js",
+      "source_sha256": "4098ff14de684d12c7cebcb8d2ddef0472af1b913b49cf9d938dda40ddb45949",
+      "published_sha256": "4098ff14de684d12c7cebcb8d2ddef0472af1b913b49cf9d938dda40ddb45949",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/utils/evidence.js",
+      "source_sha256": "0ab922a348ed4de64a403228aca7ff1e164471a9023d9a2019e985257b70c41b",
+      "published_sha256": "0ab922a348ed4de64a403228aca7ff1e164471a9023d9a2019e985257b70c41b",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/utils/helpers.js",
+      "source_sha256": "12ce7d88d759ad2340eb7358e401fdcdc83d57ab7086dd0c2583428e62994601",
+      "published_sha256": "12ce7d88d759ad2340eb7358e401fdcdc83d57ab7086dd0c2583428e62994601",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/utils/hosted-platforms.js",
+      "source_sha256": "50e52aa2f83340ae6ef8879d776150b78305fa533a58359dde3d57b7e9c4b570",
+      "published_sha256": "50e52aa2f83340ae6ef8879d776150b78305fa533a58359dde3d57b7e9c4b570",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/utils/page-protection-policy.js",
+      "source_sha256": "62d618a90a1eaacf7bd31b2c3bc7c53670ce1e2aa100bc3ed9d05953d792972b",
+      "published_sha256": "62d618a90a1eaacf7bd31b2c3bc7c53670ce1e2aa100bc3ed9d05953d792972b",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/warning/warning.css",
+      "source_sha256": "67c711c54b530e828e4134ab04256e06aefa976dffdad0ff0aa04122cb8ae0ae",
+      "published_sha256": "67c711c54b530e828e4134ab04256e06aefa976dffdad0ff0aa04122cb8ae0ae",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/warning/warning.html",
+      "source_sha256": "d435c279fd6e7a71b730294845460ab075fa5c7b9bc80ce0dab6cb634c4ea46f",
+      "published_sha256": "d435c279fd6e7a71b730294845460ab075fa5c7b9bc80ce0dab6cb634c4ea46f",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/src/warning/warning.js",
+      "source_sha256": "1daa53e499045d35462440cef6f4531baf57607649be067be738e115bcf3edf7",
+      "published_sha256": "1daa53e499045d35462440cef6f4531baf57607649be067be738e115bcf3edf7",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/tests/analysis-explanation.mjs",
+      "source_sha256": "84aff508868c4c97fd793f4bf28fa716a34eaea7523b187d29b8572b5717d687",
+      "published_sha256": "84aff508868c4c97fd793f4bf28fa716a34eaea7523b187d29b8572b5717d687",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/tests/brand-api-chain.mjs",
+      "source_sha256": "a4e8743ba027a643f30f1d0c0975fd4b3534912e5949fae3c02d1e3172aaf669",
+      "published_sha256": "a4e8743ba027a643f30f1d0c0975fd4b3534912e5949fae3c02d1e3172aaf669",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/tests/brand-cache-isolation.mjs",
+      "source_sha256": "a6feae485c4d91a718ca3f9015d565a08a71943ca939e32891cb388dfbb1d18b",
+      "published_sha256": "a6feae485c4d91a718ca3f9015d565a08a71943ca939e32891cb388dfbb1d18b",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/tests/brand-diagnostics.mjs",
+      "source_sha256": "53efa1c1189532dc427b36f75b2b18312a0aa428d2bc4d83fc206ef273453135",
+      "published_sha256": "53efa1c1189532dc427b36f75b2b18312a0aa428d2bc4d83fc206ef273453135",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/tests/brand-query-flow.mjs",
+      "source_sha256": "f2b56b39512cdfe4d570b0603eb825fbbe3f68b4ac1abb53bc21b981f7b40f0b",
+      "published_sha256": "f2b56b39512cdfe4d570b0603eb825fbbe3f68b4ac1abb53bc21b981f7b40f0b",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/tests/browser-dom-smoke.py",
+      "source_sha256": "c110c4316b1152d78c5633c7f640ce75e733782abe6ef07cc1955f332fd2bb43",
+      "published_sha256": "c110c4316b1152d78c5633c7f640ce75e733782abe6ef07cc1955f332fd2bb43",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/tests/decision-policy.mjs",
+      "source_sha256": "b78693a1e8a8926762bd75a138e1a0b1c0a7cfef5efed81b9050516c5b2c76ca",
+      "published_sha256": "b78693a1e8a8926762bd75a138e1a0b1c0a7cfef5efed81b9050516c5b2c76ca",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/tests/dom-brand-oauth.mjs",
+      "source_sha256": "cb950dc861fdd99514e63cf0a51b9368f6902f4ebe42c27700bbafe6df65cf58",
+      "published_sha256": "cb950dc861fdd99514e63cf0a51b9368f6902f4ebe42c27700bbafe6df65cf58",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/tests/domain-first-search.mjs",
+      "source_sha256": "3910f3b45ba46d79d7247b14259385a1d1d7c1f3d5dc063bf1e1adbb6be3a491",
+      "published_sha256": "3910f3b45ba46d79d7247b14259385a1d1d7c1f3d5dc063bf1e1adbb6be3a491",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/tests/dynamic-dom-regression.py",
+      "source_sha256": "e273700d80d4f98fd6b3f2e3bb77a9fed7e864d2826596da0ee9f1b0652a7ec9",
+      "published_sha256": "e273700d80d4f98fd6b3f2e3bb77a9fed7e864d2826596da0ee9f1b0652a7ec9",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/tests/extension-load-smoke.py",
+      "source_sha256": "198ba28f039578b25404be40c7fe4991014db32b57561b1c1cf5613c34255407",
+      "published_sha256": "198ba28f039578b25404be40c7fe4991014db32b57561b1c1cf5613c34255407",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/tests/identity-context.mjs",
+      "source_sha256": "4093b3ed581c978e08c0e8ac00082b37c26fcb287b3f5bcb2fc1471074bc6073",
+      "published_sha256": "4093b3ed581c978e08c0e8ac00082b37c26fcb287b3f5bcb2fc1471074bc6073",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/tests/manual-lists.mjs",
+      "source_sha256": "8e785545ec72adf87d84e5de625999ba744625d8f836ca7ac052dcebf3aab7f3",
+      "published_sha256": "8e785545ec72adf87d84e5de625999ba744625d8f836ca7ac052dcebf3aab7f3",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/tests/oauth-provider-regression.mjs",
+      "source_sha256": "8811251a5bb74df5af9c23fb29b27d6e568e516d92eb91e7a1a5529c9ccdbad2",
+      "published_sha256": "8811251a5bb74df5af9c23fb29b27d6e568e516d92eb91e7a1a5529c9ccdbad2",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/tests/official-docs-regression.mjs",
+      "source_sha256": "8cd0e6841cab6fe290464e2263db9ac8b45a3ce68ebf6acd79f13935b1f8a8f0",
+      "published_sha256": "8cd0e6841cab6fe290464e2263db9ac8b45a3ce68ebf6acd79f13935b1f8a8f0",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/tests/parent-site-link.mjs",
+      "source_sha256": "76bd209f9291c4ad5adcf87963244b5c3c9391acbb34a8a982a7dcf67c534f02",
+      "published_sha256": "76bd209f9291c4ad5adcf87963244b5c3c9391acbb34a8a982a7dcf67c534f02",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/tests/parity-report.json",
+      "source_sha256": "627709c67d57d0c79914413d5df4324da60349cc1900b3b6681c108670fbdb41",
+      "published_sha256": "627709c67d57d0c79914413d5df4324da60349cc1900b3b6681c108670fbdb41",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/tests/parity-runner.mjs",
+      "source_sha256": "ea6edc3dcebccc1d3fc323a5dbf020148bf81aa4ebec6a419658896ce8855678",
+      "published_sha256": "ea6edc3dcebccc1d3fc323a5dbf020148bf81aa4ebec6a419658896ce8855678",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/tests/replay-evidence.mjs",
+      "source_sha256": "b6e78a110cc4c3de50e2758a16101db3eb492d3a1948c151ff5247e92aade96f",
+      "published_sha256": "b6e78a110cc4c3de50e2758a16101db3eb492d3a1948c151ff5247e92aade96f",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/tests/search-page-regression.mjs",
+      "source_sha256": "2d7fa16f44bc61baa502e03ecd7d03f7e83f52cb6c5f3e4725be679d9c2eb842",
+      "published_sha256": "2d7fa16f44bc61baa502e03ecd7d03f7e83f52cb6c5f3e4725be679d9c2eb842",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/tests/suffix-reference-smoke.mjs",
+      "source_sha256": "e7578e29b72a77259df30152c7a24d758712e019b61035ad4d41b934f1fe6c15",
+      "published_sha256": "e7578e29b72a77259df30152c7a24d758712e019b61035ad4d41b934f1fe6c15",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/tests/tld-audit.json",
+      "source_sha256": "e8209131360a81956d08f5e645451e202f44b92a1f6a9fdde933a8ead33dadf1",
+      "published_sha256": "e8209131360a81956d08f5e645451e202f44b92a1f6a9fdde933a8ead33dadf1",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/tests/verified-content-page.mjs",
+      "source_sha256": "ee06a5e870dae945a4418b865976dae18f7d91b6c8bac841a73a5ec1ba33079a",
+      "published_sha256": "ee06a5e870dae945a4418b865976dae18f7d91b6c8bac841a73a5ec1ba33079a",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/tests/warning-page-smoke.py",
+      "source_sha256": "609f3ad4c9a785c4cf1a1f6466d9294c98136012b35d66afe47f150f9558a9c3",
+      "published_sha256": "609f3ad4c9a785c4cf1a1f6466d9294c98136012b35d66afe47f150f9558a9c3",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/tests/worker-smoke.mjs",
+      "source_sha256": "e8e448769d008f2876b51b8e74fee20a734ea6d26e859077182c2d1c36728618",
+      "published_sha256": "e8e448769d008f2876b51b8e74fee20a734ea6d26e859077182c2d1c36728618",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/tests/youtube-brand.mjs",
+      "source_sha256": "cc8dce6479beb80d4e36d6978675452a3b707924f1212e9d99600033add30fdc",
+      "published_sha256": "cc8dce6479beb80d4e36d6978675452a3b707924f1212e9d99600033add30fdc",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/tools/predict-saved-features.mjs",
+      "source_sha256": "9bd1a5744e6f6f5e4facee34d5a1e50ac6ef3e92799bdbf397a779a1720fc155",
+      "published_sha256": "9bd1a5744e6f6f5e4facee34d5a1e50ac6ef3e92799bdbf397a779a1720fc155",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "extension/HeuriShield-URL20-XGBoost/tools/replay-decisions.mjs",
+      "source_sha256": "6c5357dbbc3eb4e37178b3a6814d4b07b393f7369584baf5b9621ad711a5280a",
+      "published_sha256": "6c5357dbbc3eb4e37178b3a6814d4b07b393f7369584baf5b9621ad711a5280a",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "data/evaluation/dual_url17_url20_launcher_check.json",
+      "source_sha256": "9a1dd5e985d08236e9eeefbd8d6a52e34e18ccb6b7325ea8054bb96a350a8eb3",
+      "published_sha256": "9a1dd5e985d08236e9eeefbd8d6a52e34e18ccb6b7325ea8054bb96a350a8eb3",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "data/evaluation/legitimate_fresh_500_dual_06nov2026.txt",
+      "source_sha256": "33fa7b94be7c07e9e47c97449f687c7e6f3685d914c8ab6abc3f346e7ac49ae0",
+      "published_sha256": "33fa7b94be7c07e9e47c97449f687c7e6f3685d914c8ab6abc3f346e7ac49ae0",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "data/evaluation/live_archive_source.csv",
+      "source_sha256": "76e927c28fe146d09a3fe5e3a73317a5a48a4a1b11e63eef21ce37b5e6354740",
+      "published_sha256": "76e927c28fe146d09a3fe5e3a73317a5a48a4a1b11e63eef21ce37b5e6354740",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "data/evaluation/live_url20.csv",
+      "source_sha256": "737f5fe6469765a4afe9371fe527a18c76a748d175c5904667ef3b2c090b91c9",
+      "published_sha256": "737f5fe6469765a4afe9371fe527a18c76a748d175c5904667ef3b2c090b91c9",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "data/evaluation/phishing_dual_batch_2efabc56.preparation.json",
+      "source_sha256": "1b7a8bd77ea193051b42a3efcbff7fe277005c0bbbf0684b7f0ad83ad88366b4",
+      "published_sha256": "1b7a8bd77ea193051b42a3efcbff7fe277005c0bbbf0684b7f0ad83ad88366b4",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "data/evaluation/phishing_dual_batch_2efabc56.txt",
+      "source_sha256": "532e924af9b5269d75cda04eea5fde1ccd8cacbc22168d67fdbdbdd2e901a7dc",
+      "published_sha256": "532e924af9b5269d75cda04eea5fde1ccd8cacbc22168d67fdbdbdd2e901a7dc",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "data/evaluation/phishing_dual_url17_url20_06nov2026.txt",
+      "source_sha256": "6c64887cda3dd9953c73ed5480608ef02231705661ced5e63da79e44032b137f",
+      "published_sha256": "6c64887cda3dd9953c73ed5480608ef02231705661ced5e63da79e44032b137f",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "data/evaluation/phishing_dual_url17_url20_06nov2026_preparation.json",
+      "source_sha256": "5035fc0e5ecef301a15395cc446611d114d78bd4f779cab96d4025f15b41aa2d",
+      "published_sha256": "5035fc0e5ecef301a15395cc446611d114d78bd4f779cab96d4025f15b41aa2d",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "data/evaluation/phishing_dual_url17_url20_06nov2026_source.txt",
+      "source_sha256": "0793af0565a5d8c48ecc5bc64504ad1079091c67a19a1634f5de50e49bb783af",
+      "published_sha256": "0793af0565a5d8c48ecc5bc64504ad1079091c67a19a1634f5de50e49bb783af",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "data/processed/phreshphish_url20_all_clean.csv",
+      "source_sha256": "09981b1cfbf25d47da6230fcf8368a3b585d93d7bd5ff6291c650f132d2021c9",
+      "published_sha256": "09981b1cfbf25d47da6230fcf8368a3b585d93d7bd5ff6291c650f132d2021c9",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "data/processed/url20_train_test.csv",
+      "source_sha256": "19cb7ca09ad61469b228740bcf22ae4750a29d27798998952f65184b31a391e5",
+      "published_sha256": "19cb7ca09ad61469b228740bcf22ae4750a29d27798998952f65184b31a391e5",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "data/raw/https_normalization.json",
+      "source_sha256": "37f64e63400172f140ad94cbd5407291d189b5daee01417a963c55b029a099c7",
+      "published_sha256": "37f64e63400172f140ad94cbd5407291d189b5daee01417a963c55b029a099c7",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "data/raw/phreshphish_url_label.xlsx",
+      "source_sha256": "b3c721fb7a594262109e465fa80a26e7983ac44295688efa9916adcb62cdfe2d",
+      "published_sha256": "b3c721fb7a594262109e465fa80a26e7983ac44295688efa9916adcb62cdfe2d",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "data/raw/phreshphish_url_label_https.csv",
+      "source_sha256": "40301b4b13056b10a34d425d32a8ac2c4e89dbb9a4c11c6a6cc675e0e275edb3",
+      "published_sha256": "40301b4b13056b10a34d425d32a8ac2c4e89dbb9a4c11c6a6cc675e0e275edb3",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/data/cv_train_only_sample.csv",
+      "source_sha256": "94fbd7086e9d87810de8d84ae6686c41f87252111b2a2e6f7664d3bf18de18aa",
+      "published_sha256": "94fbd7086e9d87810de8d84ae6686c41f87252111b2a2e6f7664d3bf18de18aa",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/data/supplement_url20_with_provenance.csv",
+      "source_sha256": "08431f590ebcbd4fe00b743046c175db7e8060b0ce58a03e35d0f820d552bae6",
+      "published_sha256": "08431f590ebcbd4fe00b743046c175db7e8060b0ce58a03e35d0f820d552bae6",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/data/training_weights.csv",
+      "source_sha256": "9537425d0efd2eec214b049035345eb9817a31ad2dc2af4d905a933a5f4cc870",
+      "published_sha256": "9537425d0efd2eec214b049035345eb9817a31ad2dc2af4d905a933a5f4cc870",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/data/url20_augmented_splits.csv",
+      "source_sha256": "1f73c49c61b86259541e7d950dde1d425cfa6a93741d0a9f2779b21552737c45",
+      "published_sha256": "1f73c49c61b86259541e7d950dde1d425cfa6a93741d0a9f2779b21552737c45",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/HASIL_PERBAIKAN.md",
+      "source_sha256": "c81a09476b0257c46c87cbfe47947b7c04a0fcc636fabb1a2e7ff78aefa53df3",
+      "published_sha256": "c81a09476b0257c46c87cbfe47947b7c04a0fcc636fabb1a2e7ff78aefa53df3",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/models/ExtraTrees.joblib",
+      "source_sha256": "a210a10cafa060ad10edf490a5bb7d5a7f71c9a26fc81c5ba35d84b686f54da4",
+      "published_sha256": "a210a10cafa060ad10edf490a5bb7d5a7f71c9a26fc81c5ba35d84b686f54da4",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/models/HistGradientBoosting.joblib",
+      "source_sha256": "6436ebc56561b7941fcd459e6498bb72670cbcb2347d0b649a500c11ed6987d0",
+      "published_sha256": "6436ebc56561b7941fcd459e6498bb72670cbcb2347d0b649a500c11ed6987d0",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/models/LogisticRegression.joblib",
+      "source_sha256": "d1d82349d5506fab88142418d38ff9294bdfc7a0b613feb13d32fca1600f9268",
+      "published_sha256": "d1d82349d5506fab88142418d38ff9294bdfc7a0b613feb13d32fca1600f9268",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/models/RandomForest.joblib",
+      "source_sha256": "da2e8d3ce54e19bc72bcf1c194a1527cf7cb6d2eb9c6e03c18f918b6cac5fbbf",
+      "published_sha256": "da2e8d3ce54e19bc72bcf1c194a1527cf7cb6d2eb9c6e03c18f918b6cac5fbbf",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/models/XGBoost.joblib",
+      "source_sha256": "d623eefd35e9bb4cc028d40172acdd28b75a6ddc99d91a82a1c6dabfbf2f452b",
+      "published_sha256": "d623eefd35e9bb4cc028d40172acdd28b75a6ddc99d91a82a1c6dabfbf2f452b",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/models/XGBoost.json",
+      "source_sha256": "cddba2f7383e659b4abf9798276c8bd993d5f1a9f54fd5ac31933257e8af7e5e",
+      "published_sha256": "cddba2f7383e659b4abf9798276c8bd993d5f1a9f54fd5ac31933257e8af7e5e",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/baseline_error_audit.json",
+      "source_sha256": "1d28855f108d73896cd84ab3bedf566cac8e5c885f70841a83b216ddafad1f9d",
+      "published_sha256": "1d28855f108d73896cd84ab3bedf566cac8e5c885f70841a83b216ddafad1f9d",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/baseline_errors_with_evidence.csv",
+      "source_sha256": "d1ae54eddd20d97dbc81697d1bfa688b0579fba5c43f5777236d1aa9e136d716",
+      "published_sha256": "d1ae54eddd20d97dbc81697d1bfa688b0579fba5c43f5777236d1aa9e136d716",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/before_after_archive.png",
+      "source_sha256": "6ba101cf8d2626541dc5e8abe4959c987e235b4807c04bd1d6436d323bcbdae0",
+      "published_sha256": "6ba101cf8d2626541dc5e8abe4959c987e235b4807c04bd1d6436d323bcbdae0",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/before_after_fixed_threshold_05.csv",
+      "source_sha256": "1ca31c75b0f4fcb26bbae089bc5ba6bfad912a7dec0be89640e5a7c8b84bf94e",
+      "published_sha256": "1ca31c75b0f4fcb26bbae089bc5ba6bfad912a7dec0be89640e5a7c8b84bf94e",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/cross_validation_design.json",
+      "source_sha256": "2a77d92e7285a09fa16da6825ddfb5db51e068ef6de648ef622ec43888ca4f32",
+      "published_sha256": "2a77d92e7285a09fa16da6825ddfb5db51e068ef6de648ef622ec43888ca4f32",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/data_preparation.json",
+      "source_sha256": "7e1887ac1b79b98c977d9b63dbdaeb120524d53e6fa4dba13dcaa69802183777",
+      "published_sha256": "7e1887ac1b79b98c977d9b63dbdaeb120524d53e6fa4dba13dcaa69802183777",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/extension_browser_runtime.json",
+      "source_sha256": "229f0d4d0867d59f96a1ac739e5087b5271c40bd491d264e87586ec61150e8b1",
+      "published_sha256": "229f0d4d0867d59f96a1ac739e5087b5271c40bd491d264e87586ec61150e8b1",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/extension_evaluator_check.json",
+      "source_sha256": "6c3945033eb5ff2c2ac4701678c43083b0d16a17d3e851daac9de1a53c5b97b9",
+      "published_sha256": "6c3945033eb5ff2c2ac4701678c43083b0d16a17d3e851daac9de1a53c5b97b9",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/extension_inference_cases.json",
+      "source_sha256": "eeb1fd91518538bb57d749750ccc35b9c9c1660623db3f9c9705252e4affc00b",
+      "published_sha256": "eeb1fd91518538bb57d749750ccc35b9c9c1660623db3f9c9705252e4affc00b",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/extension_package.json",
+      "source_sha256": "396b09cc2208a58f1d68a6ea0e06e31516a3587a7b195eb202b381ce1ad1054a",
+      "published_sha256": "396b09cc2208a58f1d68a6ea0e06e31516a3587a7b195eb202b381ce1ad1054a",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/extension_parity.json",
+      "source_sha256": "8e5c6c473626e0f4ea9e6c3716e5011286084da87083c6320edb57209c5ea6ca",
+      "published_sha256": "8e5c6c473626e0f4ea9e6c3716e5011286084da87083c6320edb57209c5ea6ca",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/extension_ready.json",
+      "source_sha256": "7c3404af1f5f935e443735c56838eb8fc7f50fb960f7f0bca020ab3b7be7cb9f",
+      "published_sha256": "7c3404af1f5f935e443735c56838eb8fc7f50fb960f7f0bca020ab3b7be7cb9f",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/extension_tests.json",
+      "source_sha256": "575c9c9d25df0cd255fbc6baa5d708007c92b727b32339977a40b746329d650e",
+      "published_sha256": "575c9c9d25df0cd255fbc6baa5d708007c92b727b32339977a40b746329d650e",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/ExtraTrees_archive_all_predictions.csv",
+      "source_sha256": "7b406f5eccfce8564f850df349084f72757525d31201dbc1c3636c85bcea8861",
+      "published_sha256": "7b406f5eccfce8564f850df349084f72757525d31201dbc1c3636c85bcea8861",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/ExtraTrees_archive_previously_completed_predictions.csv",
+      "source_sha256": "bc3b7fb6de5ddea7735e926ba56ad1144b805d8bde3ed089d15f81cb6c3ca110",
+      "published_sha256": "bc3b7fb6de5ddea7735e926ba56ad1144b805d8bde3ed089d15f81cb6c3ca110",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/ExtraTrees_combined_test_predictions.csv",
+      "source_sha256": "bdf2fbc8b205e218156b1b9155092d1e24b0bda7978c83a42936ec769441acdd",
+      "published_sha256": "bdf2fbc8b205e218156b1b9155092d1e24b0bda7978c83a42936ec769441acdd",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/ExtraTrees_cv_selection.json",
+      "source_sha256": "afc2937da5103fe03d8ee0cb60ffc11725b1eb57ffca3d017533bb92f8b25421",
+      "published_sha256": "afc2937da5103fe03d8ee0cb60ffc11725b1eb57ffca3d017533bb92f8b25421",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/ExtraTrees_original_test_predictions.csv",
+      "source_sha256": "406b85a931228ea08d56300761d7be8c50ce755264517c60fef463d898f10ba5",
+      "published_sha256": "406b85a931228ea08d56300761d7be8c50ce755264517c60fef463d898f10ba5",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/ExtraTrees_per_url_changes.csv",
+      "source_sha256": "31a2e0c2dc6d9575d4f4469f95777b5b1bca14f13649777e649d5150bc162a2e",
+      "published_sha256": "31a2e0c2dc6d9575d4f4469f95777b5b1bca14f13649777e649d5150bc162a2e",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/ExtraTrees_supplement_test_predictions.csv",
+      "source_sha256": "18fdb4cfee281b1c00b2cb0f08dab2b5710a4978ec3d93600903c3e5b485757b",
+      "published_sha256": "18fdb4cfee281b1c00b2cb0f08dab2b5710a4978ec3d93600903c3e5b485757b",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/HistGradientBoosting_archive_all_predictions.csv",
+      "source_sha256": "e448f17d022d328178d0e74f6102b73b77de4a989e77ff17c5aa2ec206583469",
+      "published_sha256": "e448f17d022d328178d0e74f6102b73b77de4a989e77ff17c5aa2ec206583469",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/HistGradientBoosting_archive_previously_completed_predictions.csv",
+      "source_sha256": "3423923ba6310662ccb293db89488b28dca6479654beec7d2fe0213c1359f43e",
+      "published_sha256": "3423923ba6310662ccb293db89488b28dca6479654beec7d2fe0213c1359f43e",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/HistGradientBoosting_combined_test_predictions.csv",
+      "source_sha256": "725633a8d93f2ac7f711d43ce7bd82dc03d39181a6bdb3b7a2513edd6ad4754b",
+      "published_sha256": "725633a8d93f2ac7f711d43ce7bd82dc03d39181a6bdb3b7a2513edd6ad4754b",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/HistGradientBoosting_cv_selection.json",
+      "source_sha256": "f5c3a2900b0d17db2b3a5b7900406948d86e3b5b6297cafa10e394cca7e2d5d3",
+      "published_sha256": "f5c3a2900b0d17db2b3a5b7900406948d86e3b5b6297cafa10e394cca7e2d5d3",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/HistGradientBoosting_original_test_predictions.csv",
+      "source_sha256": "be7ca50216bdbfb57aa60494eb12186903a3a3e581e8a62c8ce6440671790c7b",
+      "published_sha256": "be7ca50216bdbfb57aa60494eb12186903a3a3e581e8a62c8ce6440671790c7b",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/HistGradientBoosting_per_url_changes.csv",
+      "source_sha256": "1cb96adc15ad7601bed2d3d6c08ae9d209f527732f2bd9549ebad11895dae05b",
+      "published_sha256": "1cb96adc15ad7601bed2d3d6c08ae9d209f527732f2bd9549ebad11895dae05b",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/HistGradientBoosting_supplement_test_predictions.csv",
+      "source_sha256": "f8291ec1e790c143642507aac5e4a17e56e1fde17f3ceb852650d9e6e3613e8f",
+      "published_sha256": "f8291ec1e790c143642507aac5e4a17e56e1fde17f3ceb852650d9e6e3613e8f",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/LogisticRegression_archive_all_predictions.csv",
+      "source_sha256": "e0badf5f118bdcacfafe8ea30c90a2e61a2b2f492236a419e95164af2804bffd",
+      "published_sha256": "e0badf5f118bdcacfafe8ea30c90a2e61a2b2f492236a419e95164af2804bffd",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/LogisticRegression_archive_previously_completed_predictions.csv",
+      "source_sha256": "cb212978ed2bbaab57fb09c969c7af061e71b68c34521b15718aa160131ff2ce",
+      "published_sha256": "cb212978ed2bbaab57fb09c969c7af061e71b68c34521b15718aa160131ff2ce",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/LogisticRegression_combined_test_predictions.csv",
+      "source_sha256": "93d25b2fd28762320ac49c186719ded8b64962497111dea3ab853c753cc966b7",
+      "published_sha256": "93d25b2fd28762320ac49c186719ded8b64962497111dea3ab853c753cc966b7",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/LogisticRegression_cv_selection.json",
+      "source_sha256": "f57b7669af9f537294e1090eb01034326f28f49c8c999ceb77cca04cb60d7d53",
+      "published_sha256": "f57b7669af9f537294e1090eb01034326f28f49c8c999ceb77cca04cb60d7d53",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/LogisticRegression_original_test_predictions.csv",
+      "source_sha256": "32d18f6ff5f1958ea4e6b06e4e355927b4af7564add49540a84d5873508f7c05",
+      "published_sha256": "32d18f6ff5f1958ea4e6b06e4e355927b4af7564add49540a84d5873508f7c05",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/LogisticRegression_per_url_changes.csv",
+      "source_sha256": "28e06c8eec9448b59a368b71e6ed600a72bd071cee87c6a364847c586996044a",
+      "published_sha256": "28e06c8eec9448b59a368b71e6ed600a72bd071cee87c6a364847c586996044a",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/LogisticRegression_supplement_test_predictions.csv",
+      "source_sha256": "bac7bcf8865b46b4a6fb53d2431a3ba486806b3d3a042dfe9555f7ca8af1f928",
+      "published_sha256": "bac7bcf8865b46b4a6fb53d2431a3ba486806b3d3a042dfe9555f7ca8af1f928",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/model_comparison.csv",
+      "source_sha256": "9d8e15ed543fa0533c260930c0e67da35a1591b0f3e6286009a9cddd44b0d07b",
+      "published_sha256": "9d8e15ed543fa0533c260930c0e67da35a1591b0f3e6286009a9cddd44b0d07b",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/per_url_changes_summary.json",
+      "source_sha256": "181d520c63e99dc0fc058efaece5c688ab6a4ff798fc9fd0b0ab464d5f7708f0",
+      "published_sha256": "181d520c63e99dc0fc058efaece5c688ab6a4ff798fc9fd0b0ab464d5f7708f0",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/RandomForest_archive_all_predictions.csv",
+      "source_sha256": "84062fc2cc853e1bb85a39c065306ba0700b123a70790461f82185f5a7cf3e9e",
+      "published_sha256": "84062fc2cc853e1bb85a39c065306ba0700b123a70790461f82185f5a7cf3e9e",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/RandomForest_archive_previously_completed_predictions.csv",
+      "source_sha256": "1624690c57f2b08a41b891fd05b42af18cbc5dea24cc67f708a21c8e468b211a",
+      "published_sha256": "1624690c57f2b08a41b891fd05b42af18cbc5dea24cc67f708a21c8e468b211a",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/RandomForest_combined_test_predictions.csv",
+      "source_sha256": "c072aa707328c47e0fdee14e535d9f81e10c7af99a1b1bce46b868b2ea2f2d2e",
+      "published_sha256": "c072aa707328c47e0fdee14e535d9f81e10c7af99a1b1bce46b868b2ea2f2d2e",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/RandomForest_cv_selection.json",
+      "source_sha256": "cc75fd2c5054d1741e09e63b88c3334747c7ce1d51b0b0802cb87f115a594699",
+      "published_sha256": "cc75fd2c5054d1741e09e63b88c3334747c7ce1d51b0b0802cb87f115a594699",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/RandomForest_original_test_predictions.csv",
+      "source_sha256": "574408d397c7fc5a759300e9772e197e25b594614d2d3d2f5676628142a6fa9a",
+      "published_sha256": "574408d397c7fc5a759300e9772e197e25b594614d2d3d2f5676628142a6fa9a",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/RandomForest_per_url_changes.csv",
+      "source_sha256": "d9ae76ed0eb8664c99c60264b27a0d1f020c127ca591143771b2ea2a98decb9e",
+      "published_sha256": "d9ae76ed0eb8664c99c60264b27a0d1f020c127ca591143771b2ea2a98decb9e",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/RandomForest_supplement_test_predictions.csv",
+      "source_sha256": "b3373c57c31b170d7a9025528d51a1a8d5ae812f7b1878afb0c7fcefc740c674",
+      "published_sha256": "b3373c57c31b170d7a9025528d51a1a8d5ae812f7b1878afb0c7fcefc740c674",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/results.json",
+      "source_sha256": "438eedf2f8eb0efcbbff1343a4164906014ffe394f40eb2664b3930e41760f0d",
+      "published_sha256": "438eedf2f8eb0efcbbff1343a4164906014ffe394f40eb2664b3930e41760f0d",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/run.log",
+      "source_sha256": "ca27f4346832b76cffc88c7a12c67edd894a9116903eb7864c6f6c252b8126a0",
+      "published_sha256": "ca27f4346832b76cffc88c7a12c67edd894a9116903eb7864c6f6c252b8126a0",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/verification.json",
+      "source_sha256": "6e18140d8764b9b8d9ad5ff855dc5225eb606daf4d89b1820c0ba8a85b6d5406",
+      "published_sha256": "6e18140d8764b9b8d9ad5ff855dc5225eb606daf4d89b1820c0ba8a85b6d5406",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/XGBoost_archive_all_predictions.csv",
+      "source_sha256": "b7d727224fd0b683e560bcf11b43e87485426627af36cc568ddc07b7c1aa4711",
+      "published_sha256": "b7d727224fd0b683e560bcf11b43e87485426627af36cc568ddc07b7c1aa4711",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/XGBoost_archive_previously_completed_predictions.csv",
+      "source_sha256": "74138fdcc5d47485249836e18c65519cf68dc96acdd99ce2ad37d82bba51ee88",
+      "published_sha256": "74138fdcc5d47485249836e18c65519cf68dc96acdd99ce2ad37d82bba51ee88",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/XGBoost_combined_test_predictions.csv",
+      "source_sha256": "58d744f9baa6026a9aa1a4cac38157351e56673dd5f3d8a94fd015dde5c6b34b",
+      "published_sha256": "58d744f9baa6026a9aa1a4cac38157351e56673dd5f3d8a94fd015dde5c6b34b",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/XGBoost_cv_selection.json",
+      "source_sha256": "ea899ccb714b6d3ccfc7559560937dca70efc944b8e2d281bcc3b06b01ab0cd4",
+      "published_sha256": "ea899ccb714b6d3ccfc7559560937dca70efc944b8e2d281bcc3b06b01ab0cd4",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/xgboost_feature_influence_20.csv",
+      "source_sha256": "ffc3f46b1897068f74037436d7e2d946aef88c82d48aae65d1ba6729a038a2d3",
+      "published_sha256": "ffc3f46b1897068f74037436d7e2d946aef88c82d48aae65d1ba6729a038a2d3",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/XGBoost_original_test_predictions.csv",
+      "source_sha256": "c0c9b719f0590523468d8248c496ba89430946aa7fc0570971670f09221f0a8b",
+      "published_sha256": "c0c9b719f0590523468d8248c496ba89430946aa7fc0570971670f09221f0a8b",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/XGBoost_per_url_changes.csv",
+      "source_sha256": "69297b4915c796b98e6467b98bd377f0b64ab5eb71b76caed39ed6b8d9a312bf",
+      "published_sha256": "69297b4915c796b98e6467b98bd377f0b64ab5eb71b76caed39ed6b8d9a312bf",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/xgboost_query_results.json",
+      "source_sha256": "1912c74b0fa33e50f397fef29b48944ae977dc7861d8cd0a8237357d94dc909d",
+      "published_sha256": "1912c74b0fa33e50f397fef29b48944ae977dc7861d8cd0a8237357d94dc909d",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "experiments/v2/reports/XGBoost_supplement_test_predictions.csv",
+      "source_sha256": "372555bdd540a5ce476c98e0084c2d08518907a0446db4d0819362066f329f7f",
+      "published_sha256": "372555bdd540a5ce476c98e0084c2d08518907a0446db4d0819362066f329f7f",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "reports/baseline/eda_distributions.png",
+      "source_sha256": "0f9d45f1de3cffe92218563a9968947c563065d1d44641403b5cf172decc9cb6",
+      "published_sha256": "0f9d45f1de3cffe92218563a9968947c563065d1d44641403b5cf172decc9cb6",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "reports/baseline/eda_feature_correlations.csv",
+      "source_sha256": "9f59b895be616e9c15de4fbdb81d4470c3f15e7df48b99b2d4bb04f68dda3461",
+      "published_sha256": "9f59b895be616e9c15de4fbdb81d4470c3f15e7df48b99b2d4bb04f68dda3461",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "reports/baseline/eda_feature_distribution.csv",
+      "source_sha256": "981a7d2eaebce46c6c94a74f99c0d162008e0cbd833a532442ce83c9a5600772",
+      "published_sha256": "981a7d2eaebce46c6c94a74f99c0d162008e0cbd833a532442ce83c9a5600772",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "reports/baseline/excluded_live_archive_domains.csv",
+      "source_sha256": "36efe253c482e985cdd4ae9ff954b206e241362f232b4b3c9f10c63928fb1b47",
+      "published_sha256": "36efe253c482e985cdd4ae9ff954b206e241362f232b4b3c9f10c63928fb1b47",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "reports/baseline/ExtraTrees_archive_predictions.csv",
+      "source_sha256": "a1698422178eb06cf8ca287791d2b6d5e6d602b3426fa76abb011d7b0d21271b",
+      "published_sha256": "a1698422178eb06cf8ca287791d2b6d5e6d602b3426fa76abb011d7b0d21271b",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "reports/baseline/ExtraTrees_native_importance.csv",
+      "source_sha256": "c7a5532695b247dbb5e40c1e10542726d1b8fe8da63e2e8138dc0a32b61f04ba",
+      "published_sha256": "c7a5532695b247dbb5e40c1e10542726d1b8fe8da63e2e8138dc0a32b61f04ba",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "reports/baseline/ExtraTrees_test_predictions.csv",
+      "source_sha256": "69b0d8e6c3e7868976eab10dad859a5a938c9ab6638ff28a8cac489c48c4184e",
+      "published_sha256": "69b0d8e6c3e7868976eab10dad859a5a938c9ab6638ff28a8cac489c48c4184e",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "reports/baseline/HistGradientBoosting_archive_predictions.csv",
+      "source_sha256": "5d187b661615c6fdb087b253e12b6d3037247035754600416fc4c2b5c878395c",
+      "published_sha256": "5d187b661615c6fdb087b253e12b6d3037247035754600416fc4c2b5c878395c",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "reports/baseline/HistGradientBoosting_test_predictions.csv",
+      "source_sha256": "a8fe4f3f5f981bdb37ee35a57959c91432caf0a76dd42892e7de0a65cebd2512",
+      "published_sha256": "a8fe4f3f5f981bdb37ee35a57959c91432caf0a76dd42892e7de0a65cebd2512",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "reports/data_preparation/legitimate500_dual_06nov2026/audit_500.json",
+      "source_sha256": "4383785edb9de5bd82cd7e45756bbc4f668335ccf0b650e828547ef5ffb268d0",
+      "published_sha256": "4383785edb9de5bd82cd7e45756bbc4f668335ccf0b650e828547ef5ffb268d0",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "reports/data_preparation/legitimate500_dual_06nov2026/checkpoint.json",
+      "source_sha256": "fc54502b13858c18cf93a473ef6f06b6ea9402cc2aa2f0a4cd7c8be8d9e56d15",
+      "published_sha256": "fc54502b13858c18cf93a473ef6f06b6ea9402cc2aa2f0a4cd7c8be8d9e56d15",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "reports/data_preparation/legitimate500_dual_06nov2026/exclusion_sources.json",
+      "source_sha256": "4282c627d1f6a8ef4318460ec5fb6af1a8ebca25d91591f42424258beeb13862",
+      "published_sha256": "4282c627d1f6a8ef4318460ec5fb6af1a8ebca25d91591f42424258beeb13862",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "reports/data_preparation/legitimate500_dual_06nov2026/summary.json",
+      "source_sha256": "135c69ba41b88e23441f97435f5acbd7f368929c0862ddcac653f7bfaafa26ce",
+      "published_sha256": "135c69ba41b88e23441f97435f5acbd7f368929c0862ddcac653f7bfaafa26ce",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "reports/baseline/LogisticRegression_archive_predictions.csv",
+      "source_sha256": "27fa3364dc8d4341ae4b0c17cd93e52bc71b92a13f863c9c597bc76ef491429e",
+      "published_sha256": "27fa3364dc8d4341ae4b0c17cd93e52bc71b92a13f863c9c597bc76ef491429e",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "reports/baseline/LogisticRegression_test_predictions.csv",
+      "source_sha256": "b8ca7d69f1f3046e9dd31e3dbf411306438e344c879c8359acbfab7a4161c38f",
+      "published_sha256": "b8ca7d69f1f3046e9dd31e3dbf411306438e344c879c8359acbfab7a4161c38f",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "reports/baseline/model_comparison.csv",
+      "source_sha256": "29af834d415ad15ac529ced5871c551f5373ed19f7870aec940d57a1906cffda",
+      "published_sha256": "29af834d415ad15ac529ced5871c551f5373ed19f7870aec940d57a1906cffda",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "reports/baseline/model_comparison.png",
+      "source_sha256": "f705e86f18fc868942d8f97c9198b3e4e4febf36fd749b1769711a8a40cd7b8d",
+      "published_sha256": "f705e86f18fc868942d8f97c9198b3e4e4febf36fd749b1769711a8a40cd7b8d",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "reports/baseline/preparation_eda.json",
+      "source_sha256": "83e8f263a4999345fc98554729a6ef272d2fb8971107cb437c2a646d95becade",
+      "published_sha256": "83e8f263a4999345fc98554729a6ef272d2fb8971107cb437c2a646d95becade",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "reports/baseline/quarantined_label_conflicts.csv",
+      "source_sha256": "d531170792a70a336306929e80623d15d21b1ce38493e3c1ec692d1a9a307b32",
+      "published_sha256": "d531170792a70a336306929e80623d15d21b1ce38493e3c1ec692d1a9a307b32",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "reports/baseline/RandomForest_archive_predictions.csv",
+      "source_sha256": "bcf002cdfdc4a822589c450d5954162f048fc21d9bafec43f975fa3f80d58460",
+      "published_sha256": "bcf002cdfdc4a822589c450d5954162f048fc21d9bafec43f975fa3f80d58460",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "reports/baseline/RandomForest_native_importance.csv",
+      "source_sha256": "7508221c865e28f641911708bae5068c5b78fe991bdc345d3985d2cc96cd170c",
+      "published_sha256": "7508221c865e28f641911708bae5068c5b78fe991bdc345d3985d2cc96cd170c",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "reports/baseline/RandomForest_test_predictions.csv",
+      "source_sha256": "f036b0bef6065a6df4c84e308bb1fa9a71aa259781df61606ab0a6dd3602ca4a",
+      "published_sha256": "f036b0bef6065a6df4c84e308bb1fa9a71aa259781df61606ab0a6dd3602ca4a",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "reports/baseline/run.log",
+      "source_sha256": "e595782883b397e0888c7a13694b9daee633db9604e81a479a6d1297a26de2e2",
+      "published_sha256": "e595782883b397e0888c7a13694b9daee633db9604e81a479a6d1297a26de2e2",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "reports/baseline/training_results.json",
+      "source_sha256": "20b7086c94c26318caec138029bd950c03c45861c1239dbbda67c905bd73e5b3",
+      "published_sha256": "20b7086c94c26318caec138029bd950c03c45861c1239dbbda67c905bd73e5b3",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "reports/baseline/verification.json",
+      "source_sha256": "d69508d75b2d3bd37ff95e6d2bc5db5fde36ca1eef9247bc6d011e441b25c629",
+      "published_sha256": "d69508d75b2d3bd37ff95e6d2bc5db5fde36ca1eef9247bc6d011e441b25c629",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "reports/baseline/XGBoost_archive_predictions.csv",
+      "source_sha256": "ec60c6eecab5010f853e20a4163b914f0d9f6ad479c279bd7c784b293fabf162",
+      "published_sha256": "ec60c6eecab5010f853e20a4163b914f0d9f6ad479c279bd7c784b293fabf162",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "reports/baseline/xgboost_archive_query_diagnosis.json",
+      "source_sha256": "7c5948a9b947b6bf2cbc512939a76e89c6720203b860e5ca14d1c2a6981ee3cc",
+      "published_sha256": "7c5948a9b947b6bf2cbc512939a76e89c6720203b860e5ca14d1c2a6981ee3cc",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "reports/baseline/xgboost_feature_influence.png",
+      "source_sha256": "8869a666743aa995d5e3c8441005ab4a876fc66e373bad2885fa6f479465bfec",
+      "published_sha256": "8869a666743aa995d5e3c8441005ab4a876fc66e373bad2885fa6f479465bfec",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "reports/baseline/xgboost_feature_influence_20.csv",
+      "source_sha256": "67a58c3f660a30295568289e7b3ff83d7afd986138f4b0709d1616a9602e0664",
+      "published_sha256": "67a58c3f660a30295568289e7b3ff83d7afd986138f4b0709d1616a9602e0664",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "reports/baseline/XGBoost_native_importance.csv",
+      "source_sha256": "a922d9f04825b606fabdba6d2cbb7786bdb1f565fdd493cf99e4632b670b190f",
+      "published_sha256": "a922d9f04825b606fabdba6d2cbb7786bdb1f565fdd493cf99e4632b670b190f",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "reports/baseline/XGBoost_test_predictions.csv",
+      "source_sha256": "e44d9cb5e887f0291104a1c61c48a9ca500c1538e3f436810f4bc53ec233b5cb",
+      "published_sha256": "e44d9cb5e887f0291104a1c61c48a9ca500c1538e3f436810f4bc53ec233b5cb",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "testing/live/url17_v037_legitimate_20261106_045736/browser_live_analysis.json",
+      "source_sha256": "c54bce7d16585a6c7c53d53fa5de1815c45d9fe7f818acae4e1a1a9790efbe69",
+      "published_sha256": "37b62b0ef75fdfa188b54e7df8cf983e07c1ca41c14ad126a68a63e4db3dc6b6",
+      "redaction_applied": true
+    },
+    {
+      "repository_path": "testing/live/url17_v037_legitimate_20261106_045736/browser_live_incorrect.csv",
+      "source_sha256": "ab20f52c788fd904c51cdc2c480862242eb30e6fe18cb4b11439fe0edc2e3502",
+      "published_sha256": "ab20f52c788fd904c51cdc2c480862242eb30e6fe18cb4b11439fe0edc2e3502",
+      "redaction_applied": true
+    },
+    {
+      "repository_path": "testing/live/url17_v037_legitimate_20261106_045736/browser_live_no_analysis.csv",
+      "source_sha256": "e2ef0d4f0493d46a0c15ecb89f3857968f9b10e3c48e6f5594a459bbb586db93",
+      "published_sha256": "e2ef0d4f0493d46a0c15ecb89f3857968f9b10e3c48e6f5594a459bbb586db93",
+      "redaction_applied": true
+    },
+    {
+      "repository_path": "testing/live/url17_v037_legitimate_20261106_045736/browser_live_raw_analysis.jsonl",
+      "source_sha256": "0c855d75870eeef7a724c5fa1050bacbe1e3e7968a74f94213ddfb1088dcd996",
+      "published_sha256": "f1abdb9ce5e908f0e303ded583fb008356a4050b21bd7a8547cb12784386db86",
+      "redaction_applied": true
+    },
+    {
+      "repository_path": "testing/live/url17_v037_legitimate_20261106_045736/browser_live_rows.csv",
+      "source_sha256": "9ef804ddfd8802c52ddf3c7148040244ef81179f38047b65115d50701a05b3f3",
+      "published_sha256": "9ef804ddfd8802c52ddf3c7148040244ef81179f38047b65115d50701a05b3f3",
+      "redaction_applied": true
+    },
+    {
+      "repository_path": "testing/live/url17_v037_legitimate_20261106_045736/browser_live_rows.partial.csv",
+      "source_sha256": "9ef804ddfd8802c52ddf3c7148040244ef81179f38047b65115d50701a05b3f3",
+      "published_sha256": "9ef804ddfd8802c52ddf3c7148040244ef81179f38047b65115d50701a05b3f3",
+      "redaction_applied": true
+    },
+    {
+      "repository_path": "testing/live/url17_v037_legitimate_20261106_045736/browser_live_summary.json",
+      "source_sha256": "76deab7330158af9bc16bf809a89bcaad244f5af088b9ba12a9f81878edb3ab6",
+      "published_sha256": "76deab7330158af9bc16bf809a89bcaad244f5af088b9ba12a9f81878edb3ab6",
+      "redaction_applied": true
+    },
+    {
+      "repository_path": "testing/live/url17_v037_legitimate_20261106_045736/model_snapshot_xgboost-url18.json",
+      "source_sha256": "1951f84c39bf7b6d7e72c6ffb41d937d634ce53aa3a580c3bff42e5949323404",
+      "published_sha256": "f7ee8b6839dbb5007a51c64cfd4539b0ae7d71533a4be3d0e6880ad4ab7af2eb",
+      "redaction_applied": true
+    },
+    {
+      "repository_path": "testing/live/url17_v037_legitimate_20261106_045736/run_manifest.json",
+      "source_sha256": "d00b5b24c32073cd1f07351d56cd918a401b080c4a5abf237b99623c875e888f",
+      "published_sha256": "d00b5b24c32073cd1f07351d56cd918a401b080c4a5abf237b99623c875e888f",
+      "redaction_applied": true
+    },
+    {
+      "repository_path": "testing/live/url17_v037_phishing_20261106_035537/browser_live_analysis.json",
+      "source_sha256": "25a656453368cae6e13a3f00f605213c0c178cf2bd02e416a3a1e12d95b77fa4",
+      "published_sha256": "068e80d5ca9b43f63ee7b9092f33ca3f5661fc354fe4941b59e6e425fdfbfb4d",
+      "redaction_applied": true
+    },
+    {
+      "repository_path": "testing/live/url17_v037_phishing_20261106_035537/browser_live_incorrect.csv",
+      "source_sha256": "d4598efb06aa66841d66994f943bdce7a511fe8216dd1c63fecd23056a1ba305",
+      "published_sha256": "2e558e4b5301e6b411cf077368a2731d3804878870e4eb0a65d64767dfc0883f",
+      "redaction_applied": true
+    },
+    {
+      "repository_path": "testing/live/url17_v037_phishing_20261106_035537/browser_live_no_analysis.csv",
+      "source_sha256": "9b666b7187a4f88bb84aa27c55e9f7da959bcc79251114bbe7348a4b4b2a6542",
+      "published_sha256": "47cd9ba83ab3d776b0fe6264f74db9a69854b72a154765ebf5ac420ebdc0b57b",
+      "redaction_applied": true
+    },
+    {
+      "repository_path": "testing/live/url17_v037_phishing_20261106_035537/browser_live_raw_analysis.jsonl",
+      "source_sha256": "214e44ddbd0f4e941f3f6504ace8e9bff76fe9d37381a9520b4a054889199229",
+      "published_sha256": "9f7b07f32801e21bdab3a6b5a1bd5cb1b81ecaac5f0ac9caf13f200b0761f331",
+      "redaction_applied": true
+    },
+    {
+      "repository_path": "testing/live/url17_v037_phishing_20261106_035537/browser_live_rows.csv",
+      "source_sha256": "b782003d9e1ccdc74d7fcdb5a2a72d76d92535245c96364287131861b1d89d54",
+      "published_sha256": "050b71a748598397294aea13b1039528d72818e82ff8f04f9e895d352f9dd903",
+      "redaction_applied": true
+    },
+    {
+      "repository_path": "testing/live/url17_v037_phishing_20261106_035537/browser_live_rows.partial.csv",
+      "source_sha256": "b782003d9e1ccdc74d7fcdb5a2a72d76d92535245c96364287131861b1d89d54",
+      "published_sha256": "050b71a748598397294aea13b1039528d72818e82ff8f04f9e895d352f9dd903",
+      "redaction_applied": true
+    },
+    {
+      "repository_path": "testing/live/url17_v037_phishing_20261106_035537/browser_live_summary.json",
+      "source_sha256": "33564c762f81ee4aa2e77afc0ab11776ec42c721f28cd9233f210f2613751ba5",
+      "published_sha256": "33564c762f81ee4aa2e77afc0ab11776ec42c721f28cd9233f210f2613751ba5",
+      "redaction_applied": true
+    },
+    {
+      "repository_path": "testing/live/url17_v037_phishing_20261106_035537/model_snapshot_xgboost-url18.json",
+      "source_sha256": "1951f84c39bf7b6d7e72c6ffb41d937d634ce53aa3a580c3bff42e5949323404",
+      "published_sha256": "f7ee8b6839dbb5007a51c64cfd4539b0ae7d71533a4be3d0e6880ad4ab7af2eb",
+      "redaction_applied": true
+    },
+    {
+      "repository_path": "testing/live/url17_v037_phishing_20261106_035537/run_manifest.json",
+      "source_sha256": "ce0ec68687d3a8434344d8c9898d6b51603e4b153fc92ec11c60352d80e22234",
+      "published_sha256": "ce0ec68687d3a8434344d8c9898d6b51603e4b153fc92ec11c60352d80e22234",
+      "redaction_applied": true
+    },
+    {
+      "repository_path": "testing/live/url20_v040_legitimate_20261106_045725/browser_live_analysis.json",
+      "source_sha256": "c8f48b6d814eb2c72095ffd1225d636ee7785c2f8ece65d430b66fefbee9127f",
+      "published_sha256": "d68256f65a4d32ffbb2021bea49839d57b465a68f7eb9aedcdb4741f0f241b53",
+      "redaction_applied": true
+    },
+    {
+      "repository_path": "testing/live/url20_v040_legitimate_20261106_045725/browser_live_incorrect.csv",
+      "source_sha256": "fb647d00541a0f59443a06009db01b77431d27bc25d79c63e5f6c70579afcb54",
+      "published_sha256": "fb647d00541a0f59443a06009db01b77431d27bc25d79c63e5f6c70579afcb54",
+      "redaction_applied": true
+    },
+    {
+      "repository_path": "testing/live/url20_v040_legitimate_20261106_045725/browser_live_no_analysis.csv",
+      "source_sha256": "1db5976ef7b9646643c5d50a2af8caee268f565f9364e1918c329c9a2e8540bb",
+      "published_sha256": "1db5976ef7b9646643c5d50a2af8caee268f565f9364e1918c329c9a2e8540bb",
+      "redaction_applied": true
+    },
+    {
+      "repository_path": "testing/live/url20_v040_legitimate_20261106_045725/browser_live_raw_analysis.jsonl",
+      "source_sha256": "12a42e54a61d0f5133a3c2b1a9a7902f9e46aa7ebca83295f51efd153db3cdf0",
+      "published_sha256": "ef103619f33e475a4bc386872b9b8cfa01b0c9460dbeea13b85e75649eaf68bc",
+      "redaction_applied": true
+    },
+    {
+      "repository_path": "testing/live/url20_v040_legitimate_20261106_045725/browser_live_rows.csv",
+      "source_sha256": "3550d8c4e90b4dfeb4bddaf4bce2bcb763e6aabfaea0819f96bb47cd8f405254",
+      "published_sha256": "3550d8c4e90b4dfeb4bddaf4bce2bcb763e6aabfaea0819f96bb47cd8f405254",
+      "redaction_applied": true
+    },
+    {
+      "repository_path": "testing/live/url20_v040_legitimate_20261106_045725/browser_live_rows.partial.csv",
+      "source_sha256": "3550d8c4e90b4dfeb4bddaf4bce2bcb763e6aabfaea0819f96bb47cd8f405254",
+      "published_sha256": "3550d8c4e90b4dfeb4bddaf4bce2bcb763e6aabfaea0819f96bb47cd8f405254",
+      "redaction_applied": true
+    },
+    {
+      "repository_path": "testing/live/url20_v040_legitimate_20261106_045725/browser_live_summary.json",
+      "source_sha256": "fd632bd387298cb966cdacb2031a27e6029172022fa494d7ef4b3f2372c72f79",
+      "published_sha256": "fd632bd387298cb966cdacb2031a27e6029172022fa494d7ef4b3f2372c72f79",
+      "redaction_applied": true
+    },
+    {
+      "repository_path": "testing/live/url20_v040_legitimate_20261106_045725/model_snapshot_xgboost-url20.json",
+      "source_sha256": "c35813c72d2f5a196e423d7c9d18bd883206bbab0133111b29306d08a4c0c50e",
+      "published_sha256": "1de2b8847a0fe72f4f0774bc8dd25fe63a6d47e75f105beb0c526633c7cdbd21",
+      "redaction_applied": true
+    },
+    {
+      "repository_path": "testing/live/url20_v040_legitimate_20261106_045725/run_manifest.json",
+      "source_sha256": "797896fa57546e34cf0a6b328d83b6f4356ca437bda5a2b99eb0f14cd51ba302",
+      "published_sha256": "797896fa57546e34cf0a6b328d83b6f4356ca437bda5a2b99eb0f14cd51ba302",
+      "redaction_applied": true
+    },
+    {
+      "repository_path": "testing/live/url20_v040_phishing_20261106_035533/browser_live_analysis.json",
+      "source_sha256": "592881d2bba12fe40283a9192ccb3148ab138527029f785f6d1954382cd7c352",
+      "published_sha256": "00f7d79445bbda91d23abb4b9f630b2d929898a950c129f4715ab62d26e72e4c",
+      "redaction_applied": true
+    },
+    {
+      "repository_path": "testing/live/url20_v040_phishing_20261106_035533/browser_live_incorrect.csv",
+      "source_sha256": "3a5356c00f413fdbd81a6c8cc74f514a287176cb7a61a3fee8e91e0c0162c4dc",
+      "published_sha256": "3a5356c00f413fdbd81a6c8cc74f514a287176cb7a61a3fee8e91e0c0162c4dc",
+      "redaction_applied": true
+    },
+    {
+      "repository_path": "testing/live/url20_v040_phishing_20261106_035533/browser_live_no_analysis.csv",
+      "source_sha256": "92701fa0175e49cdcc0f25e5fd75fcd6643212436c48fdce797c486e0f33284f",
+      "published_sha256": "e65802a481a3d40fcf094f233a43575c7ba2ee6c5e0a3bfc290b818d345e6300",
+      "redaction_applied": true
+    },
+    {
+      "repository_path": "testing/live/url20_v040_phishing_20261106_035533/browser_live_raw_analysis.jsonl",
+      "source_sha256": "a1de8622d46f70dcfe751d7dc1a0d5bd0a79d5d929867209c86044fb7501d5a3",
+      "published_sha256": "249ae4f1fbae6ebc724e7242e418a5f72905b01cacd0190e9af3e264db4ce721",
+      "redaction_applied": true
+    },
+    {
+      "repository_path": "testing/live/url20_v040_phishing_20261106_035533/browser_live_rows.csv",
+      "source_sha256": "7df11fe4d7003411d21eed7b7ef1da3b61ccf4452ac7684b22e465b54c477b6d",
+      "published_sha256": "88099fc6f4905b7a3cdc7b4aea93f6bd306945e0ade9d6231d848612b551730d",
+      "redaction_applied": true
+    },
+    {
+      "repository_path": "testing/live/url20_v040_phishing_20261106_035533/browser_live_rows.partial.csv",
+      "source_sha256": "7df11fe4d7003411d21eed7b7ef1da3b61ccf4452ac7684b22e465b54c477b6d",
+      "published_sha256": "88099fc6f4905b7a3cdc7b4aea93f6bd306945e0ade9d6231d848612b551730d",
+      "redaction_applied": true
+    },
+    {
+      "repository_path": "testing/live/url20_v040_phishing_20261106_035533/browser_live_summary.json",
+      "source_sha256": "0e94929fb15a5779e2a1e9d3dd75778fb37497b2fa35af6acbe26d714e7453ab",
+      "published_sha256": "0e94929fb15a5779e2a1e9d3dd75778fb37497b2fa35af6acbe26d714e7453ab",
+      "redaction_applied": true
+    },
+    {
+      "repository_path": "testing/live/url20_v040_phishing_20261106_035533/model_snapshot_xgboost-url20.json",
+      "source_sha256": "c35813c72d2f5a196e423d7c9d18bd883206bbab0133111b29306d08a4c0c50e",
+      "published_sha256": "1de2b8847a0fe72f4f0774bc8dd25fe63a6d47e75f105beb0c526633c7cdbd21",
+      "redaction_applied": true
+    },
+    {
+      "repository_path": "testing/live/url20_v040_phishing_20261106_035533/run_manifest.json",
+      "source_sha256": "1910491182fa5594aa6cf73f8c56dd4f54c9cb557ac9d462b210f5f064ffcc4f",
+      "published_sha256": "1910491182fa5594aa6cf73f8c56dd4f54c9cb557ac9d462b210f5f064ffcc4f",
+      "redaction_applied": true
+    },
+    {
+      "repository_path": "scripts/analysis_history_db.py",
+      "source_sha256": "469cf1023d58ccef6d5c773af07b04345f8843acf1ca0a18ff7108a4bfc55ddc",
+      "published_sha256": "e3f03309a9d89becd4b64226d0f5f1db4304115875ad3caf7b176ce8ae364c26",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "scripts/browser_url20_check.py",
+      "source_sha256": "4afab71028fc84f234800ed415030bba6075910dba29202de21c76d7ffced153",
+      "published_sha256": "3e987dfb4c245857aedf17d088063d3d3d595280c2474e39f657558877236114",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "scripts/buat_laporan.py",
+      "source_sha256": "91ce4ca90b244ee8f75a621e0f639f870df5e14c9c2e28a1547a0eef5b83714c",
+      "published_sha256": "3f5d44edec249257c2a429feefaa96edc77ad63e29821ed6a54a949ad6f31430",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "scripts/consolidate_live_analysis.py",
+      "source_sha256": "2f97a6fd5c706beaed9b1ea4833f1686484b3c135b508b92067a8cf4726a9304",
+      "published_sha256": "3047f46ffda32e1a1cfd618153b68b1f6497723150eb872262517c3aade31746",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "scripts/eksperimen_phreshphish.py",
+      "source_sha256": "02021ec6e4f4840efa659a2c3784183ae269dcca844cf40facda3ab36a85817b",
+      "published_sha256": "a189c903f5f2b2acf6c949f4958abebc3ff0fa1781e5b52910098ae756f44e7b",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "scripts/ekstrak_fitur_url17.py",
+      "source_sha256": "f37b21c4f4a873ae145f26ab208a2b1e5715fb8e8c9b6df8bde29cae43228399",
+      "published_sha256": "eabeeb7290701f2893b50d62cfc5125e6c33002ada872dfbcdc2905433954aad",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "scripts/evaluate-extension-browser-live.py",
+      "source_sha256": "a5853624706b5a9fa8ef47b74d61343dc28174864c3f1f5d2c9b106eba3d4027",
+      "published_sha256": "a5853624706b5a9fa8ef47b74d61343dc28174864c3f1f5d2c9b106eba3d4027",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "scripts/laporan_perbaikan_v2.py",
+      "source_sha256": "f84dab534d2b28fe7084e224cc098edaddbd99cb23ee2d5baad4a84915c74298",
+      "published_sha256": "f5d4a66909c51d8ec57a77a908b47920994b2a710e29c44d6d5d0ed55a3fc222",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "scripts/perbaikan_v2.py",
+      "source_sha256": "7573ee9a7bc5b79822988bcaf597a058a148f71a81e423b6a742340b0f60e930",
+      "published_sha256": "bab097a73d992977ccd5dbc7f2f37c2bfaa26fe2dafdeb8f3bb0bde1e335eb65",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "scripts/siapkan_extension_url20.py",
+      "source_sha256": "675b80b6b2accfd712f46041e559ca88897987424fe515dbcea15e1d495a3cfe",
+      "published_sha256": "2efe182b2884404a21d4785bd5c0b4dab661a522a1659fd441a6cda1cddd1bc5",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "scripts/siapkan_legitimate_500_dual.py",
+      "source_sha256": "fcc570546ee9a3756f630d321812d866d0e718406e7bd18f933cb56b0f252d2c",
+      "published_sha256": "e453cc438ee03f7886c348f1c6829b2ac9e37ab06fd48fe41138ef58d8ebaaad",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "scripts/siapkan_repository_xgboost20.py",
+      "source_sha256": "9ca0e7a09e2ff562065470e155c3103162887330561fff39889bee5a3b058eb5",
+      "published_sha256": "4c53bec638f708ea9df0b15086962761ecf2053de053457e78c3b60f3beb4677",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "scripts/uji_extension_url20.py",
+      "source_sha256": "3ccf1bd542aad53870148d77dd19b44070c0523b2d5a430e73c080112d6f878a",
+      "published_sha256": "98795c460b10135dc29f0e8112a5f24a04249e9ad8efdca395e9c671f506f682",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "scripts/Uji_Legitimate_URL17_URL20.ps1",
+      "source_sha256": "5348f633e54047f08d651dbc5815e2092838e334dfca4a21dc3aabef7e6b9b83",
+      "published_sha256": "5637271283a2547f5745ed70a39189fcfeea9191aa86a0509a9bbdc7d157ae02",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "scripts/Uji_Live_URL20.ps1",
+      "source_sha256": "7c39fb95f705509049e4f014572a61b0d49106ee5eced5b7674b6be812c20586",
+      "published_sha256": "fc82ea03491ae9b2c8dc352220c37a5bf69a076f63b77b8e190fdcb930d9e0f8",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "scripts/Uji_Phishing_URL17_URL20.ps1",
+      "source_sha256": "3abf82f6e3fe594ac897ea17cde6a9acd653eb397233b449d58622cfa025d268",
+      "published_sha256": "3dee7d3d09bb8892a132e5f88923942c938716d8814dfa6fd9d76714498fc0b3",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "scripts/verifikasi_url20_full.mjs",
+      "source_sha256": "679f2bd37ae66b2b98b0fd7265b41ba4a19dc0d134cc68eb07ae5c06be52eeaf",
+      "published_sha256": "7b048f195d4a2d843b3be83d35d5010a95d68b5a66d1d5e33a2bef5092534e21",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "data/raw/supplementary_sources/URL dataset.csv",
+      "source_sha256": "accb2dfbfd3329a8b5cb1b85dcad90314a660c272be755cb45d0f6865014b466",
+      "published_sha256": "accb2dfbfd3329a8b5cb1b85dcad90314a660c272be755cb45d0f6865014b466",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "data/raw/supplementary_sources/url_features_extracted1.csv",
+      "source_sha256": "8685e7901c3b4e73eb43c106cb166cc932dd14f76960a032c713c2c32f09dbcd",
+      "published_sha256": "8685e7901c3b4e73eb43c106cb166cc932dd14f76960a032c713c2c32f09dbcd",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "reports/baseline/HASIL_EKSPERIMEN.md",
+      "source_sha256": "299c302b0e0ad22baa76acc111f4a0459b0b98e346fbdb13026cd5eff8822632",
+      "published_sha256": "299c302b0e0ad22baa76acc111f4a0459b0b98e346fbdb13026cd5eff8822632",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/assets/icons/icon128.png",
+      "source_sha256": "988c759006377c7d193977b3efc1911a25f12922d2ed96a5ed60dc8054cb7d3d",
+      "published_sha256": "988c759006377c7d193977b3efc1911a25f12922d2ed96a5ed60dc8054cb7d3d",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/assets/icons/icon16.png",
+      "source_sha256": "1ef8d58c4ac51de0a285bed5e878ca2e9208690c9af477da7195a5fb65200532",
+      "published_sha256": "1ef8d58c4ac51de0a285bed5e878ca2e9208690c9af477da7195a5fb65200532",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/assets/icons/icon32.png",
+      "source_sha256": "7317aba225765f1eba3640a19ad3a40c162688f86bc405dddb90adc7cc9223f2",
+      "published_sha256": "7317aba225765f1eba3640a19ad3a40c162688f86bc405dddb90adc7cc9223f2",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/assets/icons/icon48.png",
+      "source_sha256": "37d3cf4e5d1b0c7bb50a961b52ca455a3447de1a96c9faf6d67f9474af6d4e05",
+      "published_sha256": "37d3cf4e5d1b0c7bb50a961b52ca455a3447de1a96c9faf6d67f9474af6d4e05",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/manifest.json",
+      "source_sha256": "c2e4495941cf3bc2c3ddcb19cf8aa83e69b7d56a047d75f22cd47e2abbe9fe11",
+      "published_sha256": "c2e4495941cf3bc2c3ddcb19cf8aa83e69b7d56a047d75f22cd47e2abbe9fe11",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/package.json",
+      "source_sha256": "57d0bfc7dddb5ce2d15355614a2eb1fdec819543b8f7689b2f199d661725ecb9",
+      "published_sha256": "57d0bfc7dddb5ce2d15355614a2eb1fdec819543b8f7689b2f199d661725ecb9",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/README.md",
+      "source_sha256": "207c7f82ffa202027d8e7651ab4422971c257013084a45b08b9685131c1a8d47",
+      "published_sha256": "207c7f82ffa202027d8e7651ab4422971c257013084a45b08b9685131c1a8d47",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/analyzer/brand/brand-domain-api.js",
+      "source_sha256": "b313bf3d9f55efa39e0edca6882a27297ce300cb37cd12256bdb76a4c96981db",
+      "published_sha256": "b313bf3d9f55efa39e0edca6882a27297ce300cb37cd12256bdb76a4c96981db",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/analyzer/brand/brand-evidence.js",
+      "source_sha256": "dc5c55e70181ab7beab6d57053e404fecbbd78fabd129ad30dccf4b82fbfe00c",
+      "published_sha256": "dc5c55e70181ab7beab6d57053e404fecbbd78fabd129ad30dccf4b82fbfe00c",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/analyzer/brand/brand-features.js",
+      "source_sha256": "979bae2d540abfde5331cd58fd60eeb01f3a2c00eaeadd5e74435b31918b2a1c",
+      "published_sha256": "979bae2d540abfde5331cd58fd60eeb01f3a2c00eaeadd5e74435b31918b2a1c",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/analyzer/brand/brand-identity.js",
+      "source_sha256": "6502bc3210c0d89b5d2aac429e2be8a74edd5a8b801956a7b2b035259c26c2cc",
+      "published_sha256": "6502bc3210c0d89b5d2aac429e2be8a74edd5a8b801956a7b2b035259c26c2cc",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/analyzer/brand/brand-lookup-cache.js",
+      "source_sha256": "1d2eee333072959daf650122125f538f5ba389c8102451ade9be1c789daf4d62",
+      "published_sha256": "1d2eee333072959daf650122125f538f5ba389c8102451ade9be1c789daf4d62",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/analyzer/brand/domain-brand-search.js",
+      "source_sha256": "aa7b6e6c68854ad116f28933c41615be9a84b8f4c783dbd77a0415d77235d759",
+      "published_sha256": "aa7b6e6c68854ad116f28933c41615be9a84b8f4c783dbd77a0415d77235d759",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/analyzer/brand/parent-site-link.js",
+      "source_sha256": "7565ed66d95c2f6fc5a42b1997eb9800d8c3f1685331436eda30515bf1798a34",
+      "published_sha256": "7565ed66d95c2f6fc5a42b1997eb9800d8c3f1685331436eda30515bf1798a34",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/analyzer/correlation/decision-policy.js",
+      "source_sha256": "7627c6e7e6f3f1443e6b259c9db4c2255c884e27833ea6aa2d5f4aabaa8b141e",
+      "published_sha256": "7627c6e7e6f3f1443e6b259c9db4c2255c884e27833ea6aa2d5f4aabaa8b141e",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/analyzer/correlation/evidence-rules.js",
+      "source_sha256": "d296a506cfc1b615fbea2e886ca2588fe2396c895f05f9c92638c2db60701e4e",
+      "published_sha256": "d296a506cfc1b615fbea2e886ca2588fe2396c895f05f9c92638c2db60701e4e",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/analyzer/dom/dom-evidence.js",
+      "source_sha256": "17277b22983afabe9840a9ab3338b9419823537be5fbc756d1129cbcee0326ef",
+      "published_sha256": "17277b22983afabe9840a9ab3338b9419823537be5fbc756d1129cbcee0326ef",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/analyzer/dom/dom-features.js",
+      "source_sha256": "c7c54b9822f89cff6c49847e7549dc7a0b4cf95c42100f3680340ddaf4e2dfb8",
+      "published_sha256": "c7c54b9822f89cff6c49847e7549dc7a0b4cf95c42100f3680340ddaf4e2dfb8",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/analyzer/domain/domain-age-policy.js",
+      "source_sha256": "c16fe429ccad91a6d6cb346c75511d4de13da47702fb3a497301fc123d9d96b3",
+      "published_sha256": "c16fe429ccad91a6d6cb346c75511d4de13da47702fb3a497301fc123d9d96b3",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/analyzer/domain/rdap-features.js",
+      "source_sha256": "063ffbee4e821d8bdf6dfdc0b08ac413f5ea4b82451bacfeacd6fb51e781eb39",
+      "published_sha256": "063ffbee4e821d8bdf6dfdc0b08ac413f5ea4b82451bacfeacd6fb51e781eb39",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/analyzer/domain/url18-age.js",
+      "source_sha256": "14ac8f7b680dd22a9ca38941b14bcb27c911ae5fe86219b02025940459ff4028",
+      "published_sha256": "14ac8f7b680dd22a9ca38941b14bcb27c911ae5fe86219b02025940459ff4028",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/analyzer/feature-assembler.js",
+      "source_sha256": "6dd041d5a7e4cf24431fd338f9b4a091779a4d226f185a86f71957c63f35b5a3",
+      "published_sha256": "6dd041d5a7e4cf24431fd338f9b4a091779a4d226f185a86f71957c63f35b5a3",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/analyzer/README.md",
+      "source_sha256": "66e046562de9e883b73fd80b89dfc0d7046604da12b961799cd5c75b6469bb64",
+      "published_sha256": "66e046562de9e883b73fd80b89dfc0d7046604da12b961799cd5c75b6469bb64",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/analyzer/runtime-analysis.js",
+      "source_sha256": "23de032de4c3c33779d052c440f44c7524d2b1070311f39eb5f1cd8b2533066a",
+      "published_sha256": "23de032de4c3c33779d052c440f44c7524d2b1070311f39eb5f1cd8b2533066a",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/analyzer/sensitive-url-keywords.json",
+      "source_sha256": "9df45d3a77bfd052f9129ddb35d0b21779914cbe3c5a643e07e1b3485419a77f",
+      "published_sha256": "9df45d3a77bfd052f9129ddb35d0b21779914cbe3c5a643e07e1b3485419a77f",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/analyzer/url/url-features.js",
+      "source_sha256": "3263927cf58f0fc9df4da107b6906ff0bd77c1322961df0d8fb3c86efcd6adb6",
+      "published_sha256": "3263927cf58f0fc9df4da107b6906ff0bd77c1322961df0d8fb3c86efcd6adb6",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/analyzer/url/url18-features.js",
+      "source_sha256": "6ae931631f4331d811966aa1812150f5a8320db5620d14f6ba61a552aa30203d",
+      "published_sha256": "6ae931631f4331d811966aa1812150f5a8320db5620d14f6ba61a552aa30203d",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/background/service-worker.js",
+      "source_sha256": "1ee1b698166072861e5fd17225bb919189a56c7cc6803474ea17e1155330d75f",
+      "published_sha256": "1ee1b698166072861e5fd17225bb919189a56c7cc6803474ea17e1155330d75f",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/content/dom-brand-observer.js",
+      "source_sha256": "6a94cc1549c78845cb93e43a96b2535a1dcab1966cc8a0319a6f00244b7eab2d",
+      "published_sha256": "6a94cc1549c78845cb93e43a96b2535a1dcab1966cc8a0319a6f00244b7eab2d",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/content/page-dom-snapshot.bundle.js",
+      "source_sha256": "835a1285ac342ab2d15ae39e5d097c69077d01e6ae110bac881007b30f2d450d",
+      "published_sha256": "835a1285ac342ab2d15ae39e5d097c69077d01e6ae110bac881007b30f2d450d",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/content/page-dom-snapshot.js",
+      "source_sha256": "b69e9f8c3f864387e2142c420c75557d0265f60cd04089d1996cc29f25951443",
+      "published_sha256": "b69e9f8c3f864387e2142c420c75557d0265f60cd04089d1996cc29f25951443",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/content/score-overlay.js",
+      "source_sha256": "fb1003ccb71249af50f5375d22abead06b899e75bc717fac1134e4e51db3c5d6",
+      "published_sha256": "fb1003ccb71249af50f5375d22abead06b899e75bc717fac1134e4e51db3c5d6",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/dataset/dataset.css",
+      "source_sha256": "83028e7f1ea8899388a1eafaeb04adacb43d1fb6d4ab05a28c6f6b6679726908",
+      "published_sha256": "83028e7f1ea8899388a1eafaeb04adacb43d1fb6d4ab05a28c6f6b6679726908",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/dataset/dataset.html",
+      "source_sha256": "e01c17a9700517bf342c75ab3d41ce488a85bd4984e80709facdf4584e23db53",
+      "published_sha256": "e01c17a9700517bf342c75ab3d41ce488a85bd4984e80709facdf4584e23db53",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/dataset/dataset.js",
+      "source_sha256": "33bdc96ba978707f2e5af851f69e41d483058ac89c6c772cd7cf8b63fd2c9d37",
+      "published_sha256": "33bdc96ba978707f2e5af851f69e41d483058ac89c6c772cd7cf8b63fd2c9d37",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/history/history.css",
+      "source_sha256": "eaa04c71246dd10d3dfa44dbe3dce6418b955b9d26ada6221c71a09ec6352f7b",
+      "published_sha256": "eaa04c71246dd10d3dfa44dbe3dce6418b955b9d26ada6221c71a09ec6352f7b",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/history/history.html",
+      "source_sha256": "af09d6d4b19c8ec6e7119f3f0fdcc1d777cb105cf7d1d4b55d5100a62d9a7f04",
+      "published_sha256": "af09d6d4b19c8ec6e7119f3f0fdcc1d777cb105cf7d1d4b55d5100a62d9a7f04",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/history/history.js",
+      "source_sha256": "15ed94adac91cba0feb97f304afc2d6671b6618889d5dd19d67ff83b0d4eb747",
+      "published_sha256": "15ed94adac91cba0feb97f304afc2d6671b6618889d5dd19d67ff83b0d4eb747",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/model/domain-age-policy.json",
+      "source_sha256": "6cdac163a6381c934dc9d5048bd1c4b19a4a9657a9f1839414132688e9572b22",
+      "published_sha256": "6cdac163a6381c934dc9d5048bd1c4b19a4a9657a9f1839414132688e9572b22",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/model/feature-contract-18.json",
+      "source_sha256": "210965df562c625cf77c71efedd628104ecf109f9fd1afbae1f0b8bcf7b0e115",
+      "published_sha256": "210965df562c625cf77c71efedd628104ecf109f9fd1afbae1f0b8bcf7b0e115",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/model/iana_tld_2026-10-29.txt",
+      "source_sha256": "a9d4a0fd0db2e767971162bae66e491e8d1b3e9bedd42e856c97acd90030cc8f",
+      "published_sha256": "a9d4a0fd0db2e767971162bae66e491e8d1b3e9bedd42e856c97acd90030cc8f",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/model/public_suffix_list_2026-10-29.dat",
+      "source_sha256": "090ed3277ebd1831261dd2c56688f0f410b765bc140b325dc17ccb997dbfacbe",
+      "published_sha256": "090ed3277ebd1831261dd2c56688f0f410b765bc140b325dc17ccb997dbfacbe",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/model/suffix-reference.js",
+      "source_sha256": "e0ef70bcbb47be9e9cd6d1abf02c02773314e822e8631d2c1bb4f4d915289713",
+      "published_sha256": "e0ef70bcbb47be9e9cd6d1abf02c02773314e822e8631d2c1bb4f4d915289713",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/model/xgboost-engine.js",
+      "source_sha256": "320fed39ad632e823b19671911ae1279ead2a1c16f0b48f742d269bf86ab429f",
+      "published_sha256": "320fed39ad632e823b19671911ae1279ead2a1c16f0b48f742d269bf86ab429f",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/model/xgboost-url18.json",
+      "source_sha256": "1951f84c39bf7b6d7e72c6ffb41d937d634ce53aa3a580c3bff42e5949323404",
+      "published_sha256": "1951f84c39bf7b6d7e72c6ffb41d937d634ce53aa3a580c3bff42e5949323404",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/options/options.css",
+      "source_sha256": "112efae2a6ed66e59bcf831f521954274d0aa76e46bcc50f9045ce025e4d0926",
+      "published_sha256": "112efae2a6ed66e59bcf831f521954274d0aa76e46bcc50f9045ce025e4d0926",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/options/options.html",
+      "source_sha256": "2ed4712c6f1a6a2805eedda97db220857c50d07f02e0013c6919cabbc85c95b4",
+      "published_sha256": "2ed4712c6f1a6a2805eedda97db220857c50d07f02e0013c6919cabbc85c95b4",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/options/options.js",
+      "source_sha256": "14e177c6145f283b220caf4051b2b3f07714cf6528922cc4aec35d4fb3fa3ede",
+      "published_sha256": "14e177c6145f283b220caf4051b2b3f07714cf6528922cc4aec35d4fb3fa3ede",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/rule/feature-contract-60.json",
+      "source_sha256": "6cb8735fbb5a47ca2eeb7b79747a3d805627145ecef1b4bcbc81bb7003e2cc51",
+      "published_sha256": "6cb8735fbb5a47ca2eeb7b79747a3d805627145ecef1b4bcbc81bb7003e2cc51",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/rule/feature-name-map.json",
+      "source_sha256": "0fa951207ed34c950ad11ee28fdf4a3e269a8d315933df3af9b000c85562e2bb",
+      "published_sha256": "0fa951207ed34c950ad11ee28fdf4a3e269a8d315933df3af9b000c85562e2bb",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/rule/feature-names.js",
+      "source_sha256": "cd00a743f4a2a347d3d3084953e04b8980e264d1dba4f7c5e1bc764809254ebe",
+      "published_sha256": "cd00a743f4a2a347d3d3084953e04b8980e264d1dba4f7c5e1bc764809254ebe",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/rule/PARAMETER.md",
+      "source_sha256": "e4f329da88ca1051fe138bb5eaaa271ba267bb34c9f7c03da21d309bc75f816e",
+      "published_sha256": "e4f329da88ca1051fe138bb5eaaa271ba267bb34c9f7c03da21d309bc75f816e",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/rule/README.md",
+      "source_sha256": "cd173a29c2d75d5cdd2b2c11f34cb727fe3b6590487e86f9bc488c16c575335d",
+      "published_sha256": "cd173a29c2d75d5cdd2b2c11f34cb727fe3b6590487e86f9bc488c16c575335d",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/rule/rulefit-engine-60.json",
+      "source_sha256": "ba7a90a661976c73d4c2ad36f547c586aa48f5f5ddf4d0a05a7743e8f1a52abf",
+      "published_sha256": "ba7a90a661976c73d4c2ad36f547c586aa48f5f5ddf4d0a05a7743e8f1a52abf",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/rule/rulefit-engine.js",
+      "source_sha256": "3d3b925f28a2f90bd90840dd08bb4ad9228b9bd81f3318be1a599b2a80fa69c6",
+      "published_sha256": "3d3b925f28a2f90bd90840dd08bb4ad9228b9bd81f3318be1a599b2a80fa69c6",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/shared/analysis-explanation.js",
+      "source_sha256": "2342e664bc3eaf46c438d85091f3439b0214f3a5a6e444899b129ac7c61953b8",
+      "published_sha256": "2342e664bc3eaf46c438d85091f3439b0214f3a5a6e444899b129ac7c61953b8",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/shared/audit-url.js",
+      "source_sha256": "5798fd057ccbd8990d9abfdfb3f5efc3aed0a5bb98c2747a66cce65c7079ad9a",
+      "published_sha256": "5798fd057ccbd8990d9abfdfb3f5efc3aed0a5bb98c2747a66cce65c7079ad9a",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/shared/brand-claim-guard.js",
+      "source_sha256": "e706ce0680c013a5980928a2ddb49b7f6d295719369ad1acacd10b1cd04bf1fd",
+      "published_sha256": "e706ce0680c013a5980928a2ddb49b7f6d295719369ad1acacd10b1cd04bf1fd",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/shared/brand-features.js",
+      "source_sha256": "0ac7fb064fcd8e85786743bb3cdca302030cda5c8c7f44cb93b63fcc2e0f5655",
+      "published_sha256": "0ac7fb064fcd8e85786743bb3cdca302030cda5c8c7f44cb93b63fcc2e0f5655",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/shared/dom-extractor.browser.js",
+      "source_sha256": "d8e6f8ebb45707840b0a016a39573e5c93c6b1a5fd11a4a1e9f0825c32d686f6",
+      "published_sha256": "d8e6f8ebb45707840b0a016a39573e5c93c6b1a5fd11a4a1e9f0825c32d686f6",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/shared/domain-age.js",
+      "source_sha256": "866beb5ef4b8031e96acb9770e0cd1b493048f287361ed9bc8b136f25ce01b65",
+      "published_sha256": "866beb5ef4b8031e96acb9770e0cd1b493048f287361ed9bc8b136f25ce01b65",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/shared/tldts.js",
+      "source_sha256": "8d458237e49de655cb56ba7a598b5bdba6830eb0dc320a46524a193e80f12dcd",
+      "published_sha256": "8d458237e49de655cb56ba7a598b5bdba6830eb0dc320a46524a193e80f12dcd",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/shared/url-features.js",
+      "source_sha256": "5dd8f0ca29c2b5a1372f99d9affade205333b93de3bfcf1e11e27338ebf9d776",
+      "published_sha256": "5dd8f0ca29c2b5a1372f99d9affade205333b93de3bfcf1e11e27338ebf9d776",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/storage/dataset-collector.js",
+      "source_sha256": "95c432de8cfd59ddb2ef3119d0d08171fbae4a6d1728d1beb560420dd620ed36",
+      "published_sha256": "95c432de8cfd59ddb2ef3119d0d08171fbae4a6d1728d1beb560420dd620ed36",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/storage/dataset-file.js",
+      "source_sha256": "295f4b23b276c7e086d142637ef561e68996bb339cfb783f57afd5fff6765600",
+      "published_sha256": "295f4b23b276c7e086d142637ef561e68996bb339cfb783f57afd5fff6765600",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/storage/settings.js",
+      "source_sha256": "9dc0b6e585dfa596af10c91cc0ab116e8d264a5ba52c2e16057745d2b47c693c",
+      "published_sha256": "9dc0b6e585dfa596af10c91cc0ab116e8d264a5ba52c2e16057745d2b47c693c",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/styles/base.css",
+      "source_sha256": "db768af8e752274ab9483a5a213e379f54f4946966fcd2047d8f744b00cfcf7f",
+      "published_sha256": "db768af8e752274ab9483a5a213e379f54f4946966fcd2047d8f744b00cfcf7f",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/styles/tokens.css",
+      "source_sha256": "2efe89846bc53acf234210b646f198c77c3a0d6e4ab278cd34721327cf06d92e",
+      "published_sha256": "2efe89846bc53acf234210b646f198c77c3a0d6e4ab278cd34721327cf06d92e",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/utils/constants.js",
+      "source_sha256": "4098ff14de684d12c7cebcb8d2ddef0472af1b913b49cf9d938dda40ddb45949",
+      "published_sha256": "4098ff14de684d12c7cebcb8d2ddef0472af1b913b49cf9d938dda40ddb45949",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/utils/evidence.js",
+      "source_sha256": "0ab922a348ed4de64a403228aca7ff1e164471a9023d9a2019e985257b70c41b",
+      "published_sha256": "0ab922a348ed4de64a403228aca7ff1e164471a9023d9a2019e985257b70c41b",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/utils/helpers.js",
+      "source_sha256": "12ce7d88d759ad2340eb7358e401fdcdc83d57ab7086dd0c2583428e62994601",
+      "published_sha256": "12ce7d88d759ad2340eb7358e401fdcdc83d57ab7086dd0c2583428e62994601",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/utils/hosted-platforms.js",
+      "source_sha256": "50e52aa2f83340ae6ef8879d776150b78305fa533a58359dde3d57b7e9c4b570",
+      "published_sha256": "50e52aa2f83340ae6ef8879d776150b78305fa533a58359dde3d57b7e9c4b570",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/utils/page-protection-policy.js",
+      "source_sha256": "62d618a90a1eaacf7bd31b2c3bc7c53670ce1e2aa100bc3ed9d05953d792972b",
+      "published_sha256": "62d618a90a1eaacf7bd31b2c3bc7c53670ce1e2aa100bc3ed9d05953d792972b",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/warning/warning.css",
+      "source_sha256": "67c711c54b530e828e4134ab04256e06aefa976dffdad0ff0aa04122cb8ae0ae",
+      "published_sha256": "67c711c54b530e828e4134ab04256e06aefa976dffdad0ff0aa04122cb8ae0ae",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/warning/warning.html",
+      "source_sha256": "d435c279fd6e7a71b730294845460ab075fa5c7b9bc80ce0dab6cb634c4ea46f",
+      "published_sha256": "d435c279fd6e7a71b730294845460ab075fa5c7b9bc80ce0dab6cb634c4ea46f",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/src/warning/warning.js",
+      "source_sha256": "1daa53e499045d35462440cef6f4531baf57607649be067be738e115bcf3edf7",
+      "published_sha256": "1daa53e499045d35462440cef6f4531baf57607649be067be738e115bcf3edf7",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/tests/analysis-explanation.mjs",
+      "source_sha256": "84aff508868c4c97fd793f4bf28fa716a34eaea7523b187d29b8572b5717d687",
+      "published_sha256": "84aff508868c4c97fd793f4bf28fa716a34eaea7523b187d29b8572b5717d687",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/tests/brand-api-chain.mjs",
+      "source_sha256": "233dca6e1aeaf84b06979c470f54f22bd8acf96842a959f60e55e1b648608bcb",
+      "published_sha256": "233dca6e1aeaf84b06979c470f54f22bd8acf96842a959f60e55e1b648608bcb",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/tests/brand-cache-isolation.mjs",
+      "source_sha256": "a6feae485c4d91a718ca3f9015d565a08a71943ca939e32891cb388dfbb1d18b",
+      "published_sha256": "a6feae485c4d91a718ca3f9015d565a08a71943ca939e32891cb388dfbb1d18b",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/tests/brand-diagnostics.mjs",
+      "source_sha256": "53efa1c1189532dc427b36f75b2b18312a0aa428d2bc4d83fc206ef273453135",
+      "published_sha256": "53efa1c1189532dc427b36f75b2b18312a0aa428d2bc4d83fc206ef273453135",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/tests/brand-query-flow.mjs",
+      "source_sha256": "f2b56b39512cdfe4d570b0603eb825fbbe3f68b4ac1abb53bc21b981f7b40f0b",
+      "published_sha256": "f2b56b39512cdfe4d570b0603eb825fbbe3f68b4ac1abb53bc21b981f7b40f0b",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/tests/browser-dom-smoke.py",
+      "source_sha256": "c110c4316b1152d78c5633c7f640ce75e733782abe6ef07cc1955f332fd2bb43",
+      "published_sha256": "c110c4316b1152d78c5633c7f640ce75e733782abe6ef07cc1955f332fd2bb43",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/tests/decision-policy.mjs",
+      "source_sha256": "b78693a1e8a8926762bd75a138e1a0b1c0a7cfef5efed81b9050516c5b2c76ca",
+      "published_sha256": "b78693a1e8a8926762bd75a138e1a0b1c0a7cfef5efed81b9050516c5b2c76ca",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/tests/dom-brand-oauth.mjs",
+      "source_sha256": "cb950dc861fdd99514e63cf0a51b9368f6902f4ebe42c27700bbafe6df65cf58",
+      "published_sha256": "cb950dc861fdd99514e63cf0a51b9368f6902f4ebe42c27700bbafe6df65cf58",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/tests/domain-first-search.mjs",
+      "source_sha256": "3910f3b45ba46d79d7247b14259385a1d1d7c1f3d5dc063bf1e1adbb6be3a491",
+      "published_sha256": "3910f3b45ba46d79d7247b14259385a1d1d7c1f3d5dc063bf1e1adbb6be3a491",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/tests/dynamic-dom-regression.py",
+      "source_sha256": "e273700d80d4f98fd6b3f2e3bb77a9fed7e864d2826596da0ee9f1b0652a7ec9",
+      "published_sha256": "e273700d80d4f98fd6b3f2e3bb77a9fed7e864d2826596da0ee9f1b0652a7ec9",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/tests/extension-load-smoke.py",
+      "source_sha256": "198ba28f039578b25404be40c7fe4991014db32b57561b1c1cf5613c34255407",
+      "published_sha256": "198ba28f039578b25404be40c7fe4991014db32b57561b1c1cf5613c34255407",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/tests/identity-context.mjs",
+      "source_sha256": "4093b3ed581c978e08c0e8ac00082b37c26fcb287b3f5bcb2fc1471074bc6073",
+      "published_sha256": "4093b3ed581c978e08c0e8ac00082b37c26fcb287b3f5bcb2fc1471074bc6073",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/tests/manual-lists.mjs",
+      "source_sha256": "8e785545ec72adf87d84e5de625999ba744625d8f836ca7ac052dcebf3aab7f3",
+      "published_sha256": "8e785545ec72adf87d84e5de625999ba744625d8f836ca7ac052dcebf3aab7f3",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/tests/oauth-provider-regression.mjs",
+      "source_sha256": "aee9ca18fd8ede94dfde58fbe0cf91a9af91936903232d13508b34b0c55d2f0d",
+      "published_sha256": "aee9ca18fd8ede94dfde58fbe0cf91a9af91936903232d13508b34b0c55d2f0d",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/tests/official-docs-regression.mjs",
+      "source_sha256": "dfdb68f914b26c1d823b1fa1e5cf8ae0df991b0c4869fcfeafc0b696ae5abb47",
+      "published_sha256": "dfdb68f914b26c1d823b1fa1e5cf8ae0df991b0c4869fcfeafc0b696ae5abb47",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/tests/parent-site-link.mjs",
+      "source_sha256": "76bd209f9291c4ad5adcf87963244b5c3c9391acbb34a8a982a7dcf67c534f02",
+      "published_sha256": "76bd209f9291c4ad5adcf87963244b5c3c9391acbb34a8a982a7dcf67c534f02",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/tests/parity-report.json",
+      "source_sha256": "627709c67d57d0c79914413d5df4324da60349cc1900b3b6681c108670fbdb41",
+      "published_sha256": "627709c67d57d0c79914413d5df4324da60349cc1900b3b6681c108670fbdb41",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/tests/parity-runner.mjs",
+      "source_sha256": "8c12759611e62062595efed47725c96e2d29866b47b6470157d3cd4e37f6467f",
+      "published_sha256": "8c12759611e62062595efed47725c96e2d29866b47b6470157d3cd4e37f6467f",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/tests/replay-evidence.mjs",
+      "source_sha256": "b6e78a110cc4c3de50e2758a16101db3eb492d3a1948c151ff5247e92aade96f",
+      "published_sha256": "b6e78a110cc4c3de50e2758a16101db3eb492d3a1948c151ff5247e92aade96f",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/tests/search-page-regression.mjs",
+      "source_sha256": "6d26ec7dc5e658168c23424b6d2e08aaa5afda11cc7cc8278c5e5cf527c84ed5",
+      "published_sha256": "6d26ec7dc5e658168c23424b6d2e08aaa5afda11cc7cc8278c5e5cf527c84ed5",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/tests/suffix-reference-smoke.mjs",
+      "source_sha256": "e7578e29b72a77259df30152c7a24d758712e019b61035ad4d41b934f1fe6c15",
+      "published_sha256": "e7578e29b72a77259df30152c7a24d758712e019b61035ad4d41b934f1fe6c15",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/tests/tld-audit.json",
+      "source_sha256": "e8209131360a81956d08f5e645451e202f44b92a1f6a9fdde933a8ead33dadf1",
+      "published_sha256": "e8209131360a81956d08f5e645451e202f44b92a1f6a9fdde933a8ead33dadf1",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/tests/verified-content-page.mjs",
+      "source_sha256": "c21c58e737346064f7df08e83a11be3c94f44d0ef38e556875b86e6c7400ac69",
+      "published_sha256": "c21c58e737346064f7df08e83a11be3c94f44d0ef38e556875b86e6c7400ac69",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/tests/warning-page-smoke.py",
+      "source_sha256": "609f3ad4c9a785c4cf1a1f6466d9294c98136012b35d66afe47f150f9558a9c3",
+      "published_sha256": "609f3ad4c9a785c4cf1a1f6466d9294c98136012b35d66afe47f150f9558a9c3",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/tests/worker-smoke.mjs",
+      "source_sha256": "36fdb574a8fda448ed834facd5c6143d1231e615b1b309b989539537e52aead2",
+      "published_sha256": "36fdb574a8fda448ed834facd5c6143d1231e615b1b309b989539537e52aead2",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/tests/youtube-brand.mjs",
+      "source_sha256": "cc8dce6479beb80d4e36d6978675452a3b707924f1212e9d99600033add30fdc",
+      "published_sha256": "cc8dce6479beb80d4e36d6978675452a3b707924f1212e9d99600033add30fdc",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/tools/predict-saved-features.mjs",
+      "source_sha256": "9bd1a5744e6f6f5e4facee34d5a1e50ac6ef3e92799bdbf397a779a1720fc155",
+      "published_sha256": "9bd1a5744e6f6f5e4facee34d5a1e50ac6ef3e92799bdbf397a779a1720fc155",
+      "redaction_applied": false
+    },
+    {
+      "repository_path": "comparators/HeuriShield-URL17-XGBoost/tools/replay-decisions.mjs",
+      "source_sha256": "6c5357dbbc3eb4e37178b3a6814d4b07b393f7369584baf5b9621ad711a5280a",
+      "published_sha256": "6c5357dbbc3eb4e37178b3a6814d4b07b393f7369584baf5b9621ad711a5280a",
+      "redaction_applied": false
+    }
+  ],
+  "compressed_files": [
+    {
+      "path": "data/processed/phreshphish_url20_all_clean.csv.gz",
+      "unpacked_path": "data/processed/phreshphish_url20_all_clean.csv",
+      "unpacked_sha256": "09981b1cfbf25d47da6230fcf8368a3b585d93d7bd5ff6291c650f132d2021c9",
+      "packed_sha256": "330c695c79a32abecf45e677f23ff2ec18790e81b3c3a2f7df172925e3eb7bfe",
+      "unpacked_bytes": 99080170,
+      "packed_bytes": 33138826
+    },
+    {
+      "path": "data/processed/url20_train_test.csv.gz",
+      "unpacked_path": "data/processed/url20_train_test.csv",
+      "unpacked_sha256": "19cb7ca09ad61469b228740bcf22ae4750a29d27798998952f65184b31a391e5",
+      "packed_sha256": "7ca9fab30da1cb7811b1205bd840d6825867dd7881a1c388fd98a5a83b3e696e",
+      "unpacked_bytes": 115738372,
+      "packed_bytes": 32127074
+    },
+    {
+      "path": "data/raw/phreshphish_url_label_https.csv.gz",
+      "unpacked_path": "data/raw/phreshphish_url_label_https.csv",
+      "unpacked_sha256": "40301b4b13056b10a34d425d32a8ac2c4e89dbb9a4c11c6a6cc675e0e275edb3",
+      "packed_sha256": "d2c719384dee2c838f78e729fff7c2e1f49325d3e29c58be75369905633a28d0",
+      "unpacked_bytes": 44551084,
+      "packed_bytes": 17387257
+    },
+    {
+      "path": "data/raw/supplementary_sources/URL dataset.csv.gz",
+      "unpacked_path": "data/raw/supplementary_sources/URL dataset.csv",
+      "unpacked_sha256": "accb2dfbfd3329a8b5cb1b85dcad90314a660c272be755cb45d0f6865014b466",
+      "packed_sha256": "2efa99a38a4b25807b5fe017e141cc38e4411be6df938e705f1ae6c94db31fa8",
+      "unpacked_bytes": 32312600,
+      "packed_bytes": 7862772
+    },
+    {
+      "path": "data/raw/supplementary_sources/url_features_extracted1.csv.gz",
+      "unpacked_path": "data/raw/supplementary_sources/url_features_extracted1.csv",
+      "unpacked_sha256": "8685e7901c3b4e73eb43c106cb166cc932dd14f76960a032c713c2c32f09dbcd",
+      "packed_sha256": "a42b831f3f2936613f708205b6ab4a8aad3d1536ab9587ec715f491b8b34541a",
+      "unpacked_bytes": 8963838,
+      "packed_bytes": 1757237
+    },
+    {
+      "path": "experiments/v2/data/cv_train_only_sample.csv.gz",
+      "unpacked_path": "experiments/v2/data/cv_train_only_sample.csv",
+      "unpacked_sha256": "94fbd7086e9d87810de8d84ae6686c41f87252111b2a2e6f7664d3bf18de18aa",
+      "packed_sha256": "f82327c9fc0f31bc5e1547570f60252e40292b8302229bba59ae2f8d98f0c65d",
+      "unpacked_bytes": 8827909,
+      "packed_bytes": 2284866
+    },
+    {
+      "path": "experiments/v2/data/supplement_url20_with_provenance.csv.gz",
+      "unpacked_path": "experiments/v2/data/supplement_url20_with_provenance.csv",
+      "unpacked_sha256": "08431f590ebcbd4fe00b743046c175db7e8060b0ce58a03e35d0f820d552bae6",
+      "packed_sha256": "b70d0f239ed3d808fe6726a1257860d28861c97226b76a8f6d31d5ce13cfd7d3",
+      "unpacked_bytes": 11586574,
+      "packed_bytes": 3477869
+    },
+    {
+      "path": "experiments/v2/data/training_weights.csv.gz",
+      "unpacked_path": "experiments/v2/data/training_weights.csv",
+      "unpacked_sha256": "9537425d0efd2eec214b049035345eb9817a31ad2dc2af4d905a933a5f4cc870",
+      "packed_sha256": "b2333ed276a91ecc6a4214bdd23d437bbc2726fccf274dfa374c52ee9c5f89a0",
+      "unpacked_bytes": 93243800,
+      "packed_bytes": 26330466
+    },
+    {
+      "path": "experiments/v2/data/url20_augmented_splits.csv.gz",
+      "unpacked_path": "experiments/v2/data/url20_augmented_splits.csv",
+      "unpacked_sha256": "1f73c49c61b86259541e7d950dde1d425cfa6a93741d0a9f2779b21552737c45",
+      "packed_sha256": "480b2f2f73d6391fef7b377a2dc791344680d23b8fb744a41fbf131a3a7f72b1",
+      "unpacked_bytes": 181174511,
+      "packed_bytes": 49268818
+    },
+    {
+      "path": "testing/history/history_url17.sqlite.gz",
+      "unpacked_path": "testing/history/history_url17.sqlite",
+      "unpacked_sha256": "6f18de06a14ee05efc58a6ef5993dd13b495d115ccf4d3239fc4ebafcfc50082",
+      "packed_sha256": "1ec33f1dedcc8d665e6890ee6ad7209f8963f490f52ec0a5b17be93a4cfd5e79",
+      "unpacked_bytes": 31555584,
+      "packed_bytes": 1715075
+    },
+    {
+      "path": "testing/history/history_url20.sqlite.gz",
+      "unpacked_path": "testing/history/history_url20.sqlite",
+      "unpacked_sha256": "ea5b51192f0035ec98ae9975c75cbe7dff588a99e141bc420a9f483c94f49888",
+      "packed_sha256": "5ae095b344aab5539e21a3bcc88bb7c5bfd7aead5a744f91932d9213ef5f5cd4",
+      "unpacked_bytes": 32313344,
+      "packed_bytes": 1747068
+    }
+  ],
+  "notes": [
+    "Large CSV/SQLite files are stored as gzip. Use scripts/prepare_workspace.py before running analyses.",
+    "Live evidence has email addresses and sensitive query values redacted. Numeric feature vectors, scores and verdicts are preserved.",
+    "Training datasets retain original URL strings and features for reproducibility.",
+    "Original source paths in historic reports are provenance, not required runtime paths."
+  ],
+  "publication_checks": {
+    "workspace_decompression": "all 11 archives verified",
+    "extension_function_tests": "22/22; classification limitation recorded separately"
+  }
+}

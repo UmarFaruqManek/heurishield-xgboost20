@@ -1,0 +1,17 @@
+{
+  "source": "D:\\experimen skripsi\\data\\processed\\phreshphish_url_label_clean_666297.csv",
+  "output": "D:\\experimen skripsi\\data\\processed\\phreshphish_url_label_https_666297.csv",
+  "rows": 666297,
+  "labels": {
+    "benign": 367977,
+    "phish": 298320
+  },
+  "https_prefix_added_by_label": {
+    "benign": 5741
+  },
+  "exact_duplicate_rows_after_normalization": 68,
+  "conflicting_duplicate_rows_after_normalization": 1,
+  "invalid_http_scheme_or_host": 0,
+  "note": "HTTPS assumed on request for missing-scheme records; not verified by network. Source retained for provenance. No deduplication or label changes.",
+  "output_sha256": "40301b4b13056b10a34d425d32a8ac2c4e89dbb9a4c11c6a6cc675e0e275edb3"
+}

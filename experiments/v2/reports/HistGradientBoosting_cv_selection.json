@@ -1,0 +1,46 @@
+{
+  "trials": [
+    {
+      "parameters": {
+        "max_iter": 220,
+        "max_leaf_nodes": 31,
+        "l2_regularization": 3
+      },
+      "cv": {
+        "threshold": 0.44,
+        "min_class_correct_percent": 92.22155701900265,
+        "balanced_accuracy_percent": 92.2731690260991,
+        "legitimate_correct_percent": 92.32478103319555,
+        "phishing_recall_percent": 92.22155701900265
+      }
+    },
+    {
+      "parameters": {
+        "max_iter": 280,
+        "max_leaf_nodes": 63,
+        "l2_regularization": 5
+      },
+      "cv": {
+        "threshold": 0.41,
+        "min_class_correct_percent": 92.59185347790417,
+        "balanced_accuracy_percent": 92.60490210177234,
+        "legitimate_correct_percent": 92.61795072564051,
+        "phishing_recall_percent": 92.59185347790417
+      }
+    }
+  ],
+  "selected": {
+    "parameters": {
+      "max_iter": 280,
+      "max_leaf_nodes": 63,
+      "l2_regularization": 5
+    },
+    "cv": {
+      "threshold": 0.41,
+      "min_class_correct_percent": 92.59185347790417,
+      "balanced_accuracy_percent": 92.60490210177234,
+      "legitimate_correct_percent": 92.61795072564051,
+      "phishing_recall_percent": 92.59185347790417
+    }
+  }
+}

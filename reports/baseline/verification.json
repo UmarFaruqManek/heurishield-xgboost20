@@ -1,0 +1,36 @@
+{
+  "models": {
+    "XGBoost": {
+      "saved_model_replay_rows": 128,
+      "max_probability_difference": 2.5876617404385627e-08,
+      "sha256": "3f7fb142088313a6433940172d114b0cf0d11922b78943ac8008de5561c7bd9d"
+    },
+    "RandomForest": {
+      "saved_model_replay_rows": 128,
+      "max_probability_difference": 3.3306690738754696e-16,
+      "sha256": "b180daa73260ef5179cd8db15ca07ef75e21ee8099eef7e6fd067a2f56937f93"
+    },
+    "ExtraTrees": {
+      "saved_model_replay_rows": 128,
+      "max_probability_difference": 2.220446049250313e-16,
+      "sha256": "ae8c8ccd30c207db1811e6b8e683a43cda88cb727f6408fbb0f88f96863e4e66"
+    },
+    "HistGradientBoosting": {
+      "saved_model_replay_rows": 128,
+      "max_probability_difference": 1.1102230246251565e-16,
+      "sha256": "53e7d2abaa6b1631954a4e12820d18e5aacb4e06c14b2022332060e5e363b131"
+    },
+    "LogisticRegression": {
+      "saved_model_replay_rows": 128,
+      "max_probability_difference": 1.1102230246251565e-16,
+      "sha256": "9a0aeaddd6f945fa71ae4066b144b1830389a5814d2779be3738a9cc1f3eb2b6"
+    }
+  },
+  "feature_count": 20,
+  "shap_shares_sum": 99.9999923100695,
+  "domain_overlap_checks": {
+    "train_test": 0,
+    "development_archive": 0
+  },
+  "passed": true
+}

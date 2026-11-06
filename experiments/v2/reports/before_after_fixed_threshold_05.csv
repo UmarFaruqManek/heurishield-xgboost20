@@ -1,0 +1,6 @@
+model,old_threshold,new_threshold,old_legitimate_percent,new_legitimate_percent,legitimate_change_pp,old_phishing_percent,new_phishing_percent,phishing_change_pp,new_accuracy_percent
+XGBoost,0.5,0.5,78.25,83.0,4.75,82.797,85.629,2.832,84.164
+RandomForest,0.5,0.5,80.417,88.028,7.611,83.112,84.406,1.294,86.424
+ExtraTrees,0.5,0.5,76.222,83.944,7.722,83.601,84.72,1.119,84.288
+HistGradientBoosting,0.5,0.5,78.0,83.972,5.972,83.007,85.804,2.797,84.783
+LogisticRegression,0.5,0.5,65.278,71.083,5.805,85.559,82.448,-3.111,76.115

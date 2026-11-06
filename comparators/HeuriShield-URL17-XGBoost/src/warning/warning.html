@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>HeuriShield — Akses dihentikan</title>
+    <link rel="stylesheet" href="../styles/tokens.css">
+    <link rel="stylesheet" href="../styles/base.css">
+    <link rel="stylesheet" href="./warning.css">
+  </head>
+  <body>
+    <main class="shell" data-verdict="DANGEROUS">
+      <div class="brand-bar">
+        <svg viewBox="0 0 24 28" fill="none" aria-hidden="true">
+          <path d="M12 2 22 6v8c0 6-10 12-10 12S2 20 2 14V6L12 2Z" stroke="currentColor" stroke-width="1.8"/>
+          <path d="m7.5 13 3 3 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>HeuriShield</span>
+        <a class="settings-link" href="../options/options.html" target="_blank" rel="noopener">Pengaturan</a>
+      </div>
+
+      <article class="panel" aria-labelledby="warningTitle">
+        <header class="warning-header">
+          <div class="warning-symbol" aria-hidden="true">
+            <svg viewBox="0 0 48 48" fill="none">
+              <path d="M24 5 44 40H4L24 5Z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+              <path d="M24 18v10M24 34v.2" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="warning-intro">
+            <span class="status-label">Akses dihentikan</span>
+            <h1 id="warningTitle">Terindikasi phishing</h1>
+            <p class="lead">Pemeriksaan menemukan indikasi risiko pada situs ini. Tinjau hasilnya sebelum melanjutkan.</p>
+          </div>
+        </header>
+
+        <div class="warning-content">
+          <dl class="summary">
+            <div>
+              <dt>Alamat situs yang diperiksa</dt>
+              <dd id="domain">Memuat hasil pemeriksaan…</dd>
+            </div>
+          </dl>
+
+          <section class="reasons" aria-labelledby="reasonsHeading">
+            <h2 id="reasonsHeading">Detail pemeriksaan</h2>
+            <p class="section-description">Penilaian alamat dan temuan yang berhasil dibaca dari halaman.</p>
+            <ul id="reasonList" class="reason-list" aria-live="polite"></ul>
+            <p id="reasonNote" class="reason-note" hidden></p>
+          </section>
+
+          <section id="redirectSourceSection" class="redirect-source" hidden>
+            <h2>Pengalihan halaman</h2>
+            <p id="redirectSourceText"></p>
+          </section>
+
+          <div class="next-step">
+            <p id="reasonAdvice" class="advice">Jangan masukkan kata sandi atau kode verifikasi sebelum memastikan alamat situs.</p>
+            <div class="actions">
+              <button id="backButton" type="button" class="back-button">Kembali ke halaman sebelumnya</button>
+              <button id="continueButton" type="button" class="continue-button" aria-describedby="allowDomainHint" disabled>Izinkan domain</button>
+            </div>
+            <p id="allowDomainHint" class="action-hint">Domain akan disimpan ke Allow list dan halaman ini akan dibuka kembali.</p>
+            <p id="actionError" class="action-error" role="alert" hidden></p>
+          </div>
+
+          <p class="page-footer">Hasil pemeriksaan keliru? Anda dapat mengelola Allow list melalui <a href="../options/options.html" target="_blank" rel="noopener">Pengaturan</a>.</p>
+        </div>
+      </article>
+    </main>
+    <script type="module" src="./warning.js"></script>
+  </body>
+</html>

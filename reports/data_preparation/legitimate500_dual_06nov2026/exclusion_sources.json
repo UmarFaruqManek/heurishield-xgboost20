@@ -1,0 +1,570 @@
+[
+  {
+    "path": "D:\\experimen skripsi\\reports\\legitimate_500_preflight_05nov2026\\excluded_domains.txt",
+    "type": "prior_domain_audit"
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\explanation_smoke_legitimate_5_20261027\\browser_live_rows.csv",
+    "rows": 5
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\explanation_smoke_legitimate_5_20261027\\browser_live_rows.partial.csv",
+    "rows": 5
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\explanation_smoke_legitimate_5_final_20261027\\browser_live_rows.csv",
+    "rows": 5
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\explanation_smoke_legitimate_5_final_20261027\\browser_live_rows.partial.csv",
+    "rows": 5
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261014_040851_692\\phishing\\browser_live_rows.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261014_040851_692\\phishing\\browser_live_rows.partial.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261014_230536_964\\legitimate\\browser_live_rows.csv",
+    "rows": 250
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261014_230536_964\\legitimate\\browser_live_rows.partial.csv",
+    "rows": 250
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261015_001458_009\\phishing\\browser_live_rows.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261015_001458_009\\phishing\\browser_live_rows.partial.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261015_202333_982\\phishing\\browser_live_rows.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261015_202333_982\\phishing\\browser_live_rows.partial.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261015_220551_300\\legitimate\\browser_live_rows.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261015_220551_300\\legitimate\\browser_live_rows.partial.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261015_233834_432\\legitimate\\browser_live_rows.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261015_233834_432\\legitimate\\browser_live_rows.partial.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261015_233834_432\\phishing\\browser_live_rows.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261015_233834_432\\phishing\\browser_live_rows.partial.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261016_203041_601\\phishing\\browser_live_rows.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261016_203041_601\\phishing\\browser_live_rows.partial.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261017_231341_799\\legitimate\\browser_live_rows.csv",
+    "rows": 500
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261017_231341_799\\legitimate\\browser_live_rows.partial.csv",
+    "rows": 500
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261025_141722_839\\legitimate\\browser_live_rows.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261025_141722_839\\legitimate\\browser_live_rows.partial.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261025_141722_839\\phishing\\browser_live_rows.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261025_141722_839\\phishing\\browser_live_rows.partial.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261025_155741_912\\legitimate\\browser_live_rows.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261025_155741_912\\legitimate\\browser_live_rows.partial.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261025_155741_912\\phishing\\browser_live_rows.partial.csv",
+    "rows": 50
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261025_171451_951\\phishing\\browser_live_rows.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261025_171451_951\\phishing\\browser_live_rows.partial.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261025_183556_931\\legitimate\\browser_live_rows.csv",
+    "rows": 500
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261025_183556_931\\legitimate\\browser_live_rows.partial.csv",
+    "rows": 500
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261025_183556_931\\phishing\\browser_live_rows.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261025_183556_931\\phishing\\browser_live_rows.partial.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261025_232145_386\\phishing\\browser_live_rows.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261025_232145_386\\phishing\\browser_live_rows.partial.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261027_014507_241\\phishing\\browser_live_rows.partial.csv",
+    "rows": 25
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261028_183223_459\\legitimate\\browser_live_rows.csv",
+    "rows": 500
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261028_183223_459\\legitimate\\browser_live_rows.partial.csv",
+    "rows": 500
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261030_105410_212\\legitimate\\browser_live_rows.partial.csv",
+    "rows": 50
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261030_112412_035\\legitimate\\browser_live_rows.partial.csv",
+    "rows": 100
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261030_114554_932\\legitimate\\browser_live_rows.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261030_114554_932\\legitimate\\browser_live_rows.partial.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261030_114554_932\\phishing\\browser_live_rows.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261030_114554_932\\phishing\\browser_live_rows.partial.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261030_195358_012\\phishing\\browser_live_rows.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261030_195358_012\\phishing\\browser_live_rows.partial.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261030_222536_341\\legitimate\\browser_live_rows.partial.csv",
+    "rows": 175
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261031_010551_638\\legitimate\\browser_live_rows.csv",
+    "rows": 500
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261031_010551_638\\legitimate\\browser_live_rows.partial.csv",
+    "rows": 500
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261031_024250_305\\phishing\\browser_live_rows.partial.csv",
+    "rows": 950
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261031_130054_413\\phishing\\browser_live_rows.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261031_130054_413\\phishing\\browser_live_rows.partial.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261101_140929_891\\phishing\\browser_live_rows.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261101_140929_891\\phishing\\browser_live_rows.partial.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261101_220919_257\\legitimate\\browser_live_rows.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261101_220919_257\\legitimate\\browser_live_rows.partial.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261101_232531_046\\phishing\\browser_live_rows.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261101_232531_046\\phishing\\browser_live_rows.partial.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261102_022835_310\\phishing\\browser_live_rows.csv",
+    "rows": 183
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\live_20261102_022835_310\\phishing\\browser_live_rows.partial.csv",
+    "rows": 175
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\retest_legitimate_guard_20261030\\browser_live_rows.partial.csv",
+    "rows": 200
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\rulefit60-t080-liveretrain-legitimate-phishing-like-new-300\\browser_live_rows.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\Deployment Extension\\data\\evaluasi_live\\rulefit60-t080-liveretrain-phishing-testing-test\\browser_live_rows.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\experimen skripsi\\reports\\legitimate500_rulefit60_05nov_20261105_170159_515\\browser_live_rows.csv",
+    "rows": 500
+  },
+  {
+    "path": "D:\\experimen skripsi\\reports\\legitimate500_rulefit60_05nov_20261105_170159_515\\browser_live_rows.partial.csv",
+    "rows": 500
+  },
+  {
+    "path": "D:\\experimen skripsi\\reports\\legitimate500_xgboost17_05nov_20261105_170155_657\\browser_live_rows.csv",
+    "rows": 500
+  },
+  {
+    "path": "D:\\experimen skripsi\\reports\\legitimate500_xgboost17_05nov_20261105_170155_657\\browser_live_rows.partial.csv",
+    "rows": 500
+  },
+  {
+    "path": "D:\\experimen skripsi\\reports\\live_legitimate_baru_400_20261103_224131\\browser_live_rows.csv",
+    "rows": 400
+  },
+  {
+    "path": "D:\\experimen skripsi\\reports\\live_legitimate_baru_400_20261103_224131\\browser_live_rows.partial.csv",
+    "rows": 400
+  },
+  {
+    "path": "D:\\experimen skripsi\\reports\\live_legitimate_baru_400_20261104_002513\\browser_live_rows.csv",
+    "rows": 400
+  },
+  {
+    "path": "D:\\experimen skripsi\\reports\\live_legitimate_baru_400_20261104_002513\\browser_live_rows.partial.csv",
+    "rows": 400
+  },
+  {
+    "path": "D:\\experimen skripsi\\reports\\live_legitimate_lama_400_20261103_224122\\browser_live_rows.csv",
+    "rows": 400
+  },
+  {
+    "path": "D:\\experimen skripsi\\reports\\live_legitimate_lama_400_20261103_224122\\browser_live_rows.partial.csv",
+    "rows": 400
+  },
+  {
+    "path": "D:\\experimen skripsi\\reports\\live_phishing_baru_semua300_20261103_211349\\browser_live_rows.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\experimen skripsi\\reports\\live_phishing_baru_semua300_20261103_211349\\browser_live_rows.partial.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\experimen skripsi\\reports\\live_phishing_lama_semua300_20261103_211341\\browser_live_rows.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\experimen skripsi\\reports\\live_phishing_lama_semua300_20261103_211341\\browser_live_rows.partial.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\experimen skripsi\\reports\\phishing_20261104_071840\\browser_live_rows.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\experimen skripsi\\reports\\phishing_20261104_071840\\browser_live_rows.partial.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\experimen skripsi\\reports\\phishing_baru_20261104_183806\\browser_live_rows.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\experimen skripsi\\reports\\phishing_baru_20261104_183806\\browser_live_rows.partial.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\experimen skripsi\\reports\\phishing_rulefit60_05nov_20261105_131422_826\\browser_live_rows.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\experimen skripsi\\reports\\phishing_rulefit60_05nov_20261105_131422_826\\browser_live_rows.partial.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\experimen skripsi\\reports\\phishing_xgboost17_05nov_20261105_131416_242\\browser_live_rows.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\experimen skripsi\\reports\\phishing_xgboost17_05nov_20261105_131416_242\\browser_live_rows.partial.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\experimen terakhir\\data\\evaluation\\live_url20.csv",
+    "rows": 6460
+  },
+  {
+    "path": "D:\\experimen terakhir\\data\\processed\\phreshphish_url20_all_clean.csv",
+    "rows": 666228
+  },
+  {
+    "path": "D:\\experimen terakhir\\hasil_live\\url17_v037_phishing_20261106_035537\\browser_live_rows.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\experimen terakhir\\hasil_live\\url17_v037_phishing_20261106_035537\\browser_live_rows.partial.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\experimen terakhir\\hasil_live\\url20_v040_phishing_20261106_035533\\browser_live_rows.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\experimen terakhir\\hasil_live\\url20_v040_phishing_20261106_035533\\browser_live_rows.partial.csv",
+    "rows": 300
+  },
+  {
+    "path": "D:\\experimen terakhir\\perbaikan_v2\\data\\url20_augmented_splits.csv",
+    "rows": 678115
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\All_Features_threshold90_legitimate.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\dataset2_legitimate.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\dataset_phishing_legitimate.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\legitimate.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\legitimate_5000_balanced_urls.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\legitimate_5000_urls.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\legitimate_baru_100_uji_xgboost_31okt.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\legitimate_baru_300_xgboost_31okt.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\legitimate_baru_300_xgboost_final_31okt.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\legitimate_baru_300_xgboost_terverifikasi_31okt.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\legitimate_final_300_02nov2026.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\legitimate_final_300_cadangan_02nov2026.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\legitimate_fresh_300_30okt_rulefit60.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\legitimate_fresh_300_subdomain_path_01nov.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\legitimate_fresh_400_url17_url18.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\legitimate_fresh_500_02nov2026.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\legitimate_fresh_500_05nov2026.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\legitimate_fresh_diverse_500_03nov2026.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\legitimate_fresh_diverse_500_17_oktober.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\legitimate_fresh_dual_300_01nov2026.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\legitimate_fresh_independent_300_02nov2026.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\legitimate_fresh_phishing_like_250_14_oktober.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\legitimate_fresh_phishing_like_300_15_oktober.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\legitimate_fresh_phishing_like_300_28_oktober_2026.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\legitimate_fresh_stratified_300_02nov2026.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\legitimate_fresh_subdomain_path_500_31okt.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\legitimate_fresh_subdomain_path_500_31okt_FINAL.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\legitimate_fresh_unique_500_30okt.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\legitimate_fresh_unique_domains_300_25_oktober.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\legitimate_fresh_unique_domains_500_25_oktober.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\legitimate_indonesia400_luar100_28okt2026.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\legitimate_indonesia400_luar100_path_query_28okt2026.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\legitimate_indonesia_cadangan_02nov2026.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\legitimate_indonesia_fresh_300_02nov2026.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\legitimate_indonesia_fresh_independent_200_02nov2026.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\legitimate_phishing_like_300_29okt.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\legitimate_urls_2000_diverse.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\legitimate_urls_additional_3000_candidates.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\PhishBD_2026_legitimate.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\phishstorm_legitimate.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\phislegit_legitimate.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\testing_legitimate_langsung.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\URL_dataset_legitimate.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "C:\\Users\\USER\\Downloads\\url_features_extracted1_legitimate_10000.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "D:\\experimen skripsi\\data\\evaluation\\legitimate_fresh_400_url17_url18.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "D:\\experimen skripsi\\data\\evaluation\\legitimate_fresh_500_05nov2026.txt",
+    "type": "previous_prepared_list"
+  },
+  {
+    "path": "D:\\experimen skripsi\\data\\evaluation\\legitimate_fresh_diverse_500_03nov2026.txt",
+    "type": "previous_prepared_list"
+  }
+]

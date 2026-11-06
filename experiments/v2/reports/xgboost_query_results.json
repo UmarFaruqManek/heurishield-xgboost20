@@ -1,0 +1,14 @@
+[
+  {
+    "has_query": false,
+    "rows": 3470,
+    "correct_at_05": 2931,
+    "correct_percent_at_05": 84.467
+  },
+  {
+    "has_query": true,
+    "rows": 130,
+    "correct_at_05": 57,
+    "correct_percent_at_05": 43.846
+  }
+]

@@ -1,0 +1,44 @@
+{
+  "source": "C:\\Users\\USER\\.codex\\attachments\\2efabc56-7d47-4136-ae1f-4fa2f5c7663a\\Pasted text.txt",
+  "input_file": "D:\\experimen terakhir\\data\\evaluation\\phishing_dual_batch_2efabc56.txt",
+  "source_nonblank_rows": 303,
+  "unique_valid_urls": 300,
+  "duplicates_removed": 0,
+  "invalid_rows": [
+    {
+      "line": 302,
+      "url": "H5",
+      "reason": "URL bukan HTTP(S) valid"
+    },
+    {
+      "line": 303,
+      "url": "...",
+      "reason": "URL bukan HTTP(S) valid"
+    },
+    {
+      "line": 304,
+      "url": "Menganalisis",
+      "reason": "URL bukan HTTP(S) valid"
+    }
+  ],
+  "exact_overlap": {
+    "url17_dataset": [
+      {
+        "url": "http://outlook-serv-coral.vercel.app/",
+        "label": "phishing",
+        "split": "not_available"
+      },
+      {
+        "url": "https://www.roblox.com.gr/games/8737602449/PLS-DONATE-?privateServerLinkCode=60869683094735370675006673192210",
+        "label": "phishing",
+        "split": "not_available"
+      }
+    ],
+    "url20_dataset": [],
+    "historical_archive": []
+  },
+  "input_sha256": "532e924af9b5269d75cda04eea5fde1ccd8cacbc22168d67fdbdbdd2e901a7dc",
+  "label": "phishing",
+  "label_source": "user-submitted list",
+  "public_pages_opened": 0
+}

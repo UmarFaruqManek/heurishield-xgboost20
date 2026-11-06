@@ -1,0 +1,117 @@
+{
+  "extension": "D:\\experimen terakhir\\extension\\HeuriShield-URL20-XGBoost",
+  "manifest": {
+    "manifest_version": 3,
+    "minimum_chrome_version": "106",
+    "name": "HeuriShield URL20 XGBoost v2",
+    "version": "0.4.0",
+    "description": "20 URL features, PhreshPhish-enriched XGBoost v2, threshold 0.50, DOM and brand evidence.",
+    "permissions": [
+      "storage",
+      "tabs",
+      "webNavigation",
+      "scripting",
+      "webRequest"
+    ],
+    "host_permissions": [
+      "http://*/*",
+      "https://*/*"
+    ],
+    "background": {
+      "service_worker": "src/background/service-worker.js",
+      "type": "module"
+    },
+    "content_scripts": [
+      {
+        "matches": [
+          "http://*/*",
+          "https://*/*"
+        ],
+        "js": [
+          "src/content/dom-brand-observer.js"
+        ],
+        "run_at": "document_idle",
+        "all_frames": true
+      },
+      {
+        "matches": [
+          "http://*/*",
+          "https://*/*"
+        ],
+        "js": [
+          "src/content/score-overlay.js"
+        ],
+        "run_at": "document_idle"
+      }
+    ],
+    "options_ui": {
+      "page": "src/options/options.html",
+      "open_in_tab": true
+    },
+    "action": {
+      "default_title": "HeuriShield V5",
+      "default_icon": {
+        "16": "assets/icons/icon16.png",
+        "32": "assets/icons/icon32.png",
+        "48": "assets/icons/icon48.png",
+        "128": "assets/icons/icon128.png"
+      }
+    },
+    "icons": {
+      "16": "assets/icons/icon16.png",
+      "32": "assets/icons/icon32.png",
+      "48": "assets/icons/icon48.png",
+      "128": "assets/icons/icon128.png"
+    },
+    "web_accessible_resources": [
+      {
+        "resources": [
+          "src/analyzer/*.js",
+          "src/analyzer/brand/*.js",
+          "src/analyzer/domain/*.js",
+          "src/analyzer/dom/*.js",
+          "src/analyzer/url/*.js",
+          "src/rule/*.js",
+          "src/shared/*.js",
+          "src/utils/*.js"
+        ],
+        "matches": [
+          "http://*/*",
+          "https://*/*"
+        ]
+      }
+    ]
+  },
+  "feature_contract": {
+    "feature_set": "url20-phreshphish-v2",
+    "feature_count": 20,
+    "features": [
+      "url_length",
+      "hostname_length",
+      "path_length",
+      "query_length",
+      "subdomain_count",
+      "path_depth",
+      "dot_count",
+      "hyphen_count",
+      "digit_ratio",
+      "special_char_count",
+      "has_at_symbol",
+      "has_ip_host",
+      "has_https_scheme",
+      "hostname_entropy",
+      "sensitive_token_count",
+      "url_entropy",
+      "path_hyphen_count",
+      "domain_label_length",
+      "hostname_longest_digit_run",
+      "hostname_sensitive_token_count"
+    ],
+    "threshold": 0.5,
+    "source_model_sha256": "d623eefd35e9bb4cc028d40172acdd28b75a6ddc99d91a82a1c6dabfbf2f452b"
+  },
+  "trees": 500,
+  "export_sha256": "c35813c72d2f5a196e423d7c9d18bd883206bbab0133111b29306d08a4c0c50e",
+  "threshold_choice": "0.50 fixed comparison threshold explicitly selected for this live package",
+  "training_model_threshold": 0.41
+}

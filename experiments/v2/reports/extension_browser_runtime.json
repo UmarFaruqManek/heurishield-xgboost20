@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "manifest_version": "0.4.0",
+  "feature_count": 20,
+  "threshold": 0.5,
+  "actual_browser_prediction_cases": 128,
+  "maximum_probability_error": 2.26027495497938e-07,
+  "worker_analysis_ready": true,
+  "dom_password_observed": true,
+  "same_domain_form_observed": true,
+  "saved_feature_archive_count": 1,
+  "model_fingerprint_saved": true,
+  "public_pages_opened": 0
+}

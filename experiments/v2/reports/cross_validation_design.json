@@ -1,0 +1,16 @@
+{
+  "rows": 100016,
+  "domains": 43891,
+  "label_counts": {
+    "legitimate": 54917,
+    "phishing": 45099
+  },
+  "query_by_label": {
+    "phishing": 5784,
+    "legitimate": 3450
+  },
+  "folds": 3,
+  "candidates_per_model": 2,
+  "only_original_training_and_supplement_training": true,
+  "domain_overlap_with_test_or_archive": 0
+}

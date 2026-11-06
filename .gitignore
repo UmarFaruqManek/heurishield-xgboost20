@@ -1,0 +1,22 @@
+__pycache__/
+*.pyc
+.venv/
+.env
+.env.*
+!.env.example
+node_modules/
+*.partial
+.local-tls/
+/data/processed/phreshphish_url20_all_clean.csv
+/data/processed/url20_train_test.csv
+/data/raw/phreshphish_url_label_https.csv
+/data/raw/supplementary_sources/URL dataset.csv
+/data/raw/supplementary_sources/url_features_extracted1.csv
+/experiments/v2/data/cv_train_only_sample.csv
+/experiments/v2/data/supplement_url20_with_provenance.csv
+/experiments/v2/data/training_weights.csv
+/experiments/v2/data/url20_augmented_splits.csv
+/testing/history/history_url17.sqlite
+/testing/history/history_url20.sqlite
+testing/history/*.sqlite-shm
+testing/history/*.sqlite-wal

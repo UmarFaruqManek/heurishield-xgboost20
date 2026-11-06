@@ -1,0 +1,45 @@
+{
+  "generated_at": "2026-11-05T22:03:40.627929+00:00",
+  "mode": "chrome_extension_browser_live",
+  "input": "D:\\experimen terakhir\\data\\evaluation\\legitimate_fresh_500_dual_06nov2026.txt",
+  "label": "legitimate",
+  "expected_verdict": "SAFE",
+  "total_urls": 500,
+  "evaluated": 495,
+  "correct": 406,
+  "incorrect": 89,
+  "no_analysis": 5,
+  "warning_page_observed": 0,
+  "analysis_status_counts": {
+    "completed": 495,
+    "http_error": 3,
+    "no_valid_analysis": 1,
+    "unverified_http_status": 1
+  },
+  "response_category_counts": {
+    "http_403_denied": 3,
+    "page_loaded": 497
+  },
+  "no_analysis_reason_counts": {
+    "http_403_denied": 3,
+    "model_analysis_missing_after_page_load": 1,
+    "unverified_http_status": 1
+  },
+  "redirect_category_counts": {
+    "none": 498,
+    "same_host": 2
+  },
+  "http_error_codes": {
+    "403": 3
+  },
+  "model_analysis_count": 495,
+  "brand_identity_status_counts": {
+    "ambiguous": 22,
+    "identified": 416,
+    "unknown": 57
+  },
+  "brand_identity_guard_count": 0,
+  "evaluation_definition": "Only completed model analyses with observed verdicts count toward accuracy; warning_page_observed is reported separately.",
+  "accuracy_on_evaluated_percent": 82.02,
+  "coverage_percent": 99.0
+}

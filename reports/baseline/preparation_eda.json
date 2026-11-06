@@ -1,0 +1,126 @@
+{
+  "seed": 20261106,
+  "feature_names": [
+    "url_length",
+    "hostname_length",
+    "path_length",
+    "query_length",
+    "subdomain_count",
+    "path_depth",
+    "dot_count",
+    "hyphen_count",
+    "digit_ratio",
+    "special_char_count",
+    "has_at_symbol",
+    "has_ip_host",
+    "has_https_scheme",
+    "hostname_entropy",
+    "sensitive_token_count",
+    "url_entropy",
+    "path_hyphen_count",
+    "domain_label_length",
+    "hostname_longest_digit_run",
+    "hostname_sensitive_token_count"
+  ],
+  "threshold_fixed": 0.5,
+  "source_sha256": "40301b4b13056b10a34d425d32a8ac2c4e89dbb9a4c11c6a6cc675e0e275edb3",
+  "clean_rows_before_extractor": 666228,
+  "conflict_urls_quarantined": 1,
+  "same_label_duplicates_removed": 67,
+  "extraction_errors": [],
+  "all_clean_rows": 666228,
+  "all_clean_label_counts": {
+    "legitimate": 367909,
+    "phishing": 298319
+  },
+  "archive_rows": 6460,
+  "archive_label_counts": {
+    "legitimate": 3600,
+    "phishing": 2860
+  },
+  "archive_original_status_counts": {
+    "completed": 4829,
+    "http_error": 1088,
+    "no_valid_analysis": 516,
+    "error_or_challenge_page": 10,
+    "warning_page_observed": 9,
+    "unverified_http_status": 8
+  },
+  "archive_extraction_errors": [],
+  "excluded_archive_domain_rows": 54984,
+  "excluded_archive_exact_url_rows": 4,
+  "development_rows": 611244,
+  "train_rows": 551958,
+  "test_rows": 59286,
+  "actual_train_percent": 90.30076368847793,
+  "train_labels": {
+    "legitimate": 331741,
+    "phishing": 220217
+  },
+  "test_labels": {
+    "legitimate": 34596,
+    "phishing": 24690
+  },
+  "train_domains": 228239,
+  "test_domains": 25360,
+  "train_test_domain_overlap": 0,
+  "development_archive_domain_overlap": 0,
+  "patterns": {
+    "legitimate": {
+      "rows": 367909,
+      "domains": 123334,
+      "https_percent": 99.39876198768616,
+      "query_present_percent": 0.0184828313523181,
+      "root_path_depth_zero_percent": 7.452114517448607
+    },
+    "phishing": {
+      "rows": 298319,
+      "domains": 130978,
+      "https_percent": 86.23218536376953,
+      "query_present_percent": 11.646593076538874,
+      "root_path_depth_zero_percent": 50.82210653696211
+    }
+  },
+  "top_domains": {
+    "legitimate": {
+      "wikipedia.org": 15305,
+      "reddit.com": 4056,
+      "facebook.com": 3909,
+      "2mdn.net": 3870,
+      "amazon.com": 3174,
+      "imdb.com": 2131,
+      "youtube.com": 2068,
+      "quora.com": 1928,
+      "merriam-webster.com": 1804,
+      "ebay.com": 1788,
+      "microsoft.com": 1706,
+      "yahoo.com": 1641,
+      "apple.com": 1585,
+      "fandom.com": 1402,
+      "linkedin.com": 1331
+    },
+    "phishing": {
+      "gitbook.io": 19872,
+      "google.com": 12372,
+      "weeblysite.com": 8509,
+      "weebly.com": 7875,
+      "adobe.com": 1103,
+      "ipfs.io": 1032,
+      "t.co": 1014,
+      "qrco.de": 1011,
+      "surge.sh": 958,
+      "godaddysites.com": 805,
+      "webcindario.com": 623,
+      "printerval.com": 587,
+      "studio.site": 561,
+      "q-r.to": 541,
+      "ead.me": 539
+    }
+  },
+  "limitations": [
+    "Raw XLSX has no date or official original split. A new domain split is used; this is not the original PhreshPhish benchmark.",
+    "5741 missing-scheme benign URLs had HTTPS assumed on user request, not network verified.",
+    "Historical archive labels are retained, not live reverified; archive has previously influenced system development.",
+    "Only URL20 model evaluated. DOM/brand rules not evaluated or modified."
+  ]
+}

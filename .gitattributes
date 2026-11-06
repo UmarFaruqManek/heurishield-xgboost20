@@ -1,0 +1,2 @@
+# Preserve model/extension fingerprints across Windows and Linux checkouts.
+* -text

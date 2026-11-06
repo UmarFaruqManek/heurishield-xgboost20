@@ -1,0 +1,16 @@
+model,scope,rows,threshold,tn,fp,fn,tp,accuracy_percent,legitimate_correct_percent,phishing_recall_percent,precision_percent,f1_percent,roc_auc_percent,average_precision_percent
+XGBoost,test,59286,0.5,32522,2074,2283,22407,92.651,94.005,90.753,91.528,91.139,97.454,97.142
+XGBoost,historical_archive_all_url_text,6460,0.5,2817,783,492,2368,80.263,78.25,82.797,75.151,78.789,89.665,88.277
+XGBoost,historical_archive_previously_completed,4829,0.5,2753,743,301,1032,78.381,78.747,77.419,58.141,66.409,86.696,75.526
+RandomForest,test,59286,0.5,32578,2018,2491,22199,92.394,94.167,89.911,91.667,90.78,97.016,96.807
+RandomForest,historical_archive_all_url_text,6460,0.5,2895,705,483,2377,81.61,80.417,83.112,77.125,80.007,90.338,90.336
+RandomForest,historical_archive_previously_completed,4829,0.5,2827,669,306,1027,79.809,80.864,77.044,60.554,67.811,86.906,78.087
+ExtraTrees,test,59286,0.5,32392,2204,2517,22173,92.037,93.629,89.806,90.959,90.378,96.991,96.645
+ExtraTrees,historical_archive_all_url_text,6460,0.5,2744,856,469,2391,79.489,76.222,83.601,73.637,78.304,90.065,91.051
+ExtraTrees,historical_archive_previously_completed,4829,0.5,2680,816,295,1038,76.993,76.659,77.869,55.987,65.14,86.855,81.333
+HistGradientBoosting,test,59286,0.5,32604,1992,2326,22364,92.717,94.242,90.579,91.821,91.196,97.33,97.049
+HistGradientBoosting,historical_archive_all_url_text,6460,0.5,2808,792,486,2374,80.217,78.0,83.007,74.984,78.792,89.758,87.896
+HistGradientBoosting,historical_archive_previously_completed,4829,0.5,2747,749,303,1030,78.215,78.576,77.269,57.898,66.195,86.96,74.899
+LogisticRegression,test,59286,0.5,31175,3421,4626,20064,86.427,90.112,81.264,85.433,83.296,93.524,92.572
+LogisticRegression,historical_archive_all_url_text,6460,0.5,2350,1250,413,2447,74.257,65.278,85.559,66.189,74.638,86.286,84.473
+LogisticRegression,historical_archive_previously_completed,4829,0.5,2304,1192,259,1074,69.952,65.904,80.57,47.396,59.683,81.533,68.352

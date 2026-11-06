@@ -1,0 +1,25 @@
+{
+  "feature_count": 20,
+  "comparison": "Exact float32 model-input values",
+  "reports": {
+    "development": {
+      "checked": 678115,
+      "mismatched_rows": 0,
+      "feature_differences": {},
+      "examples": []
+    },
+    "archive": {
+      "checked": 6460,
+      "mismatched_rows": 0,
+      "feature_differences": {},
+      "examples": []
+    },
+    "inference": {
+      "checked": 10460,
+      "maximum_probability_error": 4.458076739988215e-7,
+      "mismatched_decisions": 0,
+      "examples": []
+    }
+  },
+  "passed": true
+}

@@ -1,0 +1,67 @@
+{
+  "source_files": [
+    {
+      "path": "C:\\Users\\USER\\Downloads\\URL dataset.csv",
+      "sha256": "accb2dfbfd3329a8b5cb1b85dcad90314a660c272be755cb45d0f6865014b466",
+      "label_mapping": {
+        "legitimate": "legitimate",
+        "phishing": "phishing"
+      }
+    },
+    {
+      "path": "C:\\Users\\USER\\Downloads\\url_features_extracted1.csv",
+      "sha256": "8685e7901c3b4e73eb43c106cb166cc932dd14f76960a032c713c2c32f09dbcd",
+      "label_mapping": {
+        "1": "legitimate",
+        "0": "phishing"
+      }
+    }
+  ],
+  "source_filter_counts": {
+    "source_rows_read": 551395,
+    "legitimate_without_query_not_selected": 337264,
+    "reserved_domain_or_archive_url": 3708,
+    "invalid_source_url": 1887,
+    "phishing_outside_requested_patterns": 14576,
+    "already_in_phreshphish": 25,
+    "duplicate_supplement_url": 199,
+    "unknown_label": 1,
+    "supplement_domain_family_cap": 39073,
+    "supplement_class_cap": 87791
+  },
+  "supplement_rows": 66871,
+  "supplement_label_counts": {
+    "phishing": 45000,
+    "legitimate": 21871
+  },
+  "supplement_domains": 40776,
+  "supplement_by_split_label": {
+    "supplement_test|legitimate": 1679,
+    "supplement_test|phishing": 4437,
+    "train|legitimate": 20192,
+    "train|phishing": 40563
+  },
+  "full_rows": 678115,
+  "split_counts": {
+    "train": 612713,
+    "test": 59286,
+    "supplement_test": 6116
+  },
+  "train_labels": {
+    "legitimate": 351933,
+    "phishing": 260780
+  },
+  "train_query_counts": {
+    "phishing": 31399,
+    "legitimate": 20247
+  },
+  "train_test_domain_overlap": 0,
+  "training_archive_domain_overlap": 0,
+  "notes": [
+    "Supplement uses historical source labels. Page contents and collection times are not reverified.",
+    "PhreshPhish label conflicts are excluded from supplementary selection.",
+    "Supplements are naturally occurring URLs. No query/path is synthesized.",
+    "Original 59286-row test unchanged. New domains from supplementary sources receive approximately 90/10 allocation.",
+    "The historical archive has influenced earlier development and is reported as development replay."
+  ]
+}

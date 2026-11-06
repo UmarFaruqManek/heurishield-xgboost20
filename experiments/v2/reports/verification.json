@@ -1,0 +1,27 @@
+{
+  "models": {
+    "XGBoost": {
+      "serialized_prediction_rows_checked": 128,
+      "max_probability_difference": 2.9440307636185992e-08
+    },
+    "RandomForest": {
+      "serialized_prediction_rows_checked": 128,
+      "max_probability_difference": 2.220446049250313e-16
+    },
+    "ExtraTrees": {
+      "serialized_prediction_rows_checked": 128,
+      "max_probability_difference": 2.220446049250313e-16
+    },
+    "HistGradientBoosting": {
+      "serialized_prediction_rows_checked": 128,
+      "max_probability_difference": 1.1102230246251565e-16
+    },
+    "LogisticRegression": {
+      "serialized_prediction_rows_checked": 128,
+      "max_probability_difference": 9.71445146547012e-17
+    }
+  },
+  "passed": true,
+  "train_test_domains_overlap": 0,
+  "training_archive_domains_overlap": 0
+}

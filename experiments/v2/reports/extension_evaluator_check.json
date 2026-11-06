@@ -1,0 +1,7 @@
+{
+  "passed": true,
+  "snapshot_model": "model_snapshot_xgboost-url20.json",
+  "feature_count": 20,
+  "threshold": 0.5,
+  "public_urls_opened": 0
+}

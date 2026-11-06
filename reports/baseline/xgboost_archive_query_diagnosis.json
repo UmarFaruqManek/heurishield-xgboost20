@@ -1,0 +1,30 @@
+[
+  {
+    "label": "legitimate",
+    "has_query": false,
+    "rows": 3470,
+    "correct": 2817,
+    "correct_percent": 81.182
+  },
+  {
+    "label": "legitimate",
+    "has_query": true,
+    "rows": 130,
+    "correct": 0,
+    "correct_percent": 0.0
+  },
+  {
+    "label": "phishing",
+    "has_query": false,
+    "rows": 2683,
+    "correct": 2191,
+    "correct_percent": 81.662
+  },
+  {
+    "label": "phishing",
+    "has_query": true,
+    "rows": 177,
+    "correct": 177,
+    "correct_percent": 100.0
+  }
+]

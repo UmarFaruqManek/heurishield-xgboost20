@@ -1,0 +1,30 @@
+{
+  "legitimate": {
+    "incorrect_rows": 783,
+    "pattern_counts_nonexclusive": {
+      "https": 768,
+      "hostname_20_or_less": 580,
+      "query_present": 130,
+      "path_25_or_more": 45,
+      "root_path": 413
+    },
+    "review_flag_counts_nonexclusive": {
+      "final_site_changed": 188,
+      "historical_analysis_incomplete": 40,
+      "title_requires_label_review": 12
+    }
+  },
+  "phishing": {
+    "incorrect_rows": 492,
+    "pattern_counts_nonexclusive": {
+      "https": 363,
+      "hostname_20_or_less": 447,
+      "root_path": 58,
+      "path_25_or_more": 179
+    },
+    "review_flag_counts_nonexclusive": {
+      "historical_analysis_incomplete": 191,
+      "final_site_changed": 350
+    }
+  }
+}
