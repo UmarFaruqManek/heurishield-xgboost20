@@ -31,6 +31,12 @@ export function decideWithEvidence(urlVerdict, dom, brand, correlation, context 
   if (urlVerdict !== "SAFE" && urlVerdict !== "DANGEROUS") {
     return { verdict: "LIMITED", source: "url_unavailable", review_candidate: false, review_reason: null };
   }
+  if (urlVerdict === 'DANGEROUS' && correlation?.url_brand_download_phishing === true) {
+    return { verdict:'DANGEROUS',source:'url_brand_download_phishing',review_candidate:false,review_reason:null };
+  }
+  if (correlation?.brand_executable_download_phishing === true) {
+    return { verdict:'DANGEROUS',source:'brand_executable_download_phishing',review_candidate:false,review_reason:null };
+  }
   if (correlation?.strong_credential_impersonation === true) {
     return { verdict: "DANGEROUS", source: "confirmed_credential_impersonation", review_candidate: false, review_reason: null };
   }
@@ -44,7 +50,7 @@ export function decideWithEvidence(urlVerdict, dom, brand, correlation, context 
   const sensitiveForm = (dom?.has_password_field === true || dom?.has_sensitive_input === true) &&
     (dom.forms || []).some(form => form.relevant && form.cross_domain === false);
   const noConfirmedConflict = brand?.brand_domain_mismatch !== true &&
-    !(correlation?.rules || []).some(rule => ["R03", "R04", "R05", "R07", "R09", "R10"].includes(rule.id) && rule.status === "matched");
+    !(correlation?.rules || []).some(rule => ["R03", "R04", "R05", "R07", "R09", "R10", "R12", "R13"].includes(rule.id) && rule.status === "matched");
   // Page title, logo and form action are controlled by the visited site.
   // An automatic SAFE correction also needs independent evidence: a link
   // from the parent domain to this exact subdomain.

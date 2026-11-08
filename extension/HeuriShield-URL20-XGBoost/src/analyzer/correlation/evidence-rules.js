@@ -1,10 +1,11 @@
 const U = "unknown";
 import { TRUSTED_OAUTH_PROVIDER_DOMAINS } from "../../utils/constants.js";
+import { EXECUTABLE_FILE_EXTENSIONS,executableExtensionEvidence } from '../url/download-file-extension.js';
 const status = value => value === true ? "matched" : value === false ? "not_matched" : "undetermined";
 const and = (...values) => values.includes(false) ? false : values.every(v => v === true) ? true : U;
 const or = (...values) => values.includes(true) ? true : values.every(v => v === false) ? false : U;
 
-export function evaluateCorrelation(dom, brand) {
+export function evaluateCorrelation(dom, brand, context = {}) {
   const claim = brand?.claimed_brand_status === "identified" ? true : brand?.claimed_brand_status === "ambiguous" ? U : false;
   const sensitive = or(dom?.has_password_field ?? U, dom?.has_sensitive_input ?? U);
   const identity = brand?.brand_domain_mismatch ?? U;
@@ -18,6 +19,19 @@ export function evaluateCorrelation(dom, brand) {
   const crossUnknown = (dom?.forms || []).some(f => f.relevant && f.cross_domain === true && f.destination_verification !== true);
   const fakeProvider = claim === true && [...TRUSTED_OAUTH_PROVIDER_DOMAINS]
     .some(domain => domain.split(".")[0] === (brand?.claimed_brand?.name || "").toLowerCase());
+  const urlPhishing = context.urlVerdict === 'DANGEROUS' ? true : context.urlVerdict === 'SAFE' ? false : U;
+  const strongIdentity = brand?.high_confidence_host_impersonation === true || brand?.high_confidence_credential_impersonation === true;
+  const selectedCandidate=(brand?.candidates||[]).find(c=>c.claim===true && c.name===brand?.claimed_brand?.name && c.domain===brand?.verified_reference_domain);
+  const selectedTitle=selectedCandidate?selectedCandidate.in_title===true:U;
+  const referenceMismatch=brand?.official_domain_match===false&&Boolean(brand?.verified_reference_domain)?true:
+    brand?.official_domain_match===true?false:U;
+  const hostClaim=['exact','lookalike','subdomain_exact','subdomain_lookalike'].includes(brand?.host_brand_claim);
+  const domExecutable=executableExtensionEvidence(dom?.download_file_extensions,
+    {incomplete:(dom?.download_unresolved_checks||[]).includes('download_scan_incomplete')});
+  const urlExecutable=context.urlFileExtension===undefined||context.urlFileExtension==='unknown'?U:
+    EXECUTABLE_FILE_EXTENSIONS.has(context.urlFileExtension);
+  const executableOffer=or(domExecutable,urlExecutable);
+  const downloadOffer=or(dom?.has_download_link??U,urlExecutable);
   const cases = [
     ["R01", and(claim, brand?.official_domain_match === false ? true : brand?.official_domain_match === U ? U : false), ["B04", "B05"]],
     ["R02", and(claim, identity), ["B04", "B07"]],
@@ -36,11 +50,15 @@ export function evaluateCorrelation(dom, brand) {
       or(["exact", "lookalike", "subdomain_exact", "subdomain_lookalike"].includes(brand?.host_brand_claim) ? true : U,
         brand?.brand_domain_mismatch ?? U, crossSensitive ? true : crossUnknown ? U : false,
         brand?.provider_credential_claim === true)),
-      ["B04", "B05", "D01"]]
+      ["B04", "B05", "D01"]],
+    ['R12',and(urlPhishing,claim,strongIdentity,downloadOffer),['URL_MODEL','B04','B05','D06','URL_FILE_EXTENSION']],
+    ['R13',and(claim,referenceMismatch,hostClaim,selectedTitle,executableOffer),['B04','B05','HOST_BRAND','D07','URL_FILE_EXTENSION']]
   ];
   const rules = cases.map(([id, value, evidence_ids]) => ({ id, status: status(value), evidence_ids }));
   // R06 suppresses only an OAuth-related allegation. It never changes URL score.
   return { rules, oauth_context: rules.find(r => r.id === "R06")?.status === "matched",
     strong_credential_impersonation: rules.some(r => ["R03", "R07", "R10"].includes(r.id) && r.status === "matched"),
-    strong_brand_impersonation: rules.some(r => r.id === "R09" && r.status === "matched") };
+    strong_brand_impersonation: rules.some(r => r.id === "R09" && r.status === "matched"),
+    url_brand_download_phishing: rules.some(r=>r.id==='R12'&&r.status==='matched'),
+    brand_executable_download_phishing: rules.some(r=>r.id==='R13'&&r.status==='matched') };
 }

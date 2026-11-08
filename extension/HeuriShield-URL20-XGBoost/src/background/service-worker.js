@@ -8,6 +8,7 @@ import { lookupBrandByDomain } from "../analyzer/brand/brand-domain-api.js";
 import { searchDomainBrand } from "../analyzer/brand/domain-brand-search.js";
 import { lookupRdapDomain } from "../analyzer/domain/rdap-features.js";
 import { extractUrl20Features, ageLookupDomain } from "../analyzer/url/url20-features.js";
+import { urlFileExtension } from '../analyzer/url/download-file-extension.js';
 import { lookupUrl18Age } from "../analyzer/domain/url18-age.js";
 import { predictProbability } from "../model/xgboost-engine.js";
 import { classifyDomainAge } from "../analyzer/domain/domain-age-policy.js";
@@ -39,7 +40,7 @@ import { buildAnalysisExplanation } from "../shared/analysis-explanation.js";
 import { sanitizeAuditUrl } from "../shared/audit-url.js";
 import { createDatasetCollector } from "../storage/dataset-collector.js";
 
-const ANALYSIS_VERSION = "url20-phreshphish-v2-t050";
+const ANALYSIS_VERSION = "url20-phreshphish-v2-file-extension-v2-t050";
 const METADATA_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
 
 let runtimeResourcesPromise = null;
@@ -448,7 +449,9 @@ async function analyzeActiveTab(message) {
     domainSearch: root => cachedDomainBrandSearch(root, { forceRefresh: message.forceRefresh === true }),
     verifyLookup: searchBrandfetch
   });
-  const correlation = evaluateCorrelation(domEvidence, brandEvidence);
+  const urlExtension = urlFileExtension(url);
+  const correlation = evaluateCorrelation(domEvidence, brandEvidence,
+    { urlVerdict: result.verdict, urlFileExtension: urlExtension });
   const agePolicy = await fetchJson("src/model/domain-age-policy.json");
   const ageEvidence = classifyDomainAge(age.days, agePolicy);
   // A young age only corroborates observed sensitive-input and brand-conflict evidence.
@@ -515,7 +518,7 @@ async function analyzeActiveTab(message) {
       age_policy: ageEvidence },
     brand_features: brandEvidence,
     brand_identity: brandEvidence.claimed_brand,
-    url_features: { ...urlFeatures, original_registrable_domain: ageLookupDomain(url),
+    url_features: { ...urlFeatures, url_file_extension: urlExtension, original_registrable_domain: ageLookupDomain(url),
       suffix_reference_audit: suffixAudit },
     page_status_features: null,
     dom_analysis: domEvidence,

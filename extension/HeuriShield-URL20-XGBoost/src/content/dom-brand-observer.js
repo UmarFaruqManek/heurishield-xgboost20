@@ -66,10 +66,22 @@
       ...all('footer p,footer small,[class*="powered"],[id*="powered"]')
         .map(el => clean(el.textContent)).filter(text => /^(?:powered by|built with|dibuat dengan|menggunakan)\s/i.test(text))
     ].filter(Boolean).slice(0, 8);
+    const downloadCandidates = all('a[href]').map(el => {
+      let target;
+      try { target = new URL(el.href, location.href); } catch { return null; }
+      if (!['https:', 'http:', 'blob:'].includes(target.protocol)) return null;
+      const text = clean(el.textContent || attr(el, 'aria-label'));
+      if (!el.hasAttribute('download') && !/\.(?:exe|msi|msix|appx|apk|scr|com|bat|cmd|ps1|vbs|vbe|jse|wsf|jar|zip|rar|7z|iso|pdf|docx?|xlsx?|pptx?|txt|csv|dmg|pkg|deb|rpm)$/i.test(target.pathname) && !/(?:download|unduh|installer)/i.test(text)) return null;
+      target.username = ''; target.password = ''; target.search = ''; target.hash = '';
+      return { url: target.href, filename_hint: attr(el, 'download') || null, download_attribute: el.hasAttribute('download'), text };
+    }).filter(Boolean);
+    const unresolvedDownloadControls=all('button,[role="button"]').filter(el=>!el.closest('a[href]')&&/(?:download|unduh|installer)/i.test(clean(el.textContent||attr(el,'aria-label')))).length;
+    const downloadPage = { links: downloadCandidates.slice(0,30), truncated: downloadCandidates.length>30,
+      unresolved_controls: unresolvedDownloadControls };
     const snapshot = { document_ready_state: document.readyState,
       evidence_incomplete: document.readyState === "loading" ||
         (!document.title && !headings.length && !forms.length && !controls.length),
-      title: clean(document.title), headings, logos, controls, forms, software_attributions: softwareAttributions,
+      title: clean(document.title), headings, logos, controls, forms, software_attributions: softwareAttributions, download_page: downloadPage,
       password_fields: password.map((el, i) => ({ id: `password-${i}`, form_index: all("form").indexOf(el.form), visible: visible(el) })), sensitive_fields: sensitive, inaccessible_frames: inaccessibleFrames, observed_at: Date.now(), page_origin: location.origin, interaction: interaction && Date.now() - interaction.at < 15000 ? interaction : null };
     return snapshot;
   }
@@ -92,7 +104,7 @@
       schedule();
     });
     observer.observe(root, { childList: true, characterData: true, subtree: true, attributes: true,
-      attributeFilter: ["type", "action", "aria-label", "title", "alt", "placeholder", "hidden", "class", "style", "content"] });
+      attributeFilter: ["type", "action", "href", "download", "aria-label", "title", "alt", "placeholder", "hidden", "class", "style", "content"] });
     observers.push(observer);
   }
   observe(document.documentElement);

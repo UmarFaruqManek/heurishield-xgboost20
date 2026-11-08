@@ -1,4 +1,5 @@
 /* Jelaskan bukti yang teramati; pisahkan hasil model URL dari koreksi DOM/brand. */
+import { EXECUTABLE_FILE_EXTENSIONS,executableExtensionEvidence } from '../analyzer/url/download-file-extension.js';
 export function buildAnalysisExplanation(analysis = {}) {
   if (analysis.decision_policy?.source === "manual_allowlist" ||
       analysis.decision_policy?.source === "manual_blocklist") {
@@ -35,7 +36,9 @@ export function buildAnalysisExplanation(analysis = {}) {
           : decisionSource === "verified_own_domain_login"
             ? "Domain brand yang terverifikasi dan tujuan formulir pada situs yang sama mengoreksi penilaian alamat."
             : "Bukti identitas dan halaman mengubah penilaian alamat menjadi legitimate."
-      : ["confirmed_credential_impersonation", "corroborated_brand_impersonation"].includes(decisionSource)
+      : decisionSource === 'url_brand_download_phishing'
+        ? 'Analisis alamat, peniruan identitas brand, dan tautan download mendukung keputusan phishing.'
+      : ["confirmed_credential_impersonation", "corroborated_brand_impersonation", "brand_executable_download_phishing"].includes(decisionSource)
         ? "Pemeriksaan identitas situs mendukung peringatan dari analisis alamat."
       : "Keputusan akhir mengikuti penilaian alamat situs.";
     // Tiga baris yang sama dipakai panel dan halaman blokir; tidak tampilkan
@@ -58,7 +61,12 @@ export function buildAnalysisExplanation(analysis = {}) {
         : urlVerdict === "SAFE" ? "Alamat: dinilai legitimate oleh model."
           : "Alamat: penilaian belum tersedia.",
       ...(brandReason ? [brandReason] : []),
-      domExplanation(analysis.dom_features)
+      domExplanation(analysis.dom_features),
+      ...(analysis.dom_features?.has_download_link===true ? [executableExtensionEvidence(analysis.dom_features.download_file_extensions)===true
+        ? 'Unduhan: halaman menawarkan tautan installer atau skrip yang dapat dijalankan.'
+        : 'Unduhan: halaman menyediakan tautan download.'] :
+        EXECUTABLE_FILE_EXTENSIONS.has(analysis.url_features?.url_file_extension)
+          ? [`Unduhan: alamat URL memiliki akhiran file .${analysis.url_features.url_file_extension}.`] : [])
     ];
     const limitation = analysis.dom_features?.unresolved_checks?.includes("inaccessible_iframe")
       ? "Sebagian isi halaman tidak dapat diperiksa."
@@ -73,7 +81,8 @@ export function buildAnalysisExplanation(analysis = {}) {
       domain: hostname(analysis.final_url || analysis.url),
       reasons,
       action: verdict === "DANGEROUS"
-        ? "Jangan masukkan kata sandi atau kode verifikasi sebelum memastikan alamat situs."
+        ? analysis.dom_features?.has_download_link===true||EXECUTABLE_FILE_EXTENSIONS.has(analysis.url_features?.url_file_extension) ? 'Jangan masukkan data akun atau unduh file sebelum memastikan alamat situs.'
+        : "Jangan masukkan kata sandi atau kode verifikasi sebelum memastikan alamat situs."
         : "Periksa alamat situs sebelum memasukkan kata sandi atau data pribadi.",
       limitation
     };

@@ -1,6 +1,6 @@
 {
-  "checks": 22,
-  "passed": 22,
+  "checks": 27,
+  "passed": 27,
   "classification_cases": [
     {
       "classification_case": "portal.merdekasiber.com",
@@ -42,6 +42,12 @@
       "stderr": ""
     },
     {
+      "test": "brand-reference-conflict.mjs",
+      "exit_code": 0,
+      "stdout": "Canonical-reference conflict: corroborated imitation, absent DOM, article, missing heading, API failure, regional and official domains passed.\n",
+      "stderr": ""
+    },
+    {
       "test": "decision-policy.mjs",
       "exit_code": 0,
       "stdout": "Decision policy OK: URL baseline, confirmed override, review without unblocking, unknown, OAuth\n",
@@ -54,9 +60,21 @@
       "stderr": ""
     },
     {
+      "test": "dom-download-rules.mjs",
+      "exit_code": 0,
+      "stdout": "DOM download rules: R12/R13, URL SAFE correction, official/CDN/PDF negatives, unknown history, JS-only controls and explanations passed.\n",
+      "stderr": ""
+    },
+    {
       "test": "domain-first-search.mjs",
       "exit_code": 0,
       "stdout": "Domain-first search: exact domain, lazy fallback, provider failure, and conflicting identity passed\n",
+      "stderr": ""
+    },
+    {
+      "test": "download-file-extension.mjs",
+      "exit_code": 0,
+      "stdout": "Supplemental URL suffix: path-only, encoding, unknown and executable extension evidence passed.\n",
       "stderr": ""
     },
     {
@@ -141,6 +159,18 @@
       "test": "warning-page-smoke.py",
       "exit_code": 0,
       "stdout": "Warning page passed: reasons, contrast, responsive layout, keyboard, back, persistent allow list, blacklist removal, reopen and missing context.\n",
+      "stderr": ""
+    },
+    {
+      "test": "brand-domain-conflict-smoke.py",
+      "exit_code": 0,
+      "stdout": "{\n  \"passed\": true,\n  \"manifest_version\": \"0.5.2\",\n  \"brand\": \"Roblox\",\n  \"reference_domain\": \"roblox.com\",\n  \"official_domain_match\": false,\n  \"api_domain_reference_conflict\": true,\n  \"verdict\": \"DANGEROUS\",\n  \"decision_source\": \"corroborated_brand_impersonation\",\n  \"test_type\": \"local_mock_page_and_API\",\n  \"public_target_opened\": false\n}\n",
+      "stderr": ""
+    },
+    {
+      "test": "dom-download-browser.py",
+      "exit_code": 0,
+      "stdout": "{\n  \"passed\": true,\n  \"version\": \"0.5.2\",\n  \"download_link_read\": true,\n  \"executable_link_read\": true,\n  \"cross_site_read\": true,\n  \"R13_verdict\": \"DANGEROUS\",\n  \"R13_source\": \"brand_executable_download_phishing\",\n  \"pdf_not_executable\": true,\n  \"removed_link_detected\": true,\n  \"dynamic_link_detected\": true,\n  \"url_suffix_read\": true,\n  \"model_vector_still_20\": true,\n  \"separate_warning_removed\": true,\n  \"downloads_permission_removed\": true,\n  \"downloads_started\": 0,\n  \"public_sites_opened\": 0,\n  \"test\": \"local mocked page/API in Chromium\"\n}\n",
       "stderr": ""
     }
   ]

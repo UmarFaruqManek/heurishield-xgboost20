@@ -17,12 +17,13 @@ const own=await analyzeBrandEvidence(page,"https://portal.dicoding.com",{
   domainSearch:async root=>{assert.equal(root,"dicoding.com");return domain;},
   lookup:async()=>{tokenCalls++;return {lookup_success:true,candidates:[]};}
 });
-assert.equal(tokenCalls,0);
+assert.equal(tokenCalls,1); // Audit the unverified directory entry with its hostname token.
 assert.equal(own.claimed_brand.name,"Dicoding");
 assert.equal(own.candidate_domain_match,true);
 assert.equal(own.official_domain_match,true);
 assert.equal(own.verification_basis,"api_domain_match");
 assert.equal(own.token_fallback_used,false);
+assert.equal(own.canonical_reference_check_used,true);
 const liquipedia = await analyzeBrandEvidence(null, "https://liquipedia.net/valorant/VCT/2027/Pacific/Kickoff", {
   domainSearch: async () => ({lookup_success:true,found:true,candidates:[{
     name:"Liquipedia",domain:"liquipedia.net",verified:false,claimed:false,source:"fixture"}]}),

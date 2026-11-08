@@ -1,0 +1,11 @@
+{
+  "records": 1087,
+  "verdict_changes": 0,
+  "replay_levels": {
+    "partial_api_snapshot": 763,
+    "full_snapshot": 323,
+    "decision_only": 1
+  },
+  "saved_download_link_parameter_known": 0,
+  "note": "Unknown legacy download metadata is not filled as false. This checks preservation of historical decisions, not efficacy of new download-link rules."
+}

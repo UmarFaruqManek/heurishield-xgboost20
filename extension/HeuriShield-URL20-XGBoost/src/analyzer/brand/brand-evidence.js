@@ -95,8 +95,15 @@ export async function analyzeBrandEvidence(snapshot, url, { lookup, domainLookup
   const separateHostClaim = hostQueries.some(token => token !== rootLabel);
   const needsTokens = !domainCandidates.length || separateHostClaim ||
     (!pageConsistent && queryText.flatMap(safeTokens).length > 0);
+  // An exact directory entry can itself describe a lookalike site. Audit its
+  // hostname token against the existing token providers before treating that
+  // directory entry as the only identity reference. Claimed=false is NOT a
+  // rejection condition; normal exact API matches remain valid absent conflict.
+  const needsReferenceCheck = domainCandidates.length > 0 &&
+    domainCandidates.every(candidate => candidate.verified !== true) && hostQueries.length > 0;
   let fallbackDomainResult = domainSearchResult?.domain_response || null;
-  const queries = needsTokens ? [...new Set([...hostQueries, ...queryText.flatMap(safeTokens)])].slice(0, 8) : [];
+  const queries = needsTokens ? [...new Set([...hostQueries, ...queryText.flatMap(safeTokens)])].slice(0, 8) :
+    needsReferenceCheck ? hostQueries : [];
   const results = await Promise.all(queries.map(async token => {
     try { return await lookup(token); } catch { return { lookup_success: false, candidates: [] }; }
   }));
@@ -185,7 +192,18 @@ export async function analyzeBrandEvidence(snapshot, url, { lookup, domainLookup
   const ownPageClaim = ownClaims.some(c => c.inTitle || c.inHeading || c.inLogo);
   const domainLabel = norm(parseDomain(new URL(url).hostname,
     { allowPrivateDomains: true }).domainWithoutSuffix).replace(/\s/g, "");
-  const chosen = strongExternalClaims.length === 1 && !ownPageClaim
+  // A provider-verified canonical reference plus an embedded full domain and
+  // an explicit title AND heading claim outweigh an unverified same-name
+  // directory entry. A mention, missing DOM, or a different country suffix
+  // alone cannot activate this conflict resolution. Verified own-domain
+  // references (including legitimate regional domains) keep their priority.
+  const referenceConflicts = strongExternalClaims.filter(candidate => candidate.verified === true &&
+    candidate.rank === 3 && candidate.inTitle && candidate.inHeading &&
+    ownClaims.some(own => norm(own.name) === norm(candidate.name)) &&
+    new URL(url).hostname.toLowerCase().includes(`${String(candidate.domain).toLowerCase()}.`));
+  const conflictingReference = referenceConflicts.length === 1 && !ownClaims.some(candidate => candidate.verified === true)
+    ? referenceConflicts[0] : null;
+  const chosen = conflictingReference || (strongExternalClaims.length === 1 && !ownPageClaim
     ? strongExternalClaims[0]
     : ownClaims.length
     ? [...ownClaims].sort((a, b) =>
@@ -197,7 +215,7 @@ export async function analyzeBrandEvidence(snapshot, url, { lookup, domainLookup
     : claimNames.length === 1
       ? claims.filter(c => norm(c.name) === claimNames[0])
         .sort((a, b) => Number(b.verified) - Number(a.verified))[0]
-      : null;
+      : null);
   let official = UNKNOWN, officialDomain = null;
   let verified = false;
   let verificationResult = null;
@@ -270,6 +288,8 @@ export async function analyzeBrandEvidence(snapshot, url, { lookup, domainLookup
     searched_tokens: queries.map(token => ({ token, source: hostQueries.includes(token) ? "hostname" : "page", lookup_success: results[queries.indexOf(token)]?.lookup_success === true })),
     search_strategy: "domain_first_token_fallback",
     token_fallback_used: needsTokens,
+    canonical_reference_check_used: needsReferenceCheck,
+    api_domain_reference_conflict: Boolean(conflictingReference),
     brand_in_title: !title ? UNKNOWN : candidates.length ? scored.some(c => c.inTitle) : results.some(r => r?.lookup_success) ? false : UNKNOWN,
     brand_in_heading: !headings.length ? UNKNOWN : candidates.length ? scored.some(c => c.inHeading) : results.some(r => r?.lookup_success) ? false : UNKNOWN,
     brand_in_logo: snapshot.logos?.length ? scored.some(c => c.inLogo) ? true : logos.length && results.some(r => r?.lookup_success) ? false : UNKNOWN : false,

@@ -1,0 +1,31 @@
+{
+  "records": 1087,
+  "by_label": {
+    "legitimate": {
+      "rows": 842,
+      "before_correct": 808,
+      "after_correct": 808,
+      "observed_correct": 808,
+      "before_percent": 95.96,
+      "after_percent": 95.96,
+      "observed_percent": 95.96
+    },
+    "phishing": {
+      "rows": 245,
+      "before_correct": 199,
+      "after_correct": 199,
+      "observed_correct": 199,
+      "before_percent": 81.22,
+      "after_percent": 81.22,
+      "observed_percent": 81.22
+    }
+  },
+  "changed_decisions": [],
+  "replay_levels": {
+    "partial_api_snapshot": 763,
+    "full_snapshot": 323,
+    "decision_only": 1
+  },
+  "saved_download_snapshots": 0,
+  "note": "Frozen URL scores and saved API snapshots only; no public live test. Missing historical link metadata stays unknown."
+}

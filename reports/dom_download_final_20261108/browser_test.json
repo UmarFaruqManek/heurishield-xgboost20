@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "version": "0.5.2",
+  "download_link_read": true,
+  "executable_link_read": true,
+  "cross_site_read": true,
+  "R13_verdict": "DANGEROUS",
+  "R13_source": "brand_executable_download_phishing",
+  "pdf_not_executable": true,
+  "removed_link_detected": true,
+  "dynamic_link_detected": true,
+  "url_suffix_read": true,
+  "model_vector_still_20": true,
+  "separate_warning_removed": true,
+  "downloads_permission_removed": true,
+  "downloads_started": 0,
+  "public_sites_opened": 0,
+  "test": "local mocked page/API in Chromium"
+}

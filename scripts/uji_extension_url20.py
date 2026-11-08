@@ -22,7 +22,7 @@ def main():
     tests = [file for file in sorted((EXTENSION / 'tests').glob('*.mjs')) if file.name != 'parity-runner.mjs']
     with concurrent.futures.ThreadPoolExecutor(max_workers=3) as pool:
         results = list(pool.map(run, tests))
-    for name in ['extension-load-smoke.py', 'dynamic-dom-regression.py', 'warning-page-smoke.py']:
+    for name in ['extension-load-smoke.py', 'dynamic-dom-regression.py', 'warning-page-smoke.py', 'brand-domain-conflict-smoke.py', 'dom-download-browser.py']:
         results.append(run(EXTENSION / 'tests' / name))
     classification_cases = []
     for row in results:

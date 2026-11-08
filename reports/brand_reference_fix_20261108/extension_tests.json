@@ -1,0 +1,153 @@
+{
+  "checks": 23,
+  "passed": 23,
+  "classification_cases": [
+    {
+      "classification_case": "portal.merdekasiber.com",
+      "expected": "SAFE",
+      "actual": "DANGEROUS",
+      "passed": false,
+      "probability": 0.8301628977612076
+    }
+  ],
+  "results": [
+    {
+      "test": "analysis-explanation.mjs",
+      "exit_code": 0,
+      "stdout": "Explanation OK: unavailable evidence, verified domain, impersonation, OAuth\n",
+      "stderr": ""
+    },
+    {
+      "test": "brand-api-chain.mjs",
+      "exit_code": 0,
+      "stdout": "Brand API chain OK: fallback, domain preference, page ambiguity, impersonation\n",
+      "stderr": ""
+    },
+    {
+      "test": "brand-cache-isolation.mjs",
+      "exit_code": 0,
+      "stdout": "Brand token/domain caches remain separate; explicit refresh reaches lookup.\n",
+      "stderr": ""
+    },
+    {
+      "test": "brand-diagnostics.mjs",
+      "exit_code": 0,
+      "stdout": "API diagnostics/cooldown, credential title claim and incomplete DOM checks passed\n",
+      "stderr": ""
+    },
+    {
+      "test": "brand-query-flow.mjs",
+      "exit_code": 0,
+      "stdout": "Brand query flow OK: PSL, host tokens, claim context, mismatch, typo, OAuth\n",
+      "stderr": ""
+    },
+    {
+      "test": "brand-reference-conflict.mjs",
+      "exit_code": 0,
+      "stdout": "Canonical-reference conflict: corroborated imitation, absent DOM, article, missing heading, API failure, regional and official domains passed.\n",
+      "stderr": ""
+    },
+    {
+      "test": "decision-policy.mjs",
+      "exit_code": 0,
+      "stdout": "Decision policy OK: URL baseline, confirmed override, review without unblocking, unknown, OAuth\n",
+      "stderr": ""
+    },
+    {
+      "test": "dom-brand-oauth.mjs",
+      "exit_code": 0,
+      "stdout": "T01 official login OK\nT02 third party Google button OK\nT03 observed GitHub OAuth navigation OK\nT04 Apple provider is not claimed app OK\nT05 fake provider not rescued by OAuth OK\nT06 provider logo in footer OK\nT07 relative form action OK\nT08 external SSO is not phishing on its own OK\nT09 unresolved JS submit OK\nT10 OTP without password OK\nT11 modal update OK\nT12 inaccessible iframe OK\nT13 deceptive subdomain OK\nT14 returning app remains evaluated OK\nT15 article mention not a claim OK\nT16 unavailable official mapping stays unknown OK\nT17 lookalike provider not official OK\nT18 OAuth secrets excluded OK\nT19 page-local brand claim alone does not confirm credential impersonation OK\n",
+      "stderr": ""
+    },
+    {
+      "test": "domain-first-search.mjs",
+      "exit_code": 0,
+      "stdout": "Domain-first search: exact domain, lazy fallback, provider failure, and conflicting identity passed\n",
+      "stderr": ""
+    },
+    {
+      "test": "identity-context.mjs",
+      "exit_code": 0,
+      "stdout": "Identity context passed: page topics, software attribution and spaced organization names.\n",
+      "stderr": ""
+    },
+    {
+      "test": "manual-lists.mjs",
+      "exit_code": 0,
+      "stdout": "Manual list storage and www normalization OK\n",
+      "stderr": ""
+    },
+    {
+      "test": "oauth-provider-regression.mjs",
+      "exit_code": 0,
+      "stdout": "OAuth provider regression OK; model score 0.996\n",
+      "stderr": ""
+    },
+    {
+      "test": "official-docs-regression.mjs",
+      "exit_code": 0,
+      "stdout": "Verified documentation correction and phishing safeguards OK\n",
+      "stderr": ""
+    },
+    {
+      "test": "parent-site-link.mjs",
+      "exit_code": 0,
+      "stdout": "Parent site link OK: observed subdomain link, apex, HTTP, deceptive host\n",
+      "stderr": ""
+    },
+    {
+      "test": "replay-evidence.mjs",
+      "exit_code": 0,
+      "stdout": "Replay evidence OK: saved DOM + brand API responses reproduce the decision offline\n",
+      "stderr": ""
+    },
+    {
+      "test": "search-page-regression.mjs",
+      "exit_code": 0,
+      "stdout": "Official search page correction and inaccessible iframe safeguards OK\n",
+      "stderr": ""
+    },
+    {
+      "test": "suffix-reference-smoke.mjs",
+      "exit_code": 0,
+      "stdout": "kkn.uho.ac.id: uho.ac.id / uho.ac.id\nfacebook-247-support.blogspot.com: blogspot.com / facebook-247-support.blogspot.com\ntenant.pages.dev: pages.dev / tenant.pages.dev\navio-occasionali.enac.gov.it: enac.gov.it / enac.gov.it\n",
+      "stderr": ""
+    },
+    {
+      "test": "verified-content-page.mjs",
+      "exit_code": 0,
+      "stdout": "Verified content pages correct URL false positives; incomplete, sensitive and conflicting evidence stay blocked.\n",
+      "stderr": ""
+    },
+    {
+      "test": "worker-smoke.mjs",
+      "exit_code": 0,
+      "stdout": "{\"verdict\":\"SAFE\",\"model\":\"XGBoost URL20 v2\",\"featureCount\":20}\n{\"verdict\":\"DANGEROUS\",\"model\":\"XGBoost URL20 v2\",\"ageStatus\":\"unknown\"}\n{\"source\":\"https://account.example.com/login\",\"final\":\"https://www.example.com/welcome\"}\n{\"oauthHost\":\"accounts.google.com\",\"oauthDomain\":\"google.com\"}\n{\"classification_case\":\"portal.merdekasiber.com\",\"expected\":\"SAFE\",\"actual\":\"DANGEROUS\",\"passed\":false,\"probability\":0.8301628977612076}\n{\"portalRaw\":\"DANGEROUS\",\"portalFinal\":\"DANGEROUS\",\"source\":\"url_model\"}\nManual lists applied to panel and current tab OK\nPopup, persistent action and restored block page OK\n",
+      "stderr": ""
+    },
+    {
+      "test": "youtube-brand.mjs",
+      "exit_code": 0,
+      "stdout": "YouTube brand OK: title + verified own domain; copied title remains unverified\n",
+      "stderr": ""
+    },
+    {
+      "test": "extension-load-smoke.py",
+      "exit_code": 0,
+      "stdout": "Manifest V3 extension loaded; DOM extracted and brand result rendered in overlay\n",
+      "stderr": ""
+    },
+    {
+      "test": "dynamic-dom-regression.py",
+      "exit_code": 0,
+      "stdout": "SPA fixture: empty initial document, text/title update, form insertion and password type change observed\n",
+      "stderr": ""
+    },
+    {
+      "test": "warning-page-smoke.py",
+      "exit_code": 0,
+      "stdout": "Warning page passed: reasons, contrast, responsive layout, keyboard, back, persistent allow list, blacklist removal, reopen and missing context.\n",
+      "stderr": ""
+    }
+  ]
+}

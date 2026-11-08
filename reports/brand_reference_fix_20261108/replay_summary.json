@@ -1,0 +1,37 @@
+{
+  "records": 1087,
+  "before_levels": {
+    "full_snapshot": 766,
+    "partial_api_snapshot": 320,
+    "decision_only": 1
+  },
+  "after_levels": {
+    "partial_api_snapshot": 763,
+    "full_snapshot": 323,
+    "decision_only": 1
+  },
+  "legitimate": {
+    "all_rows": 842,
+    "observed_correct": 808,
+    "before_correct": 808,
+    "after_correct_partial_included": 808,
+    "complete_comparison_rows": 297,
+    "complete_before_correct": 280,
+    "complete_after_correct": 280,
+    "complete_changed": 0
+  },
+  "phishing": {
+    "all_rows": 245,
+    "observed_correct": 199,
+    "before_correct": 199,
+    "after_correct_partial_included": 199,
+    "complete_comparison_rows": 26,
+    "complete_before_correct": 17,
+    "complete_after_correct": 17,
+    "complete_changed": 0
+  },
+  "changed_records": [],
+  "new_regression_tests_passed": 24,
+  "target_public_page_available_via_web_tool": false,
+  "local_browser_mock_integration_passed": true
+}

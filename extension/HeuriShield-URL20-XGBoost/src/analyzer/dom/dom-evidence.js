@@ -1,4 +1,5 @@
 import { parse as parseDomain } from "../../shared/tldts.js";
+import { analyzeDomDownloadLinks } from './dom-download-features.js';
 
 const UNKNOWN = "unknown";
 export function registrable(host) {
@@ -8,7 +9,7 @@ export function registrable(host) {
 
 export function analyzeDomEvidence(snapshots, navigation = null) {
   const frames = (snapshots || []).filter(s => s && typeof s === "object");
-  if (!frames.length) return { has_password_field: UNKNOWN, has_sensitive_input: UNKNOWN, form_cross_domain: UNKNOWN, login_button_detected: UNKNOWN, login_redirect_detected: UNKNOWN, forms: [], controls: [], sensitive_field_types: [], unresolved_checks: ["dom_unavailable"] };
+  if (!frames.length) return { ...analyzeDomDownloadLinks([],true), has_password_field: UNKNOWN, has_sensitive_input: UNKNOWN, form_cross_domain: UNKNOWN, login_button_detected: UNKNOWN, login_redirect_detected: UNKNOWN, forms: [], controls: [], sensitive_field_types: [], unresolved_checks: ["dom_unavailable"] };
   const password = frames.flatMap(s => s.password_fields || []);
   const sensitive = frames.flatMap(s => s.sensitive_fields || []);
   const controls = frames.flatMap(s => s.controls || []);
@@ -26,6 +27,7 @@ export function analyzeDomEvidence(snapshots, navigation = null) {
   const relevant = forms.filter(f => f.relevant);
   const cross = relevant.some(f => f.cross_domain === true) ? true : relevant.some(f => f.cross_domain === UNKNOWN) || incomplete ? UNKNOWN : false;
   return {
+    ...analyzeDomDownloadLinks(frames,incomplete),
     observed_at: Math.max(...frames.map(s => Number(s.observed_at || 0))),
     observed_frame_count: frames.length,
     has_password_field: password.length ? true : incomplete ? UNKNOWN : false,

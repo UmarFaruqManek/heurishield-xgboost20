@@ -7,6 +7,7 @@ import { analyzeBrandEvidence } from "../src/analyzer/brand/brand-evidence.js";
 import { evaluateCorrelation } from "../src/analyzer/correlation/evidence-rules.js";
 import { decideWithEvidence } from "../src/analyzer/correlation/decision-policy.js";
 import { ageLookupDomain } from "../src/analyzer/url/url18-features.js";
+import { urlFileExtension } from '../src/analyzer/url/download-file-extension.js';
 
 const input = JSON.parse(readFileSync(0, "utf8"));
 const output = [];
@@ -58,7 +59,8 @@ for (const item of input.records || []) {
     if (missing.length) base.missing_saved_lookups = [...new Set(missing)];
   }
 
-  const correlation = evaluateCorrelation(dom, brand);
+  const correlation = evaluateCorrelation(dom, brand, { urlVerdict: base.url_model_verdict,
+    urlFileExtension: urlFileExtension(analysis.original_url || analysis.url || item.url) });
   const decision = decideWithEvidence(base.url_model_verdict, dom, brand, correlation, {
     probability: analysis.model_result?.probability_phishing,
     domainAgeDays: analysis.rdap_features?.source_domain_age_days ?? null,

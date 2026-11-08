@@ -79,7 +79,8 @@ if (analysis.dom_features?.has_password_field !== true || analysis.dom_features?
   throw new Error(`DOM/Brand integration failed: ${JSON.stringify({ dom: analysis.dom_features, brand: analysis.brand_features })}`);
 }
 if (analysis.brand_features?.claimed_brand?.name !== "Example" || analysis.brand_features?.candidate_domain_match !== true ||
-    analysis.brand_features?.reference_status !== "api_domain_match") {
+    !["api_domain_match", "provider_verified"].includes(analysis.brand_features?.reference_status) ||
+    analysis.brand_features?.official_domain_match !== true) {
   throw new Error(`Official brand was not found: ${JSON.stringify(analysis.brand_features)}`);
 }
 if (analysis.decision_policy?.source !== "url_model" || analysis.decision_policy?.verdict !== analysis.verdict || !Array.isArray(analysis.correlation_rules)) {

@@ -1,5 +1,11 @@
 # HeuriShield XGBoost20
 
+> **Versi aktif lokal 0.5.2:** akhiran file URL dan tautan unduhan DOM menjadi bukti tambahan dalam aturan R12/R13. Tidak ada monitor atau peringatan unduhan terpisah. Model tetap 20 fitur dan TH0,50. 27 pengujian lulus; replay 1.087 rekaman tidak mengubah keputusan. [Laporan final](reports/dom_download_final_20261108/README.md). Paket pembaruan versi 0.5.2.
+
+> Desain lokal v0.5.0 dengan monitor/peringatan unduhan terpisah sudah dibatalkan dan dilepas dari extension aktif. Riwayat pengujiannya disimpan lokal sebagai arsip.
+
+> Pembaruan lokal 8 November 2026: extension versi **0.4.1** menambahkan audit token untuk hasil pencarian domain yang belum memiliki penguatan provider, serta penanganan konflik referensi brand. Model URL20 dan threshold 0,50 tidak berubah. Sebanyak 24 pengujian fungsi/integrasi lulus. Replay sebelum/sesudah pada 323 rekaman dengan respons lengkap tidak mengubah keputusan; 763 rekaman memerlukan respons API tambahan yang belum tersimpan, dan satu rekaman hanya dapat diputar pada tingkat keputusan. Kasus Roblox diuji dalam browser dengan halaman/API fixture lokal; halaman publik target tidak berhasil dibaca. Laporan berada di `reports/brand_reference_fix_20261108`. Pembaruan lokal ini belum dipush; angka dan versi v0.4.0 di bagian historis berikut merujuk paket publikasi awal.
+
 HeuriShield adalah extension browser Chromium untuk memeriksa indikasi phishing melalui model URL, bukti identitas brand, dan struktur formulir halaman. Repository ini menyimpan extension XGBoost20 versi **0.4.0**, data, proses ekstraksi fitur, pelatihan lima model, EDA, evaluasi, dan rekaman pengujian yang mendasari versi tersebut.
 
 Paket aktif memakai **20 fitur URL, 500 pohon XGBoost, dan threshold 0,50**. Model berasal dari eksperimen `experiments/v2`. Threshold yang terpilih dalam cross-validation pelatihan adalah 0,41. Paket extension memakai 0,50 sesuai konfigurasi perbandingan yang dicatat dalam laporan.
@@ -190,3 +196,5 @@ Persiapan daftar legitimate memakai situs organisasi pada registri ROR dan dafta
 Riwayat live publik menyamarkan email dan nilai query autentikasi yang terdeteksi. Nilai fitur numerik, skor dan keputusan tetap dipertahankan. Karena penyamaran URL, fitur tersimpan menjadi rujukan untuk replay keputusan historis. Dataset pelatihan mempertahankan string URL sumber untuk mereproduksi ekstraksi. File asli proyek tetap berada pada workspace lokal pengguna.
 
 Hash sumber, hash salinan publikasi, daftar kompresi dan riwayat impor SQLite tersedia pada `publication_manifest.json`. Path absolut pada laporan historis menunjukkan lokasi saat eksperimen dijalankan. Script aktif menggunakan lokasi clone untuk data dan model utama.
+
+Laboratorium enam skenario unduhan tersedia di `testing/local/lab-unduhan-heurishield`. Jalankan `Jalankan_Lab.ps1` dari folder tersebut. Halaman/API disimulasikan lokal; model dan aturan memakai extension asli.
