@@ -6,7 +6,7 @@
   "feature_count": 20,
   "threshold": 0.5,
   "trees": 500,
-  "functional_checks_passed": 31,
+  "functional_checks_passed": 32,
   "extractor_rows_verified": 684575,
   "prediction_rows_verified": 10460,
   "known_classification_cases": [
@@ -50,7 +50,7 @@
     "src\\analyzer\\url\\url-features.js": "3263927cf58f0fc9df4da107b6906ff0bd77c1322961df0d8fb3c86efcd6adb6",
     "src\\analyzer\\url\\url18-features.js": "f3aa74ccf14a3df0a35bef1c68cac53fef6e3d8465a0e68449d085d7a9a7069c",
     "src\\analyzer\\url\\url20-features.js": "84593bd1ae7069e143714e8170f89f983b5b4d9d27b6b3de402aeab296b72646",
-    "src\\background\\service-worker.js": "1e9ceb4cbf688856083bb875d53c892b36e8c5d8fbbdb8dbf962a6497c6cf5fd",
+    "src\\background\\service-worker.js": "f2e0b06ac2033f8c69e3152f0088113833d00d463d4d55c4a1f056faef497d3c",
     "src\\content\\dom-brand-observer.js": "6a1ae755c8503a796a6b650e95a9293d3167bb0edc610c7403cd35182f64c854",
     "src\\content\\page-dom-snapshot.bundle.js": "bad8cb46503ad017f8b4d757d821337a01780d89a091ff9234ec61b55140085f",
     "src\\content\\page-dom-snapshot.js": "b69e9f8c3f864387e2142c420c75557d0265f60cd04089d1996cc29f25951443",
@@ -89,6 +89,7 @@
     "src\\shared\\url-features.js": "5dd8f0ca29c2b5a1372f99d9affade205333b93de3bfcf1e11e27338ebf9d776",
     "src\\storage\\dataset-collector.js": "95c432de8cfd59ddb2ef3119d0d08171fbae4a6d1728d1beb560420dd620ed36",
     "src\\storage\\dataset-file.js": "295f4b23b276c7e086d142637ef561e68996bb339cfb783f57afd5fff6765600",
+    "src\\storage\\feature-archive.js": "c55bfa0baaaac15b66696b39e73e2467950131a8d9efd6f8bebecebb9d154755",
     "src\\storage\\settings.js": "bf80c0a2704455e62ea886c8892f2ac47baabc6c6befd438d0387e2c6384af99",
     "src\\styles\\base.css": "db768af8e752274ab9483a5a213e379f54f4946966fcd2047d8f744b00cfcf7f",
     "src\\styles\\tokens.css": "2efe89846bc53acf234210b646f198c77c3a0d6e4ab278cd34721327cf06d92e",
@@ -155,5 +156,13 @@
   "policy_input": "url_class_and_evaluated_rule_statuses",
   "rule_alignment_replay_changed": 0,
   "thesis_baseline": "skripsi-v0.6.2",
-  "final_wiring_audit_passed": true
+  "final_wiring_audit_passed": true,
+  "maintenance_verification": {
+    "baseline_commit": "51f7d1f05d79958deabc5448872afbc2369c9de6",
+    "branch": "refactor/code-simplifier",
+    "kind": "behavior-preserving cleanup",
+    "replayed_analyses": 1198,
+    "replay_outputs_equal": true,
+    "frozen_thesis_contract_unchanged": true
+  }
 }

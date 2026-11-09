@@ -1,6 +1,6 @@
 {
-  "checks": 31,
-  "passed": 31,
+  "checks": 32,
+  "passed": 32,
   "classification_cases": [
     {
       "classification_case": "portal.merdekasiber.com",
@@ -80,6 +80,12 @@
       "test": "download-file-extension.mjs",
       "exit_code": 0,
       "stdout": "Supplemental URL suffix: path-only, encoding, unknown and executable extension evidence passed.\n",
+      "stderr": ""
+    },
+    {
+      "test": "feature-archive.mjs",
+      "exit_code": 0,
+      "stdout": "Feature archive retention, missing input, sanitization and storage failure OK\n",
       "stderr": ""
     },
     {

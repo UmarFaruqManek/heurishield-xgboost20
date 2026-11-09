@@ -6,7 +6,6 @@ import { searchBrand, searchBrandfetch } from "../analyzer/brand/brand-features.
 import { createBrandLookupCache } from "../analyzer/brand/brand-lookup-cache.js";
 import { lookupBrandByDomain } from "../analyzer/brand/brand-domain-api.js";
 import { searchDomainBrand } from "../analyzer/brand/domain-brand-search.js";
-import { lookupRdapDomain } from "../analyzer/domain/rdap-features.js";
 import { extractUrl20Features, ageLookupDomain } from "../analyzer/url/url20-features.js";
 import { urlFileExtension } from '../analyzer/url/download-file-extension.js';
 import { lookupUrl18Age } from "../analyzer/domain/url18-age.js";
@@ -41,6 +40,7 @@ import { STORAGE_KEYS } from "../utils/constants.js";
 import { buildAnalysisExplanation } from "../shared/analysis-explanation.js";
 import { sanitizeAuditUrl } from "../shared/audit-url.js";
 import { createDatasetCollector } from "../storage/dataset-collector.js";
+import { saveFeatureJsonArchive } from "../storage/feature-archive.js";
 
 const ANALYSIS_VERSION = "url20-phreshphish-v2-final-r01-r19-t050";
 const METADATA_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
@@ -703,47 +703,6 @@ function consumeTemporaryBypass(tabId, url) {
   return matches;
 }
 
-async function collectDomSnapshot(tabId, finalUrl) {
-  try {
-    let response = await requestDomSnapshot(tabId, finalUrl);
-    if (!response?.ok) {
-      await chrome.scripting.executeScript({
-        target: { tabId },
-        files: ["src/content/page-dom-snapshot.js"]
-      });
-      response = await requestDomSnapshot(tabId, finalUrl);
-    }
-
-    if (!response?.ok) {
-      return { ok: false, error: response?.error || "Content script tidak mengembalikan DOM." };
-    }
-
-    return {
-      ok: true,
-      url: response.url,
-      title: response.title,
-      domFeatures: response.domFeatures,
-      domAnalysis: response.domAnalysis
-    };
-  } catch (error) {
-    return {
-      ok: false,
-      error: error?.message || "Tidak dapat membaca DOM halaman."
-    };
-  }
-}
-
-async function requestDomSnapshot(tabId, finalUrl) {
-  try {
-    return await chrome.tabs.sendMessage(tabId, {
-      type: "HEURISHIELD_V5_COLLECT_DOM",
-      finalUrl
-    });
-  } catch {
-    return null;
-  }
-}
-
 function buildBaseAnalysis(url, tabId) {
   const parsed = safeUrl(url);
   const hostname = parsed?.hostname || "";
@@ -777,85 +736,6 @@ async function fetchJson(path) {
   return response.json();
 }
 
-function buildEvidence(domFeatures, rdapFeatures, brandFeatures) {
-  const evidence = [];
-  if (domFeatures) {
-    evidence.push(
-    {
-      evidence_id: "D16",
-      observation_id: "dom_credential_labels",
-      dependency_group: "dom",
-      source: "DOM credential fields",
-      status: "observed",
-      raw_value: {
-        password_like_label_count: domFeatures.password_credential_field_count || domFeatures.password_input_count || 0,
-        identity_like_label_count: domFeatures.identity_personal_field_count || domFeatures.email_credential_field_count || 0,
-        sensitive_form_count: domFeatures.credential_form_count || 0,
-        credential_form_count: domFeatures.credential_form_count || 0
-      },
-      explanation: "Input kredensial dan label sensitif dibaca langsung dari DOM halaman."
-    },
-    {
-      evidence_id: "D18",
-      observation_id: "dom_credential_forms",
-      dependency_group: "dom",
-      source: "DOM forms",
-      status: "observed",
-      raw_value: {
-        credential_form_count: domFeatures.credential_form_count || 0,
-        sensitive_form_count: domFeatures.credential_form_count || 0,
-        no_clear_page_identity: false,
-        visible_brand_hints: []
-      },
-      explanation: "Jumlah form kredensial dihitung dari input password, email, OTP, PIN, payment, dan identitas."
-    }
-    );
-  }
-
-  evidence.push({
-    evidence_id: "U18",
-    observation_id: "domain_age_rdap",
-    dependency_group: "domain_metadata",
-    source: "RDAP/WHOIS",
-    status: rdapFeatures?.final_rdap_available || rdapFeatures?.original_rdap_available ? "observed" : "unavailable",
-    raw_value: {
-      source_domain_age_days: rdapFeatures?.source_domain_age_days ?? null,
-      page_domain_age_days: rdapFeatures?.page_domain_age_days ?? null,
-      original_rdap_available: rdapFeatures?.original_rdap_available ?? null,
-      final_rdap_available: rdapFeatures?.final_rdap_available ?? null
-    },
-    explanation: "Umur domain dan metadata registrasi dibaca melalui RDAP/WHOIS seperti pipeline crawler."
-  });
-
-  evidence.push({
-    evidence_id: "B01",
-    observation_id: "brand_candidate",
-    dependency_group: "brand",
-    source: "Brand lookup",
-    status: brandFeatures?.brand_found ? "observed" : "unavailable",
-    raw_value: {
-      brand_found: brandFeatures?.brand_found ?? false,
-      brand_top_candidate_domain: brandFeatures?.brand_top_candidate_domain ?? null,
-      brand_search_score: brandFeatures?.brand_search_score ?? null,
-      brand_quality_score: brandFeatures?.brand_quality_score ?? null
-    },
-    explanation: "Kandidat brand dicari melalui Clearbit terlebih dahulu, lalu Brandfetch untuk skor domain yang sama atau fallback."
-  });
-
-  return evidence;
-}
-
-function domScore(features) {
-  if (!features) return 0;
-  return Math.min(100, Math.round(
-    (features.credential_form_count || 0) * 22 +
-    (features.external_credential_form_count || 0) * 18 +
-    (features.ip_credential_form_count || 0) * 18 +
-    (features.eval_count || 0) * 4 +
-    (features.external_resource_ratio || 0) * 20
-  ));
-}
-
 function isHttpUrl(url) {
   const parsed = safeUrl(url);
   return parsed?.protocol === "http:" || parsed?.protocol === "https:";
@@ -867,35 +747,6 @@ function safeUrl(url) {
   } catch {
     return null;
   }
-}
-
-function formatThreshold(value) {
-  return Number.isFinite(Number(value)) ? Number(value).toFixed(4).replace(/\.?0+$/, "") : String(value);
-}
-
-async function cachedRdapLookup(domain) {
-  // Versi provider menghindari pemakaian cache RDAP lama setelah pergantian prioritas.
-  const key = `rdap:age-fallback-v4:${String(domain || "").toLowerCase()}`;
-  if (!key || key.endsWith(":")) return lookupRdapDomain(domain);
-  const cache = await getMetadataCache();
-  const cached = cache[key];
-  if (
-    cached?.metadata?.rdap_available === true &&
-    cached?.cached_at &&
-    Date.now() - Date.parse(cached.cached_at) < METADATA_CACHE_TTL_MS
-  ) {
-    return cached.metadata;
-  }
-
-  const metadata = await lookupRdapDomain(domain);
-  if (metadata?.rdap_available === true || metadata?.rdap_skip_reason) {
-    await updateMetadataCache((current) => {
-      current[key] = { metadata, cached_at: new Date().toISOString() };
-    });
-  } else if (cached) {
-    await updateMetadataCache((current) => { delete current[key]; });
-  }
-  return metadata;
 }
 
 function updateMetadataCache(mutate) {
@@ -947,102 +798,4 @@ function normalizeComparableUrl(url) {
   } catch {
     return String(url || "");
   }
-}
-
-async function saveFeatureJsonArchive(analysis) {
-  // Arsip mentah untuk audit/debug berbeda dari tiga alasan ringkas yang terlihat di UI.
-  if (!analysis?.feature_vector?.vector) return;
-
-  const observedAt = new Date().toISOString();
-  const archive = {
-    archive_version: "heurishield-v5-feature-json-v1",
-    observed_at: observedAt,
-    analyzer_version: analysis.analyzer_version,
-    document_id: analysis.document_id,
-    tab_id: analysis.tab_id,
-    url: analysis.url,
-    original_url: analysis.original_url,
-    final_url: analysis.final_url,
-    normalized_url: analysis.normalized_url,
-    hostname: analysis.hostname,
-    registrable_domain: analysis.registrable_domain,
-    verdict: analysis.verdict,
-    model_result: compactModelResult(analysis.model_result),
-    brand_identity: analysis.brand_identity || null,
-    correlation_rules: analysis.correlation_rules || [],
-    oauth_context: analysis.oauth_context === true,
-    decision_policy: analysis.decision_policy || null,
-    unresolved_checks: [...(analysis.dom_features?.unresolved_checks || []), ...(analysis.brand_features?.unresolved_checks || [])],
-    feature_vector_coverage: analysis.feature_vector_coverage,
-    feature_vector_20: analysis.feature_vector.vector,
-    feature_vector_values: analysis.feature_vector.values,
-    feature_sources: {
-      url: analysis.url_features || null,
-      dom: analysis.dom_features || null,
-      rdap: analysis.rdap_features || null,
-      brand: analysis.brand_features || null,
-      status: analysis.page_status_features || null
-    }
-  };
-
-  try {
-    const result = await chrome.storage.local.get({ [STORAGE_KEYS.FEATURE_ARCHIVE]: [] });
-    const archives = Array.isArray(result[STORAGE_KEYS.FEATURE_ARCHIVE])
-      ? result[STORAGE_KEYS.FEATURE_ARCHIVE]
-      : [];
-    archives.unshift({
-      id: `${fileTimestamp(observedAt)}_${safeFilePart(analysis.hostname || "unknown")}_${safeFilePart(analysis.document_id || "analysis")}`,
-      path_hint: `riwayat/json/${fileTimestamp(observedAt)}_${safeFilePart(analysis.hostname || "unknown")}_${safeFilePart(analysis.document_id || "analysis")}.json`,
-      ...archive
-    });
-    await chrome.storage.local.set({ [STORAGE_KEYS.FEATURE_ARCHIVE]: archives.slice(0, 500) });
-  } catch (error) {
-    console.warn("HeuriShield feature archive storage failed:", error?.message || error);
-  }
-}
-
-function compactModelResult(model) {
-  if (!model || typeof model !== "object") return null;
-  return {
-    model_family: model.model_family || null,
-    model_name: model.model_name || null,
-    threshold: model.threshold ?? null,
-    source_model_sha256: model.source_model_sha256 || null,
-    feature_set: model.feature_set || null,
-    predicted_label: model.predicted_label || model.targetLabel || null,
-    verdict: model.verdict || null,
-    raw_verdict: model.raw_verdict || model.verdict || null,
-    post_model_guard: model.post_model_guard || null,
-    fired_rule_count: model.fired_rule_count ?? null,
-    top_fired_rules: Array.isArray(model.fired_rules)
-      ? model.fired_rules.slice(0, 6).map((rule) => ({
-          id: rule.id,
-          coefficient: rule.coefficient,
-          direction: rule.direction,
-          expression: rule.expression
-        }))
-      : [],
-    feature_coverage: model.feature_coverage || model.features || null
-  };
-}
-
-function ruleToReason(rule) {
-  const prefix = rule.direction === "phishing" ? "RuleFit risiko" : "RuleFit aman";
-  const conditions = (rule.conditions || [])
-    .slice(0, 3)
-    .map((condition) => `${condition.feature} ${condition.operator} ${formatThreshold(condition.threshold)}`)
-    .join("; ");
-  return conditions ? `${prefix}: ${conditions}` : `${prefix}: ${rule.expression || rule.id}`;
-}
-
-function fileTimestamp(value) {
-  return String(value || new Date().toISOString()).replace(/[:.]/g, "-");
-}
-
-function safeFilePart(value) {
-  return String(value || "")
-    .toLowerCase()
-    .replace(/[^a-z0-9.-]+/g, "_")
-    .replace(/^_+|_+$/g, "")
-    .slice(0, 80) || "unknown";
 }

@@ -1,0 +1,86 @@
+{
+  "skill_file": "C:\\Users\\USER\\Downloads\\SKILL.md",
+  "baseline_commit": "51f7d1f05d79958deabc5448872afbc2369c9de6",
+  "worker_lines_before": 1048,
+  "worker_lines_after": 801,
+  "archive_module_lines": 91,
+  "removed_private_functions": [
+    "collectDomSnapshot",
+    "requestDomSnapshot",
+    "buildEvidence",
+    "domScore",
+    "cachedRdapLookup",
+    "formatThreshold",
+    "ruleToReason"
+  ],
+  "checks_before": {
+    "passed": 31,
+    "total": 31
+  },
+  "checks_after": {
+    "passed": 32,
+    "total": 32
+  },
+  "archive_differential_cases": {
+    "passed": 6,
+    "total": 6
+  },
+  "runtime_js_syntax_checked": 53,
+  "build": "esbuild 0.28.2 cached offline; Chrome 106 target; success",
+  "replay": {
+    "archive": {
+      "records": 1087,
+      "replayable": 1087,
+      "exact_output_equal": true,
+      "by_label": {
+        "legitimate": {
+          "evaluated": 842,
+          "correct": 809,
+          "percent": 96.08
+        },
+        "phishing": {
+          "evaluated": 245,
+          "correct": 200,
+          "percent": 81.63
+        }
+      },
+      "before_sha256": "a9cac39593f056d7cf2dbe58454e738b533def03812b512ba0f6000cb2f0847c",
+      "after_sha256": "a9cac39593f056d7cf2dbe58454e738b533def03812b512ba0f6000cb2f0847c"
+    },
+    "recent": {
+      "records": 299,
+      "replayable": 111,
+      "exact_output_equal": true,
+      "by_label": {
+        "legitimate": {
+          "evaluated": 0,
+          "correct": 0,
+          "percent": null
+        },
+        "phishing": {
+          "evaluated": 111,
+          "correct": 72,
+          "percent": 64.86
+        }
+      },
+      "before_sha256": "8385f757dcead4815f8479ceb09b500be5b7f6a253c8514e2029005760e67783",
+      "after_sha256": "8385f757dcead4815f8479ceb09b500be5b7f6a253c8514e2029005760e67783"
+    }
+  },
+  "unchanged": [
+    "XGBoost model",
+    "20 URL features",
+    "threshold 0.50",
+    "DOM and brand extraction",
+    "R01-R19",
+    "decision policy",
+    "API providers",
+    "frozen thesis contract"
+  ],
+  "limits": [
+    "Replay preserves archived evidence; no claim of accuracy improvement",
+    "No project ESLint configuration exists; syntax and diff whitespace checked",
+    "Frozen byte-for-byte checker intentionally reports worker differs on this branch",
+    "Code quality is not objectively certifiable as 10/10"
+  ]
+}

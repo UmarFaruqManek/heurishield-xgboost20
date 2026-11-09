@@ -1,0 +1,40 @@
+{
+  "archive": {
+    "records": 1087,
+    "replayable": 1087,
+    "exact_output_equal": true,
+    "by_label": {
+      "legitimate": {
+        "evaluated": 842,
+        "correct": 809,
+        "percent": 96.08
+      },
+      "phishing": {
+        "evaluated": 245,
+        "correct": 200,
+        "percent": 81.63
+      }
+    },
+    "before_sha256": "a9cac39593f056d7cf2dbe58454e738b533def03812b512ba0f6000cb2f0847c",
+    "after_sha256": "a9cac39593f056d7cf2dbe58454e738b533def03812b512ba0f6000cb2f0847c"
+  },
+  "recent": {
+    "records": 299,
+    "replayable": 111,
+    "exact_output_equal": true,
+    "by_label": {
+      "legitimate": {
+        "evaluated": 0,
+        "correct": 0,
+        "percent": null
+      },
+      "phishing": {
+        "evaluated": 111,
+        "correct": 72,
+        "percent": 64.86
+      }
+    },
+    "before_sha256": "8385f757dcead4815f8479ceb09b500be5b7f6a253c8514e2029005760e67783",
+    "after_sha256": "8385f757dcead4815f8479ceb09b500be5b7f6a253c8514e2029005760e67783"
+  }
+}
