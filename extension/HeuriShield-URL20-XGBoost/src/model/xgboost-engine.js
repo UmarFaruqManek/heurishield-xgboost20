@@ -1,4 +1,8 @@
 /* Evaluate the exact numeric XGBoost trees exported from the trained booster. */
+export function classifyUrl(model, features) {
+  // The rest of the extension receives only the categorical result.
+  return predictProbability(model, features) >= model.threshold ? 'phishing' : 'legitimate';
+}
 export function predictProbability(model, features) {
   if (model?.objective !== "binary:logistic" || model.feature_names?.length !== 20) {
     throw new Error("Unsupported URL model");

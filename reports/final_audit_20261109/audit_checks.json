@@ -1,0 +1,9 @@
+{
+  "model_and_feature_contract_unchanged_from_github": true,
+  "url20_feature_count": 20,
+  "trees": 500,
+  "threshold": 0.5,
+  "source_pdf_sha256": "f7760e0c5ba34177cb0654c113814154043c44a372f7743c22353dc3c7756a18",
+  "replay_rows": 1087,
+  "decisions_changed": 0
+}

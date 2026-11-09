@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { analyzeDomEvidence } from '../src/analyzer/dom/dom-evidence.js';
 import { analyzeBrandEvidence } from '../src/analyzer/brand/brand-evidence.js';
 import { evaluateCorrelation } from '../src/analyzer/correlation/evidence-rules.js';
-import { decideWithEvidence } from '../src/analyzer/correlation/decision-policy.js';
+import { decideWithEvidence } from './decision-fixture.js';
 import { buildAnalysisExplanation } from '../src/shared/analysis-explanation.js';
 
 const snapshot={page_origin:'https://bca.bank.com',title:'Login BCA',headings:[{text:'BCA Downloads'}],

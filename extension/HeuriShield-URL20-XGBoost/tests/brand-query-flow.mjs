@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { brandHostQueries, analyzeBrandEvidence } from "../src/analyzer/brand/brand-evidence.js";
 import { analyzeDomEvidence } from "../src/analyzer/dom/dom-evidence.js";
 import { evaluateCorrelation } from "../src/analyzer/correlation/evidence-rules.js";
-import { decideWithEvidence } from "../src/analyzer/correlation/decision-policy.js";
+import { decideWithEvidence } from "./decision-fixture.js";
 
 const catalog = {
   google: [{ name: "Google", domain: "google.com", verified: true }],
@@ -38,7 +38,7 @@ assert.equal(impersonation.potential_mismatch, true);
 const dom = analyzeDomEvidence([page("Google Login", "Sign in to Google")]);
 const rules = evaluateCorrelation(dom, impersonation).rules;
 assert.equal(rules.find(r => r.id === "R01").status, "matched");
-assert.equal(rules.find(r => r.id === "R03").status, "undetermined");
+assert.equal(rules.find(r => r.id === "R03").status, "matched");
 const typo = await analyzeBrandEvidence(page("Google Login", "Sign in to Google"), "https://oogle-login.example.test", { lookup });
 assert.equal(typo.claimed_brand.name, "Google");
 assert.equal(typo.candidates.find(c => c.name === "Google").approximate, true);

@@ -34,10 +34,10 @@ await test("T04 Apple provider is not claimed app", async () => {
 await test("T05 fake provider not rescued by OAuth", async () => {
   const s = snap("https://google-login.example.test", { title: "Google Login", headings: [{ text: "Sign in to Google" }], password_fields: [{ form_index: 0 }] });
   const b = await analyzeBrandEvidence(s, s.page_origin, { lookup });
-  assert.equal(b.official_domain_match, false); assert.equal(b.brand_domain_mismatch, "unknown");
+  assert.equal(b.official_domain_match, false); assert.equal(b.brand_domain_mismatch, true);
   assert.equal(rule(evaluateCorrelation(analyzeDomEvidence([s]), b), "R06"), "not_matched");
-  // A confirmed mismatch is synthetic here; the live analyzer only reports potential mismatch.
-  const confirmed = { ...b, brand_domain_mismatch: true };
+  // The live analyzer now supplies the confirmed mismatch from hostname evidence.
+  const confirmed = b;
   assert.equal(rule(evaluateCorrelation(analyzeDomEvidence([s]), confirmed), "R03"), "matched");
   assert.equal(rule(evaluateCorrelation(analyzeDomEvidence([s]), confirmed), "R07"), "matched");
 });

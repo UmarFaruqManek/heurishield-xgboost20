@@ -1,0 +1,20 @@
+{
+  "by_label": {
+    "legitimate": {
+      "rows": 842,
+      "before_correct": 809,
+      "after_correct": 809
+    },
+    "phishing": {
+      "rows": 245,
+      "before_correct": 200,
+      "after_correct": 200
+    }
+  },
+  "changed": [],
+  "levels": {
+    "partial_api_snapshot": 763,
+    "full_snapshot": 323,
+    "decision_only": 1
+  }
+}

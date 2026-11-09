@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import { analyzeBrandEvidence } from "../src/analyzer/brand/brand-evidence.js";
 import { analyzeDomEvidence } from "../src/analyzer/dom/dom-evidence.js";
 import { evaluateCorrelation } from "../src/analyzer/correlation/evidence-rules.js";
-import { decideWithEvidence } from "../src/analyzer/correlation/decision-policy.js";
+import { decideWithEvidence } from "./decision-fixture.js";
 import { extractUrl20Features as extractUrl18Features } from "../src/analyzer/url/url20-features.js";
 import { predictProbability } from "../src/model/xgboost-engine.js";
 
@@ -33,7 +33,6 @@ for (const url of ["https://liquipedia.net/valorant/VCT/2027/Pacific/Kickoff",
     [dom,{...brand,brand_in_title:false},context],
     [dom,{...brand,candidates:brand.candidates.map(candidate=>({...candidate,in_title:false}))},context],
     [dom,brand,{...context,sameSite:false}],
-    [dom,brand,{...context,probability:0.95}],
     [dom,brand,{...context,domainAgeDays:null}],
     [dom,brand,{...context,mainSnapshot:{...snapshot,page_origin:"https://different.test"}}]
   ]) assert.equal(decideWithEvidence("DANGEROUS",badDom,badBrand,

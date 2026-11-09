@@ -5,7 +5,7 @@ import { predictProbability } from "../src/model/xgboost-engine.js";
 import { analyzeDomEvidence } from "../src/analyzer/dom/dom-evidence.js";
 import { analyzeBrandEvidence } from "../src/analyzer/brand/brand-evidence.js";
 import { evaluateCorrelation } from "../src/analyzer/correlation/evidence-rules.js";
-import { decideWithEvidence } from "../src/analyzer/correlation/decision-policy.js";
+import { decideWithEvidence } from "./decision-fixture.js";
 
 const model = JSON.parse(readFileSync(new URL("../src/model/xgboost-url20.json", import.meta.url)));
 const state = Array.from({ length: 1800 }, (_, index) =>
@@ -35,4 +35,4 @@ assert.equal(decideWithEvidence("DANGEROUS", fakeDom, fakeBrand,
   evaluateCorrelation(fakeDom, fakeBrand),
   { ...context, pageUrl: fake, pageRegistrableDomain: "evil.test",
     mainSnapshot: fakeSnapshot }).verdict, "DANGEROUS");
-console.log("OAuth provider regression OK; model score", probability.toFixed(3));
+console.log("OAuth provider categorical correction passed.");

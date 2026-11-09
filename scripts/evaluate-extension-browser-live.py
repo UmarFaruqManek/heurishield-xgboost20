@@ -35,10 +35,10 @@ VERDICT_BY_LABEL = {
 }
 
 OUTPUT_FIELDS = [
-    "analysis_status", "elapsed_seconds", "raw_probability_phishing", "raw_verdict",
+    "analysis_status", "elapsed_seconds", "raw_verdict",
     "index", "input_url", "input_domain", "expected_label", "expected_verdict",
     "actual_verdict", "correct", "browser_final_url", "page_title", "analysis_url",
-    "analysis_final_url", "registrable_domain", "score", "probability_phishing",
+    "analysis_final_url", "registrable_domain",
     "threshold", "post_model_guard", "fired_rule_count", "brand_name",
     "brand_domain", "brand_identity_status", "brand_identity_active_domain",
     "brand_identity_candidate_domain", "brand_identity_method",
@@ -354,7 +354,6 @@ def row_from_analysis(index: int, input_url: str, expected_label: str, analysis:
     correct = bool(verdict == expected_verdict)
     return {
         "analysis_status": "completed" if verdict in {"SAFE", "DANGEROUS"} else "no_valid_analysis",
-        "raw_probability_phishing": model.get("raw_probability_phishing", "") if model else "",
         "raw_verdict": model.get("raw_verdict", "") if model else "",
         "index": index,
         "input_url": input_url,
@@ -368,8 +367,6 @@ def row_from_analysis(index: int, input_url: str, expected_label: str, analysis:
         "analysis_url": analysis.get("url") if analysis else "",
         "analysis_final_url": analysis.get("final_url") if analysis else "",
         "registrable_domain": analysis.get("registrable_domain") if analysis else "",
-        "score": analysis.get("score") if analysis else "",
-        "probability_phishing": model.get("probability_phishing") if model else "",
         "threshold": model.get("threshold") if model else "",
         "post_model_guard": (model.get("post_model_guard") or {}).get("id") if model else "",
         "fired_rule_count": model.get("fired_rule_count") if model else "",

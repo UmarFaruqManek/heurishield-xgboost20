@@ -10,13 +10,15 @@ import { lookupRdapDomain } from "../analyzer/domain/rdap-features.js";
 import { extractUrl20Features, ageLookupDomain } from "../analyzer/url/url20-features.js";
 import { urlFileExtension } from '../analyzer/url/download-file-extension.js';
 import { lookupUrl18Age } from "../analyzer/domain/url18-age.js";
-import { predictProbability } from "../model/xgboost-engine.js";
-import { classifyDomainAge } from "../analyzer/domain/domain-age-policy.js";
+import { classifyUrl } from "../model/xgboost-engine.js";
+import { classifyDomainAge, evaluateDomainAgeRule } from "../analyzer/domain/domain-age-policy.js";
 import { auditDomainSuffix } from "../model/suffix-reference.js";
-import { analyzeDomEvidence } from "../analyzer/dom/dom-evidence.js";
+import { analyzeDomEvidence, verifyFormDestinations } from "../analyzer/dom/dom-evidence.js";
 import { analyzeBrandEvidence } from "../analyzer/brand/brand-evidence.js";
 import { parentSiteLinksToPage } from "../analyzer/brand/parent-site-link.js";
 import { evaluateCorrelation } from "../analyzer/correlation/evidence-rules.js";
+import { evaluateCorrectionRules } from "../analyzer/correlation/correction-rules.js";
+import { classificationRecord } from "../shared/classification-record.js";
 import { decideWithEvidence } from "../analyzer/correlation/decision-policy.js";
 import { TRUSTED_OAUTH_PROVIDER_DOMAINS } from "../utils/constants.js";
 import {
@@ -40,7 +42,7 @@ import { buildAnalysisExplanation } from "../shared/analysis-explanation.js";
 import { sanitizeAuditUrl } from "../shared/audit-url.js";
 import { createDatasetCollector } from "../storage/dataset-collector.js";
 
-const ANALYSIS_VERSION = "url20-phreshphish-v2-file-extension-v2-t050";
+const ANALYSIS_VERSION = "url20-phreshphish-v2-final-r01-r19-t050";
 const METADATA_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
 
 let runtimeResourcesPromise = null;
@@ -106,7 +108,7 @@ function recordLoginNavigation(tabId, destinationUrl) {
   interactionByTab.delete(tabId);
 }
 
-ensureRuntimeStateVersion().catch((error) => {
+const runtimeStateReady = ensureRuntimeStateVersion().catch((error) => {
   console.warn("HeuriShield runtime state migration failed:", error?.message || error);
 });
 
@@ -385,6 +387,7 @@ if (chrome.webNavigation?.onCompleted) {
 }
 
 async function analyzeActiveTab(message) {
+  await runtimeStateReady;
   const tabId = Number(message.tabId);
   const finalUrl = String(message.url || "");
   const observed = initialUrlByTab.get(tabId) ||
@@ -421,11 +424,10 @@ async function analyzeActiveTab(message) {
   ]);
   const vector = { ...urlFeatures };
   const ageKnown = Number.isFinite(age.days);
-  const probability = predictProbability(model, vector);
-  const predictedLabel = probability >= model.threshold ? "phishing" : "legitimate";
+  const predictedLabel = classifyUrl(model, vector);
   const coverage = { provided_features: 20, missing_features: 0, coverage_percent: 100 };
   const result = { ready: true, model_family: "XGBoost", model_name: "XGBoost URL20 v2",
-    threshold: model.threshold, probability_phishing: probability,
+    threshold: model.threshold,
     source_model_sha256: model.source_model_sha256, feature_set: model.feature_set,
     predicted_label: predictedLabel, verdict: predictedLabel === "phishing" ? "DANGEROUS" : "SAFE",
     age_known: ageKnown,
@@ -442,27 +444,22 @@ async function analyzeActiveTab(message) {
       Date.now() - snapshot.observed_at < 30_000)
     .map(([, snapshot]) => snapshot)] : [];
   const nav = navigationByTab.get(tabId);
-  const domEvidence = analyzeDomEvidence(frames, nav && Date.now() - nav.observed_at < 30000 ? nav : null);
+  let domEvidence = analyzeDomEvidence(frames, nav && Date.now() - nav.observed_at < 30000 ? nav : null);
   const brandEvidence = await analyzeBrandEvidence(mainSnapshot, finalUrl, {
     lookup: token => cachedBrandLookup(token, { forceRefresh: message.forceRefresh === true }),
     domainLookup: root => cachedBrandDomainLookup(root, { forceRefresh: message.forceRefresh === true }),
     domainSearch: root => cachedDomainBrandSearch(root, { forceRefresh: message.forceRefresh === true }),
     verifyLookup: searchBrandfetch
   });
+  domEvidence = verifyFormDestinations(domEvidence, brandEvidence);
   const urlExtension = urlFileExtension(url);
   const correlation = evaluateCorrelation(domEvidence, brandEvidence,
     { urlVerdict: result.verdict, urlFileExtension: urlExtension });
   const agePolicy = await fetchJson("src/model/domain-age-policy.json");
   const ageEvidence = classifyDomainAge(age.days, agePolicy);
   // A young age only corroborates observed sensitive-input and brand-conflict evidence.
-  const ageRule = { id: "R11", status: ageEvidence.category === "unknown" ? "undetermined" :
-    ageEvidence.supporting_risk_signal === true &&
-    (domEvidence.has_password_field === true || domEvidence.has_sensitive_input === true) &&
-    brandEvidence.brand_domain_mismatch === true ? "matched" : "not_matched",
-    evidence_ids: ["domain_age_days", "B07", "D01", "D02"],
-    supporting_only: true, age_category: ageEvidence.category };
-  correlation.rules.push(ageRule);
-  const checkParentSite = result.verdict === "DANGEROUS" && probability < 0.60 &&
+  correlation.rules.push(evaluateDomainAgeRule(ageEvidence, domEvidence, brandEvidence));
+  const checkParentSite = result.verdict === "DANGEROUS" &&
     Number.isFinite(age.days) && age.days >= 1095 &&
     ageLookupDomain(url) === ageLookupDomain(finalUrl) &&
     brandEvidence.claimed_brand_status === "identified" &&
@@ -471,20 +468,19 @@ async function analyzeActiveTab(message) {
     (brandEvidence.brand_in_heading === true || brandEvidence.brand_in_logo === true) &&
     domEvidence.has_password_field === true && domEvidence.form_cross_domain !== true;
   const parentSiteLink = checkParentSite ? await parentSiteLinksToPage(finalUrl) : false;
-  const decision = decideWithEvidence(result.verdict, domEvidence, brandEvidence, correlation,
-    { probability, domainAgeDays: age.days,
+  const decisionContext = { domainAgeDays: age.days,
       sameSite: ageLookupDomain(url) === ageLookupDomain(finalUrl), parentSiteLink,
       pageRegistrableDomain: ageLookupDomain(finalUrl), pageUrl: finalUrl,
-      mainSnapshot });
+      mainSnapshot };
+  const corrections = evaluateCorrectionRules(result.verdict, domEvidence, brandEvidence, correlation, decisionContext);
+  correlation.rules.push(...corrections.rules);
+  const decision = decideWithEvidence(result.verdict, correlation.rules, corrections);
 
-  const analysis = {
+  const analysis = classificationRecord({
     ...base,
     registrable_domain: ageLookupDomain(url) || base.registrable_domain,
     final_url: sanitizeAuditUrl(finalUrl),
     verdict: decision.verdict,
-    score: Math.round(probability * 100),
-    url_score: Math.round(probability * 100),
-    dom_score: null,
     evidence: correlation.rules.filter(r => r.status === "matched"),
     evidence_trace: correlation.rules,
     matched_rules: correlation.rules.filter(r => r.status === "matched"),
@@ -493,8 +489,7 @@ async function analyzeActiveTab(message) {
     decision_policy: decision,
     parent_site_link_observed: parentSiteLink,
     decision_checklist: {
-      mode: "xgboost_url20",
-      compatibilityScore: coverage.coverage_percent
+      mode: "xgboost_url20_categorical"
     },
     model_result: {
       ...result,
@@ -523,7 +518,7 @@ async function analyzeActiveTab(message) {
     page_status_features: null,
     dom_analysis: domEvidence,
     dom_error: null
-  };
+  });
 
   analysis.url = sanitizeAuditUrl(analysis.url);
   analysis.original_url = sanitizeAuditUrl(analysis.original_url);
@@ -661,7 +656,6 @@ async function redirectToWarningPage(tabId, analysis) {
     domain: safeUrl(targetUrl)?.hostname || "",
     registrable_domain: analysis.registrable_domain || "",
     verdict: analysis.verdict || "DANGEROUS",
-    score: analysis.score ?? null,
     matched_rules: Array.isArray(analysis.matched_rules) ? analysis.matched_rules.slice(0, 8) : [],
     redirect_source_warning: analysis.redirect_source_warning || null,
     analyzer_version: analysis.analyzer_version || ANALYSIS_VERSION,
@@ -765,8 +759,7 @@ function buildBaseAnalysis(url, tabId) {
     normalized_url: sanitizeAuditUrl(url),
     hostname,
     registrable_domain: registrable,
-    verdict: "LIMITED",
-    score: 0
+    verdict: "LIMITED"
   };
 }
 
@@ -933,6 +926,8 @@ async function ensureRuntimeStateVersion() {
   const current = await chrome.storage.local.get({ [STORAGE_KEYS.RUNTIME_STATE_VERSION]: null });
   if (current[STORAGE_KEYS.RUNTIME_STATE_VERSION] === ANALYSIS_VERSION) return;
   await clearStaleRuntimeState();
+  const previous = await chrome.storage.local.get(null);
+  await chrome.storage.local.set(classificationRecord(previous));
   await chrome.storage.local.set({ [STORAGE_KEYS.RUNTIME_STATE_VERSION]: ANALYSIS_VERSION });
 }
 
@@ -972,7 +967,6 @@ async function saveFeatureJsonArchive(analysis) {
     hostname: analysis.hostname,
     registrable_domain: analysis.registrable_domain,
     verdict: analysis.verdict,
-    score: analysis.score,
     model_result: compactModelResult(analysis.model_result),
     brand_identity: analysis.brand_identity || null,
     correlation_rules: analysis.correlation_rules || [],
@@ -1017,8 +1011,6 @@ function compactModelResult(model) {
     feature_set: model.feature_set || null,
     predicted_label: model.predicted_label || model.targetLabel || null,
     verdict: model.verdict || null,
-    probability_phishing: model.probability_phishing ?? null,
-    raw_probability_phishing: model.raw_probability_phishing ?? model.probability_phishing ?? null,
     raw_verdict: model.raw_verdict || model.verdict || null,
     post_model_guard: model.post_model_guard || null,
     fired_rule_count: model.fired_rule_count ?? null,

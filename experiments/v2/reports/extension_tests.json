@@ -1,13 +1,12 @@
 {
-  "checks": 27,
-  "passed": 27,
+  "checks": 31,
+  "passed": 31,
   "classification_cases": [
     {
       "classification_case": "portal.merdekasiber.com",
       "expected": "SAFE",
-      "actual": "DANGEROUS",
-      "passed": false,
-      "probability": 0.8301628977612076
+      "actual": "SAFE",
+      "passed": true
     }
   ],
   "results": [
@@ -48,6 +47,12 @@
       "stderr": ""
     },
     {
+      "test": "categorical-boundary.mjs",
+      "exit_code": 0,
+      "stdout": "Categorical URL boundary, explicit correction rules and score-free records passed.\n",
+      "stderr": ""
+    },
+    {
       "test": "decision-policy.mjs",
       "exit_code": 0,
       "stdout": "Decision policy OK: URL baseline, confirmed override, review without unblocking, unknown, OAuth\n",
@@ -78,6 +83,18 @@
       "stderr": ""
     },
     {
+      "test": "final-policy-matrix.mjs",
+      "exit_code": 0,
+      "stdout": "Final decision table: 32768 combinations passed; contextual/supporting rules do not independently override.\n",
+      "stderr": ""
+    },
+    {
+      "test": "final-wiring-audit.mjs",
+      "exit_code": 0,
+      "stdout": "Final wiring: confirmed vs potential identity conflict, R02/R03/R04/R10 activation, OAuth and unknown destination passed.\n",
+      "stderr": ""
+    },
+    {
       "test": "identity-context.mjs",
       "exit_code": 0,
       "stdout": "Identity context passed: page topics, software attribution and spaced organization names.\n",
@@ -92,7 +109,7 @@
     {
       "test": "oauth-provider-regression.mjs",
       "exit_code": 0,
-      "stdout": "OAuth provider regression OK; model score 0.996\n",
+      "stdout": "OAuth provider categorical correction passed.\n",
       "stderr": ""
     },
     {
@@ -105,6 +122,12 @@
       "test": "parent-site-link.mjs",
       "exit_code": 0,
       "stdout": "Parent site link OK: observed subdomain link, apex, HTTP, deceptive host\n",
+      "stderr": ""
+    },
+    {
+      "test": "policy-rule-ids.mjs",
+      "exit_code": 0,
+      "stdout": "Policy uses only R IDs/statuses: both correction directions, conflicts, unknown and fallback passed.\n",
       "stderr": ""
     },
     {
@@ -134,7 +157,7 @@
     {
       "test": "worker-smoke.mjs",
       "exit_code": 0,
-      "stdout": "{\"verdict\":\"SAFE\",\"model\":\"XGBoost URL20 v2\",\"featureCount\":20}\n{\"verdict\":\"DANGEROUS\",\"model\":\"XGBoost URL20 v2\",\"ageStatus\":\"unknown\"}\n{\"source\":\"https://account.example.com/login\",\"final\":\"https://www.example.com/welcome\"}\n{\"oauthHost\":\"accounts.google.com\",\"oauthDomain\":\"google.com\"}\n{\"classification_case\":\"portal.merdekasiber.com\",\"expected\":\"SAFE\",\"actual\":\"DANGEROUS\",\"passed\":false,\"probability\":0.8301628977612076}\n{\"portalRaw\":\"DANGEROUS\",\"portalFinal\":\"DANGEROUS\",\"source\":\"url_model\"}\nManual lists applied to panel and current tab OK\nPopup, persistent action and restored block page OK\n",
+      "stdout": "{\"verdict\":\"SAFE\",\"model\":\"XGBoost URL20 v2\",\"featureCount\":20}\n{\"verdict\":\"DANGEROUS\",\"model\":\"XGBoost URL20 v2\",\"ageStatus\":\"unknown\"}\n{\"source\":\"https://account.example.com/login\",\"final\":\"https://www.example.com/welcome\"}\n{\"oauthHost\":\"accounts.google.com\",\"oauthDomain\":\"google.com\"}\n{\"classification_case\":\"portal.merdekasiber.com\",\"expected\":\"SAFE\",\"actual\":\"SAFE\",\"passed\":true}\n{\"portalRaw\":\"DANGEROUS\",\"portalFinal\":\"SAFE\",\"source\":\"corroborated_own_domain_review\"}\nManual lists applied to panel and current tab OK\nPopup, persistent action and restored block page OK\n",
       "stderr": ""
     },
     {
@@ -164,13 +187,13 @@
     {
       "test": "brand-domain-conflict-smoke.py",
       "exit_code": 0,
-      "stdout": "{\n  \"passed\": true,\n  \"manifest_version\": \"0.5.2\",\n  \"brand\": \"Roblox\",\n  \"reference_domain\": \"roblox.com\",\n  \"official_domain_match\": false,\n  \"api_domain_reference_conflict\": true,\n  \"verdict\": \"DANGEROUS\",\n  \"decision_source\": \"corroborated_brand_impersonation\",\n  \"test_type\": \"local_mock_page_and_API\",\n  \"public_target_opened\": false\n}\n",
+      "stdout": "{\n  \"passed\": true,\n  \"manifest_version\": \"0.6.2\",\n  \"brand\": \"Roblox\",\n  \"reference_domain\": \"roblox.com\",\n  \"official_domain_match\": false,\n  \"api_domain_reference_conflict\": true,\n  \"verdict\": \"DANGEROUS\",\n  \"decision_source\": \"corroborated_brand_impersonation\",\n  \"test_type\": \"local_mock_page_and_API\",\n  \"public_target_opened\": false\n}\n",
       "stderr": ""
     },
     {
       "test": "dom-download-browser.py",
       "exit_code": 0,
-      "stdout": "{\n  \"passed\": true,\n  \"version\": \"0.5.2\",\n  \"download_link_read\": true,\n  \"executable_link_read\": true,\n  \"cross_site_read\": true,\n  \"R13_verdict\": \"DANGEROUS\",\n  \"R13_source\": \"brand_executable_download_phishing\",\n  \"pdf_not_executable\": true,\n  \"removed_link_detected\": true,\n  \"dynamic_link_detected\": true,\n  \"url_suffix_read\": true,\n  \"model_vector_still_20\": true,\n  \"separate_warning_removed\": true,\n  \"downloads_permission_removed\": true,\n  \"downloads_started\": 0,\n  \"public_sites_opened\": 0,\n  \"test\": \"local mocked page/API in Chromium\"\n}\n",
+      "stdout": "{\n  \"passed\": true,\n  \"version\": \"0.6.2\",\n  \"download_link_read\": true,\n  \"executable_link_read\": true,\n  \"cross_site_read\": true,\n  \"R13_verdict\": \"DANGEROUS\",\n  \"R13_source\": \"brand_executable_download_phishing\",\n  \"pdf_not_executable\": true,\n  \"removed_link_detected\": true,\n  \"dynamic_link_detected\": true,\n  \"url_suffix_read\": true,\n  \"model_vector_still_20\": true,\n  \"confirmed_brand_mismatch_read\": true,\n  \"form_destination_verification_read\": true,\n  \"R03_R04_live_wiring\": true,\n  \"credential_values_not_archived\": true,\n  \"separate_warning_removed\": true,\n  \"downloads_permission_removed\": true,\n  \"downloads_started\": 0,\n  \"public_sites_opened\": 0,\n  \"test\": \"local mocked page/API in Chromium\"\n}\n",
       "stderr": ""
     }
   ]

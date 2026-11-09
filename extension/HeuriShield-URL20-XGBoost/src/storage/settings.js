@@ -2,6 +2,7 @@
  * Akses chrome.storage untuk pengaturan, hasil per tab, riwayat dan konteks halaman blokir.
  * Fungsi di sini menyimpan/membaca data; bukan evaluator klasifikasi.
  */
+import { classificationRecord } from "../shared/classification-record.js";
 import { DEFAULT_SETTINGS, STORAGE_KEYS } from "../utils/constants.js";
 
 export async function getSetting(key, fallback) {
@@ -42,7 +43,7 @@ export async function saveAnalysisForTab(tabId, analysis) {
   const analysisByTab = result[STORAGE_KEYS.ANALYSIS_BY_TAB];
 
   analysisByTab[String(tabId)] = {
-    ...analysis,
+    ...classificationRecord(analysis),
     analyzed_at: new Date().toISOString()
   };
 
@@ -77,7 +78,6 @@ export async function saveUrlHistoryVisit(tabId, url) {
     {
       url,
       domain: parsed.hostname,
-      score: 0,
       status: "LIMITED",
       reasons: "Analisis belum selesai."
     },
@@ -93,7 +93,6 @@ export async function saveUrlHistoryEntry(tabId, analysis) {
   await saveHistoryItem(tabId, {
     url: analysis.normalized_url || analysis.url,
     domain: analysis.registrable_domain || analysis.hostname || "",
-    score: analysis.score ?? 0,
     status: analysis.verdict || "LIMITED",
     reasons: buildHistoryReasons(analysis)
   });
@@ -108,7 +107,6 @@ async function saveHistoryItem(tabId, item, options = {}) {
     options.preserveExistingAnalysis && previous
       ? {
           ...item,
-          score: previous.score ?? item.score,
           status: previous.status || previous.verdict || item.status,
           reasons: previous.reasons || item.reasons
         }
@@ -191,7 +189,7 @@ async function writeWarningContext(id, context) {
   const result = await chrome.storage.local.get({ [STORAGE_KEYS.WARNING_CONTEXTS]: {} });
   const contexts = result[STORAGE_KEYS.WARNING_CONTEXTS];
   contexts[id] = {
-    ...context,
+    ...classificationRecord(context),
     created_at: new Date().toISOString()
   };
 

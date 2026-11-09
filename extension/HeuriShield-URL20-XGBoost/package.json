@@ -1,6 +1,6 @@
 {
   "name": "heurishield-url20-xgboost-v2",
-  "version": "0.5.2",
+  "version": "0.6.2",
   "type": "module",
   "private": true,
   "scripts": {

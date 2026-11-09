@@ -1,0 +1,31 @@
+{
+  "counts": {
+    "legitimate": {
+      "rows": 842,
+      "before_correct": 809,
+      "after_correct": 809
+    },
+    "phishing": {
+      "rows": 245,
+      "before_correct": 200,
+      "after_correct": 200
+    }
+  },
+  "changes": [],
+  "matched_rules": {
+    "R08": 488,
+    "R16": 2,
+    "R19": 8,
+    "R01": 44,
+    "R02": 16,
+    "R09": 14,
+    "R03": 3,
+    "R07": 3,
+    "R10": 3
+  },
+  "replay_levels": {
+    "partial_api_snapshot": 763,
+    "full_snapshot": 323,
+    "decision_only": 1
+  }
+}

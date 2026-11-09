@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "minimum_chrome_version": "106",
   "name": "HeuriShield URL20 XGBoost v2",
-  "version": "0.5.2",
+  "version": "0.6.2",
   "description": "20 URL features, PhreshPhish-enriched XGBoost v2, threshold 0.50, DOM and brand evidence.",
   "permissions": [
     "storage",

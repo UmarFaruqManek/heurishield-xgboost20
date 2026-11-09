@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { searchBrand } from "../src/analyzer/brand/brand-features.js";
 import { analyzeBrandEvidence } from "../src/analyzer/brand/brand-evidence.js";
 import { buildAnalysisExplanation } from "../src/shared/analysis-explanation.js";
-import { decideWithEvidence } from "../src/analyzer/correlation/decision-policy.js";
+import { decideWithEvidence } from "./decision-fixture.js";
 import { analyzeDomEvidence } from "../src/analyzer/dom/dom-evidence.js";
 import { evaluateCorrelation } from "../src/analyzer/correlation/evidence-rules.js";
 import { extractUrl20Features as extractUrl18Features } from "../src/analyzer/url/url20-features.js";

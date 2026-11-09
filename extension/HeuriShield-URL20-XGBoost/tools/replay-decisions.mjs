@@ -2,12 +2,16 @@
 // No browser navigation or API requests occur here. The frozen URL-model verdict
 // comes from the original live run; URL feature/model changes require a new test.
 import { readFileSync } from "node:fs";
-import { analyzeDomEvidence } from "../src/analyzer/dom/dom-evidence.js";
+import { analyzeDomEvidence, verifyFormDestinations } from "../src/analyzer/dom/dom-evidence.js";
 import { analyzeBrandEvidence } from "../src/analyzer/brand/brand-evidence.js";
 import { evaluateCorrelation } from "../src/analyzer/correlation/evidence-rules.js";
+import { evaluateCorrectionRules } from "../src/analyzer/correlation/correction-rules.js";
 import { decideWithEvidence } from "../src/analyzer/correlation/decision-policy.js";
 import { ageLookupDomain } from "../src/analyzer/url/url18-features.js";
 import { urlFileExtension } from '../src/analyzer/url/download-file-extension.js';
+
+import {classifyDomainAge,evaluateDomainAgeRule} from "../src/analyzer/domain/domain-age-policy.js";
+const agePolicy=JSON.parse(readFileSync(new URL("../src/model/domain-age-policy.json",import.meta.url),"utf8"));
 
 const input = JSON.parse(readFileSync(0, "utf8"));
 const output = [];
@@ -59,17 +63,21 @@ for (const item of input.records || []) {
     if (missing.length) base.missing_saved_lookups = [...new Set(missing)];
   }
 
+  dom = verifyFormDestinations(dom, brand);
   const correlation = evaluateCorrelation(dom, brand, { urlVerdict: base.url_model_verdict,
     urlFileExtension: urlFileExtension(analysis.original_url || analysis.url || item.url) });
-  const decision = decideWithEvidence(base.url_model_verdict, dom, brand, correlation, {
-    probability: analysis.model_result?.probability_phishing,
+  correlation.rules.push(evaluateDomainAgeRule(classifyDomainAge(analysis.rdap_features?.source_domain_age_days ?? null,agePolicy),dom,brand));
+  const context = {
     domainAgeDays: analysis.rdap_features?.source_domain_age_days ?? null,
     sameSite: ageLookupDomain(item.url) === ageLookupDomain(analysis.final_url || item.url),
     parentSiteLink: analysis.parent_site_link_observed === true,
     pageRegistrableDomain: analysis.registrable_domain,
     pageUrl: analysis.final_url || item.url,
     mainSnapshot: saved?.main_snapshot || null
-  });
+  };
+  const corrections = evaluateCorrectionRules(base.url_model_verdict, dom, brand, correlation, context);
+  correlation.rules.push(...corrections.rules);
+  const decision = decideWithEvidence(base.url_model_verdict, correlation.rules, corrections);
   output.push({ ...base, replay_level: level, new_verdict: decision.verdict,
     old_source: analysis.decision_policy?.source || null,
     new_source: decision.source,

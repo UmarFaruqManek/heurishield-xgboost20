@@ -258,7 +258,6 @@ export async function analyzeBrandEvidence(snapshot, url, { lookup, domainLookup
   }
   // A different verified reference domain is a potential mismatch. It cannot
   // prove impersonation on its own, since partner domains may legitimately exist.
-  const mismatch = official === true ? false : UNKNOWN;
   const hostClaim = chosen ? hostBrandClaim(url, chosen) : null;
   // Preserve a directory reference even when its provider does not attest ownership.
   // Exact/one-edit host claim + page title supports a narrowly scoped allegation;
@@ -283,6 +282,10 @@ export async function analyzeBrandEvidence(snapshot, url, { lookup, domainLookup
   const providerCredentialClaim = Boolean(highConfidenceCredentialImpersonation &&
     providerDomain(chosen?.name) === officialDomain && officialDomain &&
     chosen.inTitle && (snapshot.controls || []).some(control => control.type === "native_login"));
+  // A mismatching reference alone is a potential mismatch (R01).
+  // Confirmed mismatch also requires corroborated hostname/credential identity.
+  const mismatch = official === true ? false : official === false &&
+    (highConfidenceHostImpersonation || providerCredentialClaim) ? true : UNKNOWN;
   return {
     observed_at: snapshot.observed_at || null,
     searched_tokens: queries.map(token => ({ token, source: hostQueries.includes(token) ? "hostname" : "page", lookup_success: results[queries.indexOf(token)]?.lookup_success === true })),

@@ -1,0 +1,129 @@
+{
+  "mode": "local_mocked_page_and_api_real_extension",
+  "results": [
+    {
+      "scenario": "Peniruan brand + installer",
+      "url": "https://bca.portal-lab.test/download",
+      "expected_R13": true,
+      "actual_R13": "matched",
+      "passed": true,
+      "verdict": "DANGEROUS",
+      "source": "brand_executable_download_phishing",
+      "url_model": "DANGEROUS",
+      "url_file_extension": null,
+      "has_download_link": true,
+      "download_file_extensions": [
+        "exe"
+      ],
+      "brand": {
+        "id": "bca.co.id",
+        "name": "BCA",
+        "official_domain": "bca.co.id"
+      },
+      "official_domain_match": false,
+      "feature_count": 20
+    },
+    {
+      "scenario": "Peniruan brand + PDF",
+      "url": "https://bca.portal-lab.test/manual",
+      "expected_R13": false,
+      "actual_R13": "not_matched",
+      "passed": true,
+      "verdict": "DANGEROUS",
+      "source": "url_model",
+      "url_model": "DANGEROUS",
+      "url_file_extension": null,
+      "has_download_link": true,
+      "download_file_extensions": [
+        "pdf"
+      ],
+      "brand": {
+        "id": "bca.co.id",
+        "name": "BCA",
+        "official_domain": "bca.co.id"
+      },
+      "official_domain_match": false,
+      "feature_count": 20
+    },
+    {
+      "scenario": "Brand cocok + installer",
+      "url": "https://bca.co.id/download",
+      "expected_R13": false,
+      "actual_R13": "not_matched",
+      "passed": true,
+      "verdict": "SAFE",
+      "source": "url_model",
+      "url_model": "SAFE",
+      "url_file_extension": null,
+      "has_download_link": true,
+      "download_file_extensions": [
+        "exe"
+      ],
+      "brand": {
+        "id": "bca.co.id",
+        "name": "BCA",
+        "official_domain": "bca.co.id"
+      },
+      "official_domain_match": true,
+      "feature_count": 20
+    },
+    {
+      "scenario": "Tanpa brand + installer",
+      "url": "https://portal-lab.test/download",
+      "expected_R13": false,
+      "actual_R13": "not_matched",
+      "passed": true,
+      "verdict": "DANGEROUS",
+      "source": "url_model",
+      "url_model": "DANGEROUS",
+      "url_file_extension": null,
+      "has_download_link": true,
+      "download_file_extensions": [
+        "exe"
+      ],
+      "brand": null,
+      "official_domain_match": "unknown",
+      "feature_count": 20
+    },
+    {
+      "scenario": "Peniruan brand tanpa unduhan",
+      "url": "https://bca.portal-lab.test/about",
+      "expected_R13": false,
+      "actual_R13": "not_matched",
+      "passed": true,
+      "verdict": "DANGEROUS",
+      "source": "url_model",
+      "url_model": "DANGEROUS",
+      "url_file_extension": null,
+      "has_download_link": false,
+      "download_file_extensions": [],
+      "brand": {
+        "id": "bca.co.id",
+        "name": "BCA",
+        "official_domain": "bca.co.id"
+      },
+      "official_domain_match": false,
+      "feature_count": 20
+    },
+    {
+      "scenario": "Akhiran EXE pada URL",
+      "url": "https://bca.portal-lab.test/setup.exe",
+      "expected_R13": true,
+      "actual_R13": "matched",
+      "passed": true,
+      "verdict": "DANGEROUS",
+      "source": "brand_executable_download_phishing",
+      "url_model": "DANGEROUS",
+      "url_file_extension": "exe",
+      "has_download_link": false,
+      "download_file_extensions": [],
+      "brand": {
+        "id": "bca.co.id",
+        "name": "BCA",
+        "official_domain": "bca.co.id"
+      },
+      "official_domain_match": false,
+      "feature_count": 20
+    }
+  ]
+}

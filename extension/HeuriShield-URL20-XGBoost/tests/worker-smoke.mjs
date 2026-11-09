@@ -1,7 +1,7 @@
 /* Offline worker smoke: fake registration API and extension storage, no web visit. */
 import fs from "node:fs/promises";
 
-const storage = new Map();
+const storage = new Map([["urlHistory", [{url:"https://old.example/",score:90,status:"DANGEROUS"}]]]);
 let listener;
 let beforeNavigate;
 const sentMessages = [];
@@ -15,6 +15,7 @@ globalThis.chrome = {
   },
   storage: { local: {
     async get(keys) {
+      if (keys === null) return Object.fromEntries(storage);
       if (typeof keys === "string") return { [keys]: storage.get(keys) };
       if (Array.isArray(keys)) return Object.fromEntries(keys.map(key => [key, storage.get(key)]));
       return Object.fromEntries(Object.entries(keys).map(([key, fallback]) => [key, storage.has(key) ? storage.get(key) : fallback]));
@@ -108,6 +109,7 @@ if (redirected.url !== "https://account.example.com/login" || redirected.final_u
   throw new Error("Original URL was lost on redirect");
 }
 process.stdout.write(JSON.stringify({ source: redirected.url, final: redirected.final_url }) + "\n");
+if (storage.get("urlHistory").some(row => "score" in row)) throw new Error("Historical score survived migration");
 beforeNavigate({ frameId: 0, tabId: 4, url: "https://www.dicoding.com/login" });
 const oauthPage = await new Promise((resolve, reject) => {
   listener({ type: "HEURISHIELD_ANALYZE_PAGE",
@@ -131,7 +133,7 @@ if (portal.brand_features?.claimed_brand?.name !== "Merdeka Siber" ||
     portal.model_result?.model_name !== "XGBoost URL20 v2") {
   throw new Error(`Portal false-positive correction failed: ${JSON.stringify({
     raw: portal.model_result.verdict, final: portal.verdict, decision: portal.decision_policy,
-    brand: portal.brand_features?.claimed_brand, probability: portal.model_result.probability_phishing })}`);
+    brand: portal.brand_features?.claimed_brand })}`);
 }
 // Keep classification failures visible, while checking the remaining manual-list flows.
 if (portal.verdict !== "SAFE" &&
@@ -140,7 +142,7 @@ if (portal.verdict !== "SAFE" &&
 }
 process.stdout.write(JSON.stringify({ classification_case: "portal.merdekasiber.com",
   expected: "SAFE", actual: portal.verdict,
-  passed: portal.verdict === "SAFE", probability: portal.model_result.probability_phishing }) + "\n");
+  passed: portal.verdict === "SAFE" }) + "\n");
 process.stdout.write(JSON.stringify({ portalRaw: portal.model_result.verdict,
   portalFinal: portal.verdict, source: portal.decision_policy.source }) + "\n");
 

@@ -1,0 +1,29 @@
+/* Final policy consumes URL class and matched evidence rules only. */
+import { evaluateCorrectionRules } from "./correction-rules.js";
+
+export function decideWithEvidence(urlVerdict, dom, brand, correlation, context = {}) {
+  if (urlVerdict !== "SAFE" && urlVerdict !== "DANGEROUS") {
+    return { verdict: "LIMITED", source: "url_unavailable", review_candidate: false, review_reason: null };
+  }
+  if (urlVerdict === 'DANGEROUS' && correlation?.url_brand_download_phishing === true) {
+    return { verdict:'DANGEROUS',source:'url_brand_download_phishing',review_candidate:false,review_reason:null };
+  }
+  if (correlation?.brand_executable_download_phishing === true) {
+    return { verdict:'DANGEROUS',source:'brand_executable_download_phishing',review_candidate:false,review_reason:null };
+  }
+  if (correlation?.strong_credential_impersonation === true) {
+    return { verdict: "DANGEROUS", source: "confirmed_credential_impersonation", review_candidate: false, review_reason: null };
+  }
+  if (correlation?.strong_brand_impersonation === true) {
+    return { verdict: "DANGEROUS", source: "corroborated_brand_impersonation", review_candidate: false, review_reason: null };
+  }
+
+  const correction = correlation?.correction_rules ||
+    evaluateCorrectionRules(urlVerdict, dom, brand, correlation, context);
+  const matched = correction.rules.find(rule => rule.status === 'matched');
+  if (matched) return { verdict: 'SAFE', source: matched.source,
+    review_candidate: false, review_reason: null,
+    ...(matched.id === 'C02' ? {corroboration:'parent_site_link'} : {}) };
+  return {verdict:urlVerdict, source:'url_model',
+    review_candidate:correction.review_candidate, review_reason:correction.review_reason};
+}

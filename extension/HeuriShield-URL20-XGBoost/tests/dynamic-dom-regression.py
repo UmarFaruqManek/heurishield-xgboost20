@@ -1,4 +1,5 @@
 """Observe a controlled SPA fixture, without visiting public websites or APIs."""
+import json
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from playwright.sync_api import sync_playwright
@@ -29,6 +30,8 @@ with TemporaryDirectory(prefix='hs-spa-fixture-') as profile, sync_playwright() 
     assert after['evidence_incomplete'] is False
     assert after['password_fields'] and after['forms'][0]['relevant']
     assert after['title'] == 'Account login'
+    page.locator('input').fill('HS_SECRET_MUST_NOT_BE_SAVED')
+    assert 'HS_SECRET_MUST_NOT_BE_SAVED' not in json.dumps(snapshot())
     page.evaluate('''() => {
       const meta = document.createElement('meta');
       meta.name = 'generator'; meta.content = 'WordPress 6.8';

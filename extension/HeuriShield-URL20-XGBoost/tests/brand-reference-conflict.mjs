@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { analyzeBrandEvidence } from '../src/analyzer/brand/brand-evidence.js';
 import { analyzeDomEvidence } from '../src/analyzer/dom/dom-evidence.js';
 import { evaluateCorrelation } from '../src/analyzer/correlation/evidence-rules.js';
-import { decideWithEvidence } from '../src/analyzer/correlation/decision-policy.js';
+import { decideWithEvidence } from './decision-fixture.js';
 
 const url='https://www.roblox.com.ml/users/390783638810/profile';
 const page={page_origin:'https://www.roblox.com.ml',title:'Player - Roblox',

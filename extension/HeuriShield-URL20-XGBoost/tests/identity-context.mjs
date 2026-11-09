@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { analyzeBrandEvidence } from "../src/analyzer/brand/brand-evidence.js";
 import { analyzeDomEvidence } from "../src/analyzer/dom/dom-evidence.js";
 import { evaluateCorrelation } from "../src/analyzer/correlation/evidence-rules.js";
-import { decideWithEvidence } from "../src/analyzer/correlation/decision-policy.js";
+import { decideWithEvidence } from "./decision-fixture.js";
 
 const snapshot = {page_origin:"https://agency.example",title:"Non-major Source - Example Agency",
   headings:[{text:"Non-major Source"}],logos:[],forms:[],controls:[],
@@ -54,7 +54,7 @@ assert.equal(decideLogin({...loginDom,form_cross_domain:true,
   forms:[{relevant:true,cross_domain:true,same_origin:false}]}),"DANGEROUS");
 assert.equal(decideLogin({...loginDom,unresolved_checks:["inaccessible_iframe"]}),"DANGEROUS");
 assert.equal(decideLogin(loginDom,{...loginBrand,official_domain_match:null}),"DANGEROUS");
-assert.equal(decideLogin(loginDom,loginBrand,{...loginContext,probability:.95}),"DANGEROUS");
+assert.equal(decideLogin(loginDom,loginBrand,{...loginContext,probability:.95}),"SAFE");
 assert.equal(decideLogin(loginDom,loginBrand,{...loginContext,domainAgeDays:null}),"DANGEROUS");
 assert.equal(decideLogin(loginDom,loginBrand,{...loginContext,
   mainSnapshot:{...loginSnapshot,page_origin:"https://other.example"}}),"DANGEROUS");

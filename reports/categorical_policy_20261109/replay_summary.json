@@ -1,0 +1,66 @@
+{
+  "by_label": {
+    "legitimate": {
+      "rows": 842,
+      "before_correct": 808,
+      "after_correct": 809,
+      "before_percent": 95.96,
+      "after_percent": 96.08
+    },
+    "phishing": {
+      "rows": 245,
+      "before_correct": 199,
+      "after_correct": 200,
+      "before_percent": 81.22,
+      "after_percent": 81.63
+    }
+  },
+  "changes": [
+    {
+      "index": 427,
+      "url": "https://darbhangamedicalcollege.in/sitemap/",
+      "label": "legitimate",
+      "before": "SAFE",
+      "after": "DANGEROUS",
+      "before_source": "verified_own_domain_non_sensitive_page",
+      "after_source": "url_model",
+      "replay_level": "full_snapshot"
+    },
+    {
+      "index": 528,
+      "url": "https://universaldialog.com/wp-login.php?redirect_to=index.php",
+      "label": "legitimate",
+      "before": "DANGEROUS",
+      "after": "SAFE",
+      "before_source": "url_model",
+      "after_source": "verified_own_domain_login",
+      "replay_level": "partial_api_snapshot"
+    },
+    {
+      "index": 677,
+      "url": "https://mashpeewampanoagtribe-nsn.gov/bar-association-membership",
+      "label": "legitimate",
+      "before": "DANGEROUS",
+      "after": "SAFE",
+      "before_source": "url_model",
+      "after_source": "verified_own_domain_non_sensitive_page",
+      "replay_level": "full_snapshot"
+    },
+    {
+      "index": 1029,
+      "url": "https://sunrisemaillogin.flazio.online/",
+      "label": "phishing",
+      "before": "SAFE",
+      "after": "DANGEROUS",
+      "before_source": "verified_own_domain_non_sensitive_page",
+      "after_source": "url_model",
+      "replay_level": "full_snapshot"
+    }
+  ],
+  "replay_levels": {
+    "partial_api_snapshot": 763,
+    "full_snapshot": 323,
+    "decision_only": 1
+  },
+  "note": "No live browsing. Frozen historical URL classes; historical scores are not read by the new rules. Partial snapshots do not prove complete regressions."
+}

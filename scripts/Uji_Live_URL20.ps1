@@ -13,8 +13,8 @@ $extensionRoot = Join-Path $projectRoot 'extension\HeuriShield-URL20-XGBoost'
 $manifest = Get-Content -LiteralPath (Join-Path $extensionRoot 'manifest.json') -Raw | ConvertFrom-Json
 $modelPath = Join-Path $extensionRoot 'src\model\xgboost-url20.json'
 $model = Get-Content -LiteralPath $modelPath -Raw | ConvertFrom-Json
-if ($manifest.version -ne '0.5.2' -or $model.feature_names.Count -ne 20 -or $model.threshold -ne 0.5) {
-    throw 'Konfigurasi extension tidak sesuai paket URL20 v0.5.2 TH0.50.'
+if ($manifest.version -ne '0.6.2' -or $model.feature_names.Count -ne 20 -or $model.threshold -ne 0.5) {
+    throw 'Konfigurasi extension tidak sesuai paket URL20 v0.6.2 TH0.50.'
 }
 
 $readyReport = Join-Path $projectRoot 'experiments\v2\reports\extension_ready.json'
@@ -43,7 +43,7 @@ if (-not $InputFile -or -not (Test-Path -LiteralPath $InputFile -PathType Leaf))
     throw 'Isi -InputFile dengan lokasi file URL yang akan diuji.'
 }
 
-$runId = 'url20_v052_' + $Label + '_' + (Get-Date -Format 'yyyyMMdd_HHmmss')
+$runId = 'url20_v062_' + $Label + '_' + (Get-Date -Format 'yyyyMMdd_HHmmss')
 $reportRoot = Join-Path $projectRoot ('testing\live\' + $runId)
 $historyPath = Join-Path $projectRoot 'data\evaluation\history_url20.sqlite'
 python (Join-Path $PSScriptRoot 'evaluate-extension-browser-live.py') `

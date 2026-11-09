@@ -1,6 +1,6 @@
 # HeuriShield XGBoost20
 
-> **Versi aktif lokal 0.5.2:** akhiran file URL dan tautan unduhan DOM menjadi bukti tambahan dalam aturan R12/R13. Tidak ada monitor atau peringatan unduhan terpisah. Model tetap 20 fitur dan TH0,50. 27 pengujian lulus; replay 1.087 rekaman tidak mengubah keputusan. [Laporan final](reports/dom_download_final_20261108/README.md). Paket pembaruan versi 0.5.2.
+> **Acuan penulisan dibekukan: v0.6.2 / skripsi-v0.6.2.** Model URL20 TH0,50; 9 parameter utama brand; 8 parameter utama DOM; aturan R01–R19; policy berbasis ID/status tanpa skor klasifikasi. 31 pengujian lulus termasuk 32.768 kombinasi keputusan; enam simulasi unduhan lulus. [Gunakan satu acuan final ini](reports/final_audit_20261109/README.md), bukan laporan percobaan sebelumnya. Belum dipush ke GitHub.
 
 > Desain lokal v0.5.0 dengan monitor/peringatan unduhan terpisah sudah dibatalkan dan dilepas dari extension aktif. Riwayat pengujiannya disimpan lokal sebagai arsip.
 

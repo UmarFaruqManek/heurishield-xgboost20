@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { decideWithEvidence } from "../src/analyzer/correlation/decision-policy.js";
+import { decideWithEvidence } from "./decision-fixture.js";
 
 const baseDom = { has_password_field: true, has_sensitive_input: false,
   forms: [{ relevant: true, cross_domain: false }] };
@@ -98,7 +98,7 @@ assert.equal(decideWithEvidence("DANGEROUS", firstPartyDom,
     claim: true, in_title: true, in_heading: true }] },
   safeCorrelation, firstPartyContext).verdict, "DANGEROUS");
 assert.equal(decideWithEvidence("DANGEROUS", firstPartyDom,
-  firstPartyLogin, safeCorrelation, { ...firstPartyContext, probability: 0.8 }).verdict, "DANGEROUS");
+  firstPartyLogin, safeCorrelation, { ...firstPartyContext, probability: 0.8 }).verdict, "SAFE");
 // The long OAuth query raises URL risk, but the observed page belongs to the
 // provider itself. A matching name on a lookalike host cannot receive this correction.
 const oauthUrl = "https://accounts.google.com/v3/signin/accountchooser?client_id=example.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fauth.indodax.com%2F__%2Fauth%2Fhandler&response_type=code&scope=openid";

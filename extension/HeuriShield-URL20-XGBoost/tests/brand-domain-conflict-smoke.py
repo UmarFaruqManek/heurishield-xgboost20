@@ -48,5 +48,6 @@ with TemporaryDirectory(prefix='hs-brand-conflict-') as profile,sync_playwright(
         'brand':b['claimed_brand']['name'],'reference_domain':b['verified_reference_domain'],
         'official_domain_match':False,'api_domain_reference_conflict':True,'verdict':a['verdict'],
         'decision_source':a['decision_policy']['source'],'test_type':'local_mock_page_and_API','public_target_opened':False}
-    (extension.parents[1]/'reports/brand_reference_fix_20261108/browser_conflict_test.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
+    out=extension.parents[1]/'reports/final_audit_20261109';out.mkdir(exist_ok=True,parents=True)
+    (out/'browser_conflict_test.json').write_text(json.dumps(report,indent=2),encoding='utf-8')
     print(json.dumps(report,indent=2));context.close()

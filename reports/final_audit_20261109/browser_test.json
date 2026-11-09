@@ -1,0 +1,23 @@
+{
+  "passed": true,
+  "version": "0.6.2",
+  "download_link_read": true,
+  "executable_link_read": true,
+  "cross_site_read": true,
+  "R13_verdict": "DANGEROUS",
+  "R13_source": "brand_executable_download_phishing",
+  "pdf_not_executable": true,
+  "removed_link_detected": true,
+  "dynamic_link_detected": true,
+  "url_suffix_read": true,
+  "model_vector_still_20": true,
+  "confirmed_brand_mismatch_read": true,
+  "form_destination_verification_read": true,
+  "R03_R04_live_wiring": true,
+  "credential_values_not_archived": true,
+  "separate_warning_removed": true,
+  "downloads_permission_removed": true,
+  "downloads_started": 0,
+  "public_sites_opened": 0,
+  "test": "local mocked page/API in Chromium"
+}
