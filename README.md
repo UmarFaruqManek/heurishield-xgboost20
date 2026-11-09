@@ -1,6 +1,6 @@
 # HeuriShield XGBoost20
 
-> **Acuan penulisan dibekukan: v0.6.2 / skripsi-v0.6.2.** Model URL20 TH0,50; 9 parameter utama brand; 8 parameter utama DOM; aturan R01–R19; policy berbasis ID/status tanpa skor klasifikasi. 31 pengujian lulus termasuk 32.768 kombinasi keputusan; enam simulasi unduhan lulus. [Gunakan satu acuan final ini](reports/final_audit_20261109/README.md), bukan laporan percobaan sebelumnya. Belum dipush ke GitHub.
+> **Acuan penulisan dibekukan: v0.6.2 / skripsi-v0.6.2.** Model URL20 TH0,50; 9 parameter utama brand; 8 parameter utama DOM; aturan R01–R19; policy berbasis ID/status tanpa skor klasifikasi. 31 pengujian lulus termasuk 32.768 kombinasi keputusan; enam simulasi unduhan lulus. [Gunakan satu acuan final ini](reports/final_audit_20261109/README.md), bukan laporan percobaan sebelumnya. Kode penelitian tersedia pada tag `skripsi-v0.6.2`.
 
 > Desain lokal v0.5.0 dengan monitor/peringatan unduhan terpisah sudah dibatalkan dan dilepas dari extension aktif. Riwayat pengujiannya disimpan lokal sebagai arsip.
 
@@ -9,6 +9,10 @@
 HeuriShield adalah extension browser Chromium untuk memeriksa indikasi phishing melalui model URL, bukti identitas brand, dan struktur formulir halaman. Repository ini menyimpan extension XGBoost20 versi **0.4.0**, data, proses ekstraksi fitur, pelatihan lima model, EDA, evaluasi, dan rekaman pengujian yang mendasari versi tersebut.
 
 Paket aktif memakai **20 fitur URL, 500 pohon XGBoost, dan threshold 0,50**. Model berasal dari eksperimen `experiments/v2`. Threshold yang terpilih dalam cross-validation pelatihan adalah 0,41. Paket extension memakai 0,50 sesuai konfigurasi perbandingan yang dicatat dalam laporan.
+
+## Panduan revisi skripsi di perangkat lain
+
+Gunakan [README_REVISI_SKRIPSI.md](README_REVISI_SKRIPSI.md) untuk lokasi revisi, definisi final R01–R19, decision policy dan dasar rencana pengujian. Bagian naskah yang sudah sesuai dipertahankan.
 
 ## Struktur repository
 
