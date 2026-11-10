@@ -18,13 +18,18 @@ with TemporaryDirectory(prefix="hs-extension-smoke-") as profile, sync_playwrigh
     worker.evaluate("async () => chrome.storage.local.set({heurishieldEnabled:false})")
     settings_page = context.new_page()
     settings_page.goto(worker.url.replace("src/background/service-worker.js", "src/options/options.html"))
-    settings_page.wait_for_function("document.querySelector('#phishingAction').value === 'blockpage'")
-    settings_page.select_option("#phishingAction", "popup")
-    settings_page.wait_for_function("document.querySelector('#actionStatus').textContent.includes('tersimpan')")
+    settings_page.wait_for_selector("#domainInput")
+    assert settings_page.locator("#phishingAction").count() == 0
+    assert settings_page.get_by_text("Tindakan saat phishing terdeteksi").count() == 0
+    settings_page.fill("#domainInput", "https://www.example.test/login")
+    settings_page.click("#addButton")
+    settings_page.wait_for_selector(".domain-name")
+    assert settings_page.locator(".domain-name").inner_text() == "example.test"
     settings_page.reload()
-    settings_page.wait_for_function("document.querySelector('#phishingAction').value === 'popup'")
-    settings_page.select_option("#phishingAction", "blockpage")
-    settings_page.wait_for_function("document.querySelector('#actionStatus').textContent.includes('tersimpan')")
+    settings_page.wait_for_selector(".domain-name")
+    assert settings_page.locator(".domain-name").inner_text() == "example.test"
+    settings_page.click(".delete-btn")
+    settings_page.wait_for_selector(".empty-state")
     settings_page.close()
     context.route("https://shop.example.test/**", lambda route: route.fulfill(status=200, content_type="text/html", body="<html><head><title>Google Login</title></head><body><main><h1>Sign in to Google</h1><form><input type='password' autocomplete='current-password'><button>Login</button></form></main></body></html>"))
     page = context.new_page()

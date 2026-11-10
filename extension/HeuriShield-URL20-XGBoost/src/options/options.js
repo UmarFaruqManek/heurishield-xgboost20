@@ -3,8 +3,6 @@
  * Perubahan pengaturan dilakukan lewat kontrol halaman ini, bukan parameter hasil pelatihan.
  */
 import {
-  getPhishingAction,
-  setPhishingAction,
   getAllowlist,
   getBlacklist,
   addToAllowlist,
@@ -27,21 +25,6 @@ let isSubmitting = false;
 document.addEventListener("DOMContentLoaded", init);
 
 async function init() {
-  const actionSelect = document.querySelector("#phishingAction");
-  const actionStatus = document.querySelector("#actionStatus");
-  actionSelect.value = await getPhishingAction();
-  actionSelect.addEventListener("change", async () => {
-    actionSelect.disabled = true;
-    try {
-      await setPhishingAction(actionSelect.value);
-      actionStatus.textContent = "Pilihan tindakan tersimpan. Berlaku pada deteksi berikutnya.";
-    } catch {
-      actionSelect.value = await getPhishingAction();
-      actionStatus.textContent = "Pilihan gagal disimpan. Silakan coba kembali.";
-    } finally {
-      actionSelect.disabled = false;
-    }
-  });
   await renderList();
 
   elements.addButton.addEventListener("click", handleAdd);
