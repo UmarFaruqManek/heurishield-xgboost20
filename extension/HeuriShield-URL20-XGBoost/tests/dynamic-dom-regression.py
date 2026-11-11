@@ -40,5 +40,27 @@ with TemporaryDirectory(prefix='hs-spa-fixture-') as profile, sync_playwright() 
     assert 'WordPress 6.8' in snapshot()['software_attributions']
     page.evaluate("() => document.querySelector('input').setAttribute('autocomplete','one-time-code')")
     assert snapshot()['password_fields']
+    page.evaluate('''() => {
+      document.querySelector('main').innerHTML = '<section id="modal" style="display:none"><input type="password"><button>Masuk</button></section>';
+    }''')
+    hidden = snapshot()
+    assert hidden['password_fields'] and all(f['visible'] is False for f in hidden['password_fields'])
+    control = context.new_page()
+    control.goto(worker.url.removesuffix('src/background/service-worker.js')+'src/options/options.html')
+    def explanation_for(evidence):
+        return control.evaluate('''async snapshot => {
+          const {analyzeDomEvidence}=await import(chrome.runtime.getURL('src/analyzer/dom/dom-evidence.js'));
+          const {buildAnalysisExplanation}=await import(chrome.runtime.getURL('src/shared/analysis-explanation.js'));
+          return buildAnalysisExplanation({url:'https://spa.example.test/',verdict:'DANGEROUS',
+            model_result:{model_family:'XGBoost',verdict:'DANGEROUS'},
+            decision_policy:{source:'url_model'},
+            brand_features:{claimed_brand_status:'ambiguous'},dom_features:analyzeDomEvidence([snapshot])});
+        }''', evidence)
+    assert explanation_for(hidden)['reasons'] == ['Alamat: dinilai phishing oleh model.']
+    page.locator('#modal').evaluate("el=>el.style.display='block'")
+    shown = snapshot()
+    assert shown['password_fields'][0]['visible'] is True
+    assert len(explanation_for(shown)['reasons']) == 2
     print('SPA fixture: empty initial document, text/title update, form insertion and password type change observed')
+    print('Hidden modal: metadata retained, no fabricated form reason; opening modal adds the observed credential finding.')
     context.close()

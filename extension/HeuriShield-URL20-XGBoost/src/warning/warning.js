@@ -77,7 +77,7 @@ function renderReasons(reasons) {
       const item = document.createElement("li");
       const text = String(reason);
       const prefix = /^(Alamat|Identitas situs|Formulir|Login):\s*/.exec(text);
-      const labels = { Alamat: "Analisis alamat URL", "Identitas situs": "Identitas situs", Formulir: "Formulir dan data akun", Login: "Alur login" };
+      const labels = { Alamat: "Analisis alamat URL", "Identitas situs": "Identitas situs", Formulir: "Formulir", Login: "Alur login" };
       const label = document.createElement("strong");
       label.className = "reason-label";
       label.textContent = prefix ? labels[prefix[1]] : "Temuan pemeriksaan";

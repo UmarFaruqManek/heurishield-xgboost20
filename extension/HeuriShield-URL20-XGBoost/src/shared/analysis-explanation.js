@@ -41,11 +41,9 @@ export function buildAnalysisExplanation(analysis = {}) {
       : ["confirmed_credential_impersonation", "corroborated_brand_impersonation", "brand_executable_download_phishing"].includes(decisionSource)
         ? "Pemeriksaan identitas situs mendukung peringatan dari analisis alamat."
       : "Keputusan akhir mengikuti penilaian alamat situs.";
-    // Tiga baris yang sama dipakai panel dan halaman blokir; tidak tampilkan
-    // angka fitur, aturan internal, atau klaim kepemilikan yang belum terbukti.
-    const brandReason = analysis.brand_features?.claimed_brand_status === "unknown" &&
-      !analysis.brand_features?.software_brands?.length
-      ? null : brandExplanation(analysis.brand_features, analysis.final_url || analysis.url);
+    // Temuan brand dan DOM bersifat opsional. Jangan mengisi tiga baris hanya
+    // untuk menyatakan bahwa suatu pemeriksaan tidak menemukan bukti.
+    const brandReason = brandExplanation(analysis.brand_features, analysis.final_url || analysis.url);
     const reasons = [
       decisionSource === "verified_oauth_provider_page"
         ? "Alamat: halaman otorisasi berada pada domain resmi penyedia login. Alamat tujuan aplikasi tetap perlu diperiksa secara terpisah."
@@ -61,13 +59,13 @@ export function buildAnalysisExplanation(analysis = {}) {
         : urlVerdict === "SAFE" ? "Alamat: dinilai legitimate oleh model."
           : "Alamat: penilaian belum tersedia.",
       ...(brandReason ? [brandReason] : []),
-      domExplanation(analysis.dom_features),
+      domExplanation(analysis.dom_features, analysis.final_url || analysis.url),
       ...(analysis.dom_features?.has_download_link===true ? [executableExtensionEvidence(analysis.dom_features.download_file_extensions)===true
         ? 'Unduhan: halaman menawarkan tautan installer atau skrip yang dapat dijalankan.'
         : 'Unduhan: halaman menyediakan tautan download.'] :
         EXECUTABLE_FILE_EXTENSIONS.has(analysis.url_features?.url_file_extension)
           ? [`Unduhan: alamat URL memiliki akhiran file .${analysis.url_features.url_file_extension}.`] : [])
-    ];
+    ].filter(Boolean);
     const limitation = analysis.dom_features?.unresolved_checks?.includes("inaccessible_iframe")
       ? "Sebagian isi halaman tidak dapat diperiksa."
       : analysis.decision_policy?.review_reason === "local_login_unverified"
@@ -132,61 +130,59 @@ export function buildAnalysisExplanation(analysis = {}) {
 }
 
 function brandExplanation(brand, pageUrl) {
-  if (!brand)
-    return "Identitas situs: belum dapat diperiksa.";
+  if (!brand || brand.claimed_brand_status === "ambiguous") return null;
   const claim = brand.claimed_brand;
   const reference = brand.verified_reference_domain || claim?.official_domain;
   if (claim?.name && brand.official_domain_match === true && brand.verification_basis === "api_domain_match")
     return `Identitas situs: domain cocok dengan brand ${claim.name}.`;
   if (brand.unresolved_checks?.includes("dom_unavailable"))
-    return "Identitas situs: belum dapat diperiksa.";
-  if (claim?.name && brand.candidate_host_corroborated && brand.candidate_reference_domain)
-    return `Identitas situs: alamat ini menyisipkan ${brand.candidate_reference_domain} sebelum akhiran domain lain, sementara judul halaman memakai nama ${claim.name}. Gabungan ini menunjukkan indikasi peniruan; domain rujukan berasal dari hasil pencarian brand.`;
+    return null;
   if (claim?.name && brand.official_domain_match === true && reference)
     return `Identitas situs: domain cocok dengan brand ${claim.name}.`;
   if (claim?.name && brand.official_domain_match === false && reference)
-    return `Identitas situs: halaman menampilkan ${claim.name}, tetapi domain yang dibuka berbeda dari domain resminya (${reference}). Hubungan resmi dengan domain ini belum dapat dipastikan.`;
+    return `Identitas situs: halaman menampilkan ${claim.name}, tetapi domain yang dibuka berbeda dari domain resminya (${reference}).`;
+  if (claim?.name && brand.candidate_host_corroborated && brand.candidate_reference_domain)
+    return `Identitas situs: halaman menampilkan ${claim.name}, tetapi domain yang dibuka berbeda dari domain rujukan (${brand.candidate_reference_domain}).`;
   if (claim?.name)
-    return `Identitas situs: nama ${claim.name} ditemukan, tetapi domain resminya belum dapat diverifikasi.`;
-  if (brand.software_brands?.length)
-    return `Identitas situs: ${brand.software_brands.join(", ")} dikenali sebagai perangkat lunak halaman. Identitas pemilik situs belum ditemukan.`;
-  if (brand.claimed_brand_status === "ambiguous")
-    return "Identitas situs: beberapa nama merek ditemukan; identitas halaman belum dapat dipastikan.";
-  return "Identitas situs: merek yang digunakan halaman belum dapat dipastikan.";
+    return `Identitas situs: nama brand ${claim.name} ditemukan.`;
+  return null;
 }
 
-function domExplanation(dom) {
+function domExplanation(dom, pageUrl) {
   if (!dom || dom.unresolved_checks?.includes("dom_unavailable") || !dom.observed_frame_count)
-    return "Formulir: halaman belum dapat diperiksa.";
-  if (dom.unresolved_checks?.includes("page_not_ready") && dom.has_password_field !== true && dom.has_sensitive_input !== true)
-    return "Formulir: halaman masih dimuat atau buktinya belum lengkap; keberadaan formulir belum dapat dipastikan.";
+    return null;
   const navigation = dom.navigation;
   if (navigation?.observed === true && navigation.destination_type === "official_provider")
     return "Login: pengalihan ke penyedia identitas resmi teramati; ini tidak membuktikan situs asal aman.";
-  const relevant = (dom.forms || []).filter(form => form.relevant);
+  const fields = [...(dom.password_fields || []), ...(dom.sensitive_fields || [])];
+  // Snapshots retain hidden controls for diagnosis. Their presence does not
+  // mean the page is currently asking the user to enter credentials.
+  if (fields.length && fields.every(field => field.visible === false)) return null;
+  const relevant = (dom.forms || []).filter(form => form.relevant === true && form.visible !== false);
   const unverifiedCross = relevant.find(form => form.cross_domain === true && form.destination_verification === false);
   if (unverifiedCross)
-    return `Formulir: tujuan pengiriman data akun adalah domain lain (${unverifiedCross.destination_registrable_domain || "tujuan tidak diketahui"}) yang belum terverifikasi.`;
+    return crossDomainFormExplanation(unverifiedCross, pageUrl);
   const otherCross = relevant.find(form => form.cross_domain === true);
   if (otherCross)
-    return otherCross.destination_verification === true
-      ? "Formulir: tujuan pengiriman data akun adalah domain lain yang terverifikasi."
-      : "Formulir: tujuan pengiriman data akun adalah domain lain; hubungan resminya belum dapat dipastikan.";
+    return crossDomainFormExplanation(otherCross, pageUrl);
   if (relevant.some(form => form.cross_domain === "unknown"))
-    return "Formulir: jenis data dan tujuan formulir yang terdeteksi belum dapat dipastikan.";
-  if (!relevant.length && dom.unresolved_checks?.includes("inaccessible_iframe"))
-    return "Formulir: tidak terlihat permintaan data akun pada bagian halaman yang diperiksa; sebagian iframe belum dapat diperiksa.";
-  if (dom.form_cross_domain === "unknown")
-    return "Formulir: tujuan pengiriman data akun belum dapat dipastikan.";
+    return "Formulir: ditemukan formulir; tujuan pengirimannya belum teramati.";
   if (relevant.length && dom.form_cross_domain === false)
-    return "Formulir: tujuan yang tertera berada pada domain halaman ini; pengiriman aktual belum diamati.";
+    return `Formulir: ditemukan formulir yang mengarah ke domain halaman ini (${hostname(pageUrl)}).`;
   if (dom.has_password_field === true || dom.has_sensitive_input === true)
-    return "Formulir: halaman meminta data akun, tetapi tujuan pengirimannya belum dapat dipastikan.";
-  if (dom.has_password_field === "unknown" || dom.has_sensitive_input === "unknown")
-    return "Formulir: pemeriksaan data akun belum lengkap.";
-  if (Array.isArray(dom.forms) && dom.forms.length === 0)
-    return "Formulir: tidak ditemukan pada halaman yang diperiksa.";
-  return "Formulir: tidak ditemukan formulir yang meminta data akun.";
+    return "Formulir: ditemukan kolom data akun; tujuan pengirimannya belum teramati.";
+  return null;
+}
+
+function crossDomainFormExplanation(form, pageUrl) {
+  let target = form.destination_registrable_domain;
+  try { target = new URL(form.action_origin).hostname || target; } catch { /* Use the recorded domain if the action is unavailable. */ }
+  if (!target) return "Formulir: tujuan lintas domain terdeteksi, tetapi nama domain tujuannya belum tersedia.";
+  const source = form.frame_index === 0 ? hostname(pageUrl) : form.source_registrable_domain || hostname(pageUrl);
+  const detail = `Formulir: ditemukan formulir yang mengarah ke ${target}, berbeda dari domain halaman (${source}).`;
+  return form.destination_verification === true
+    ? `${detail} Tujuan ini sesuai dengan referensi yang dikenali.`
+    : detail;
 }
 
 function guardReason(guard) {

@@ -65,7 +65,7 @@ const correctedText = buildAnalysisExplanation({ url: kendariUrl,
   model_result: { model_family: "XGBoost", verdict: "DANGEROUS" },
   decision_policy: corrected, brand_features: incompleteBrand,
   dom_features: incompleteDom });
-assert.match(correctedText.reasons.join(" "), /sebagian iframe belum dapat diperiksa/i);
+assert.match(correctedText.limitation, /Sebagian isi halaman tidak dapat diperiksa/i);
 assert.doesNotMatch(correctedText.reasons.join(" "), /tujuan pengiriman data akun belum dapat dipastikan/i);
 
 // Search results can mention an unrelated verified brand in both title and
@@ -96,7 +96,7 @@ const searchExplanation = buildAnalysisExplanation({ url: prabowoUrl,
   model_result: { model_family: "XGBoost", verdict: "DANGEROUS" },
   decision_policy: { source: "verified_own_domain_search_page" },
   brand_features: searchBrand, dom_features: searchDom });
-assert.match(searchExplanation.reasons.join(" "), /jenis data dan tujuan formulir/);
+assert.match(searchExplanation.reasons.join(" "), /ditemukan formulir; tujuan pengirimannya belum teramati/);
 
 // The protection is for the verified search route, independent of the search
 // term, model score, domain-age API availability, and readable iframe state.

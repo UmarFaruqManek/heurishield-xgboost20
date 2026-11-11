@@ -21,6 +21,13 @@ export function brandHostQueries(url) {
   return queries.slice(0, 5);
 }
 const hasBrand = (text, name) => new RegExp(`(?:^|\\s)${norm(name).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?:$|\\s)`, "u").test(norm(text));
+function namesCredentialOwner(title, name) {
+  const brand = norm(name).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  // "Login to your Brand account" attributes the native login to Brand.
+  // "Login with Brand" is an OAuth/provider mention, not this attribution.
+  return new RegExp(`^(?:login|log in|signin|sign in|masuk) (?:(?:to|into|ke) )?(?:your )?${brand}(?: |$)`, "u")
+    .test(norm(title));
+}
 function oneEditApart(a, b) {
   if (a.length < 5 || b.length < 5 || Math.abs(a.length - b.length) > 1) return false;
   let i = 0, j = 0, edits = 0;
@@ -174,10 +181,13 @@ export async function analyzeBrandEvidence(snapshot, url, { lookup, domainLookup
     const credentialTitle = inTitle && (snapshot.password_fields || []).length > 0 &&
       (snapshot.controls || []).some(control => control.type === "native_login") &&
       c.rank === 3 && !HOST_GENERIC.has(norm(c.name));
+    const credentialHostClaim = !ownDomain && c.verified === true &&
+      hostClaim === "subdomain_exact" && credentialTitle &&
+      namesCredentialOwner(title, c.name) && !article && !providerOnlyContext && !oauthOnly;
     const claim = Boolean(!software && !oauthOnly && !providerOnlyContext &&
       (verifiedOwnDomain || (c.fromDomainSearch && domainMatch(url, c.domain)) || (!article && ((inTitle && inHeading) ||
         (inLogo && (inTitle || inHeading)) || (inTitle && hostClaim) || credentialTitle))));
-    return { ...c, inTitle, inHeading, inLogo, hostClaim, claim, oauthOnly, article, credentialTitle, software };
+    return { ...c, inTitle, inHeading, inLogo, hostClaim, claim, oauthOnly, article, credentialTitle, credentialHostClaim, software };
   });
   const claims = scored.filter(c => c.claim);
   const claimNames = [...new Set(claims.map(c => norm(c.name)))];
@@ -189,7 +199,10 @@ export async function analyzeBrandEvidence(snapshot, url, { lookup, domainLookup
     c.inTitle && (c.inHeading || c.inLogo || (c.verified === true && c.credentialTitle)) &&
     ((c.verified === true && (snapshot.password_fields || []).length > 0) ||
       Boolean(c.hostClaim)));
-  const ownPageClaim = ownClaims.some(c => c.inTitle || c.inHeading || c.inLogo);
+  // A generic action word in the title (e.g. "Login") does not corroborate
+  // the site's identity against a distinct, supported credential-owner claim.
+  const ownPageClaim = ownClaims.some(c => c.inHeading || c.inLogo ||
+    (c.inTitle && !HOST_GENERIC.has(norm(c.name))));
   const domainLabel = norm(parseDomain(new URL(url).hostname,
     { allowPrivateDomains: true }).domainWithoutSuffix).replace(/\s/g, "");
   // A provider-verified canonical reference plus an embedded full domain and
@@ -272,11 +285,11 @@ export async function analyzeBrandEvidence(snapshot, url, { lookup, domainLookup
   const subdomainClaim = hostClaim === "subdomain_exact" || hostClaim === "subdomain_lookalike";
   const highConfidenceHostImpersonation = candidateHostCorroborated || Boolean(chosen && verified && official === false &&
     hostClaim && chosen.inTitle && !chosen.article && !chosen.oauthOnly &&
-    (!subdomainClaim || ((snapshot.password_fields || []).length > 0 &&
+    (!subdomainClaim || chosen.credentialHostClaim || ((snapshot.password_fields || []).length > 0 &&
       (chosen.inHeading || chosen.inLogo))));
   const highConfidenceCredentialImpersonation = Boolean(chosen && verified && official === false &&
     (snapshot.password_fields || []).length &&
-    (chosen.inTitle && chosen.inHeading || chosen.inLogo && chosen.inTitle ||
+    (chosen.credentialHostClaim || chosen.inTitle && chosen.inHeading || chosen.inLogo && chosen.inTitle ||
       (chosen.inTitle && providerDomain(chosen.name) === officialDomain &&
         (snapshot.controls || []).some(control => control.type === "native_login"))));
   const providerCredentialClaim = Boolean(highConfidenceCredentialImpersonation &&

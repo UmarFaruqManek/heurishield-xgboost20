@@ -6,7 +6,7 @@
   "feature_count": 20,
   "threshold": 0.5,
   "trees": 500,
-  "functional_checks_passed": 32,
+  "functional_checks_passed": 33,
   "extractor_rows_verified": 684575,
   "prediction_rows_verified": 10460,
   "known_classification_cases": [
@@ -27,7 +27,7 @@
     "manifest.json": "21302097f0e4548826d20e312fa83d05fa2dbb6ce7f0b00d2d414b65678207a0",
     "package.json": "169c0f38d0020b4d67b10b045043e22390505082c8a4859ddeb0cfa95e84275b",
     "src\\analyzer\\brand\\brand-domain-api.js": "b313bf3d9f55efa39e0edca6882a27297ce300cb37cd12256bdb76a4c96981db",
-    "src\\analyzer\\brand\\brand-evidence.js": "dc262d7dc80422f0fce61222ed7076f8ce0d40f3ca9aed795028b2e74fac13c9",
+    "src\\analyzer\\brand\\brand-evidence.js": "44eb11f7a8f92b06fa96af58ba8e8f4f8ba846bfe116b01114ce625dff3983bc",
     "src\\analyzer\\brand\\brand-features.js": "979bae2d540abfde5331cd58fd60eeb01f3a2c00eaeadd5e74435b31918b2a1c",
     "src\\analyzer\\brand\\brand-identity.js": "6502bc3210c0d89b5d2aac429e2be8a74edd5a8b801956a7b2b035259c26c2cc",
     "src\\analyzer\\brand\\brand-lookup-cache.js": "1d2eee333072959daf650122125f538f5ba389c8102451ade9be1c789daf4d62",
@@ -78,7 +78,7 @@
     "src\\rule\\README.md": "cd173a29c2d75d5cdd2b2c11f34cb727fe3b6590487e86f9bc488c16c575335d",
     "src\\rule\\rulefit-engine-60.json": "ba7a90a661976c73d4c2ad36f547c586aa48f5f5ddf4d0a05a7743e8f1a52abf",
     "src\\rule\\rulefit-engine.js": "3d3b925f28a2f90bd90840dd08bb4ad9228b9bd81f3318be1a599b2a80fa69c6",
-    "src\\shared\\analysis-explanation.js": "2d5d8a5e1fdd2ca63f9e2a796f405efee909a4c773b9c5058c56d36fdda67eb8",
+    "src\\shared\\analysis-explanation.js": "ec6e2c0b46fcd62ae8b3f690e1716f9d9f7160d0a28c4b853fd07a23bb8035ce",
     "src\\shared\\audit-url.js": "5798fd057ccbd8990d9abfdfb3f5efc3aed0a5bb98c2747a66cce65c7079ad9a",
     "src\\shared\\brand-claim-guard.js": "e706ce0680c013a5980928a2ddb49b7f6d295719369ad1acacd10b1cd04bf1fd",
     "src\\shared\\brand-features.js": "0ac7fb064fcd8e85786743bb3cdca302030cda5c8c7f44cb93b63fcc2e0f5655",
@@ -100,7 +100,7 @@
     "src\\utils\\page-protection-policy.js": "62d618a90a1eaacf7bd31b2c3bc7c53670ce1e2aa100bc3ed9d05953d792972b",
     "src\\warning\\warning.css": "67c711c54b530e828e4134ab04256e06aefa976dffdad0ff0aa04122cb8ae0ae",
     "src\\warning\\warning.html": "d435c279fd6e7a71b730294845460ab075fa5c7b9bc80ce0dab6cb634c4ea46f",
-    "src\\warning\\warning.js": "1daa53e499045d35462440cef6f4531baf57607649be067be738e115bcf3edf7"
+    "src\\warning\\warning.js": "1e920251602e6a65b5e30458453b6a8b5432ff00243c1cad628d05dcb885486f"
   },
   "brand_reference_patch": "20261108-canonical-token-audit",
   "brand_replay_complete_comparison_rows": 323,
@@ -164,5 +164,30 @@
     "replayed_analyses": 1198,
     "replay_outputs_equal": true,
     "frozen_thesis_contract_unchanged": true
+  },
+  "presentation_verification": {
+    "report": "reports/explanation_text_20261111/regression.json",
+    "checks_passed": 32,
+    "decision_replay_equal": 1198,
+    "saved_warning_contexts_verified": 2
+  },
+  "brand_credential_identity_verification": {
+    "report": "reports/brand_credential_claim_20261111/summary.after.json",
+    "tests_passed": 33,
+    "local_paypal_block_observed": true,
+    "model_or_threshold_changed": false,
+    "archive_live_decisions_unchanged": 1823,
+    "note": "Archived replay includes partial API snapshots; it is not a fresh independent accuracy measurement."
+  },
+  "optional_explanation_verification": {
+    "report": "reports/explanation_optional_20261111/summary.after.json",
+    "checks_passed": 33,
+    "live_replay_decisions_unchanged": 1823,
+    "combined_archive_replay_equal": 1087,
+    "controlled_clone_replay_equal": 3,
+    "warning_url_only_render_verified": true,
+    "hidden_modal_and_opened_modal_verified": true,
+    "classification_logic_changed": false,
+    "note": "Replay inputs overlap and may contain partial saved API snapshots. This is regression evidence, not a fresh accuracy estimate."
   }
 }

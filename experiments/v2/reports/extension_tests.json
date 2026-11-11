@@ -1,6 +1,6 @@
 {
-  "checks": 32,
-  "passed": 32,
+  "checks": 33,
+  "passed": 33,
   "classification_cases": [
     {
       "classification_case": "portal.merdekasiber.com",
@@ -13,7 +13,7 @@
     {
       "test": "analysis-explanation.mjs",
       "exit_code": 0,
-      "stdout": "Explanation OK: unavailable evidence, verified domain, impersonation, OAuth\n",
+      "stdout": "Explanation OK: unavailable evidence, verified domain, impersonation, OAuth\nOptional explanations: URL-only, unknown/ambiguous brand, hidden modal, opened login and positive form findings passed.\n",
       "stderr": ""
     },
     {
@@ -50,6 +50,12 @@
       "test": "categorical-boundary.mjs",
       "exit_code": 0,
       "stdout": "Categorical URL boundary, explicit correction rules and score-free records passed.\n",
+      "stderr": ""
+    },
+    {
+      "test": "credential-owner-identity.mjs",
+      "exit_code": 0,
+      "stdout": "Credential owner identity: subdomain + explicit title + native password form; official, OAuth, article, missing evidence, provider failure and unrelated brand controls passed.\n",
       "stderr": ""
     },
     {
@@ -181,7 +187,7 @@
     {
       "test": "dynamic-dom-regression.py",
       "exit_code": 0,
-      "stdout": "SPA fixture: empty initial document, text/title update, form insertion and password type change observed\n",
+      "stdout": "SPA fixture: empty initial document, text/title update, form insertion and password type change observed\nHidden modal: metadata retained, no fabricated form reason; opening modal adds the observed credential finding.\n",
       "stderr": ""
     },
     {

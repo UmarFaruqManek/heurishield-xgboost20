@@ -44,9 +44,9 @@ with TemporaryDirectory(prefix="hs-warning-") as profile, sync_playwright() as p
     warning_url = root_url + "src/warning/warning.html?id=ui-test"
     page.goto(warning_url)
     page.locator("#domain").filter(has_text="simak.un-sultra.ac.id").wait_for()
-    assert page.locator(".reason-label").all_text_contents() == ["Analisis alamat URL", "Formulir dan data akun"]
+    assert page.locator(".reason-label").all_text_contents() == ["Analisis alamat URL", "Formulir"]
     assert page.locator("#reasonList").evaluate("el => getComputedStyle(el).listStyleType") == "disc"
-    assert "Tujuan pengiriman saat formulir digunakan belum diamati" in page.locator("#reasonList").inner_text()
+    assert "ditemukan formulir yang mengarah ke domain halaman ini (simak.un-sultra.ac.id)" in page.locator("#reasonList").inner_text()
     assert page.locator("#continueButton").is_enabled()
     assert page.evaluate("""() => [...document.querySelectorAll('*')].every(el =>
         !getComputedStyle(el).backgroundImage.includes('gradient'))""")
@@ -121,6 +121,15 @@ with TemporaryDirectory(prefix="hs-warning-") as profile, sync_playwright() as p
     assert outcome['ok'] and outcome['analysis']['decision_policy']['source'] == 'manual_allowlist', outcome
     assert outcome['analysis']['verdict'] == 'SAFE'
     control.close()
+    worker.evaluate('''async () => chrome.storage.local.set({warningContexts:{'only-url':{
+      originalUrl:'https://shoopee.co.id/',analysis:{url:'https://shoopee.co.id/',verdict:'DANGEROUS',
+        model_result:{model_family:'XGBoost',verdict:'DANGEROUS'},decision_policy:{source:'url_model'},
+        brand_features:{claimed_brand_status:'ambiguous'},dom_features:{observed_frame_count:1,
+          has_password_field:true,password_fields:[{visible:false}],forms:[]}}}}})''')
+    page.goto(root_url + 'src/warning/warning.html?id=only-url')
+    page.locator('#domain').filter(has_text='shoopee.co.id').wait_for()
+    assert page.locator('.reason-label').all_text_contents() == ['Analisis alamat URL']
+    assert page.locator('#reasonList li').count() == 1
     page.goto(root_url + "src/warning/warning.html?id=missing")
     page.locator("#domain").filter(has_text="Tidak tersedia").wait_for()
     assert page.locator("#continueButton").is_disabled()
