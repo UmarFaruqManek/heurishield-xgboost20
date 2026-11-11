@@ -37,9 +37,6 @@ def consolidate_live_analysis(out_dir: Path) -> Path:
     summary = json.loads(summary_path.read_text(encoding="utf-8")) if summary_path.is_file() else None
     manifest_path = out_dir / "run_manifest.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8")) if manifest_path.is_file() else None
-    snapshot_name = (manifest or {}).get("model_snapshot") or "model_snapshot_rulefit-engine-60.json"
-    snapshot_path = out_dir / snapshot_name
-    engine = json.loads(snapshot_path.read_text(encoding="utf-8")) if snapshot_path.is_file() and "rulefit" in snapshot_name.lower() else None
 
     records = []
     for row in rows:
@@ -48,17 +45,9 @@ def consolidate_live_analysis(out_dir: Path) -> Path:
         vector = (analysis or {}).get("feature_vector") or {}
         model = (analysis or {}).get("model_result") or {}
         status = row.get("analysis_status") or raw.get("analysis_status") or "unknown"
-        # Pada RuleFit60, vector adalah 60 nilai mentah; median baru diterapkan
-        # ketika syarat aturan dievaluasi. raw_vector hanya ada pada varian lama.
+        # XGBoost reads missing values natively, so the model input is the raw vector.
         raw_features = vector.get("raw_vector") or vector.get("vector")
-        used_features = None
-        if isinstance(raw_features, dict) and engine:
-            medians = engine.get("imputer_median") or {}
-            used_features = {name: (medians.get(name, 0) if value is None else value)
-                             for name, value in raw_features.items()}
-        elif isinstance(raw_features, dict):
-            # XGBoost accepts missing values natively; a null age remains null.
-            used_features = raw_features
+        used_features = raw_features if isinstance(raw_features, dict) else None
         records.append({
             "index": int(row["index"]),
             "input_url": row.get("input_url"),

@@ -408,11 +408,10 @@ async def evaluate(args):
     xgboost_model = next((extension_dir / 'src' / 'model' / name
                           for name in ('xgboost-url20.json', 'xgboost-url18.json')
                           if (extension_dir / 'src' / 'model' / name).is_file()), None)
-    use_xgboost = xgboost_model is not None
-    if not use_xgboost:
+    if xgboost_model is None:
         raise ValueError('XGBoost model file is missing from the supplied extension')
     history_db = Path(args.history_db) if args.history_db else (
-        extension_dir.parent / "database_evaluasi" / "riwayat_analisis.sqlite" if use_xgboost else None)
+        extension_dir.parent / "database_evaluasi" / "riwayat_analisis.sqlite")
     fingerprints = {str(f.relative_to(extension_dir)): hashlib.sha256(f.read_bytes()).hexdigest()
                     for f in extension_dir.rglob('*') if f.is_file()
                     and (f.suffix == '.js' or f.name == 'manifest.json'
@@ -421,7 +420,7 @@ async def evaluate(args):
                     and '.git' not in f.parts and 'node_modules' not in f.parts}
     # Simpan engine yang benar-benar dipakai agar replay fitur tetap bisa dilakukan
     # meskipun isi folder extension berubah setelah pengujian.
-    engine_path = xgboost_model if use_xgboost else extension_dir / 'src' / 'rule' / 'rulefit-engine-60.json'
+    engine_path = xgboost_model
     snapshot_path = out_dir / f'model_snapshot_{engine_path.name}'
     shutil.copyfile(engine_path, snapshot_path)
     (out_dir / 'run_manifest.json').write_text(json.dumps({

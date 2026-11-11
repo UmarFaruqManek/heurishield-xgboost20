@@ -1,27 +1,24 @@
 # HeuriShield URL20 XGBoost v2
 
-Paket uji live versi 0.4.0 menggunakan XGBoost dari eksperimen PhreshPhish yang diperkaya data tambahan. URL Analyzer memakai 20 fitur dan 500 pohon dengan threshold 0,50.
-
-Model pelatihan memilih threshold 0,41 melalui cross-validation. Paket ini memakai 0,50 sesuai konfigurasi perbandingan yang menghasilkan legitimate 83,00% dan phishing 85,63% pada 6.460 URL arsip. Skor tersebut berasal dari evaluasi URL Analyzer secara offline. Keputusan extension juga mempertimbangkan bukti DOM, brand, OAuth, dan umur domain melalui kebijakan yang disertakan.
+Extension Chromium (Manifest V3) untuk mendeteksi dan memblokir situs phishing dengan analisis heuristik. Versi pengembangan **0.7.0**; rancangan penelitian yang dibekukan tetap berada pada tag `skripsi-v0.6.2`.
 
 ## Memuat extension
 
-Buka chrome://extensions atau edge://extensions, aktifkan Developer mode, lalu pilih Load unpacked dan folder ini. Nama yang ditampilkan adalah HeuriShield URL20 XGBoost v2 versi 0.4.0.
+Buka `chrome://extensions` atau `edge://extensions`, aktifkan Developer mode, pilih **Load unpacked**, lalu pilih folder ini.
 
-## Parameter tambahan
+## Alur analisis
 
-- `domain_label_length` mengukur panjang label domain utama menurut PSL yang digunakan pada pelatihan.
-- `hostname_longest_digit_run` mengukur rangkaian angka berurutan terpanjang pada hostname.
-- `hostname_sensitive_token_count` menghitung token akun/autentikasi pada hostname.
+1. **URL Analyzer** — `src/analyzer/url/url20-features.js` mengekstraksi 20 fitur dari URL awal. `src/model/xgboost-engine.js` mengevaluasi 500 pohon XGBoost (`src/model/xgboost-url20.json`) dengan threshold 0,50. Probabilitas hanya dipakai di dalam engine; keluarannya kelas legitimate/phishing.
+2. **Informasi pendukung** (bukan input model) — umur domain (`src/analyzer/domain/url18-age.js`, kategori di `src/model/domain-age-policy.json`) dan akhiran file pada URL (`src/analyzer/url/download-file-extension.js`).
+3. **DOM Analyzer** — content script `src/content/dom-brand-observer.js` membaca metadata halaman (tanpa membaca isi field), lalu `src/analyzer/dom/dom-evidence.js` menyusun parameter DOM.
+4. **Brand Analyzer** — `src/analyzer/brand/brand-evidence.js` mencari identitas brand berdasarkan domain terlebih dahulu, lalu token hostname/halaman, melalui `brand-search-api.js` (Clearbit, Brandfetch) dan `brand-domain-api.js`.
+5. **Rule dan decision policy** — `src/analyzer/correlation/` mengevaluasi rule secara logis (tanpa bobot) dan menetapkan keputusan akhir.
+6. **Tindakan** — `src/background/service-worker.js` menerapkan allowlist/blocklist, lalu block page (`src/warning/`) atau popup overlay (`src/content/score-overlay.js`).
+7. **Pencatatan** — riwayat, arsip fitur dan dataset lokal di `src/storage/`. Skor/probabilitas klasifikasi tidak disimpan (`src/shared/classification-record.js`).
 
-Kontrak lengkap tersedia pada `src/model/feature-contract-20.json`. Model aktif tersedia pada `src/model/xgboost-url20.json`. Identitas model dan threshold disimpan bersama hasil pemeriksaan.
+## Pengujian
 
-## Pengujian dan rekaman
-
-Launcher tersedia pada `../../scripts/Uji_Live_URL20.ps1`. Pengguna menjalankan daftar URL melalui terminal. Setiap URL memakai profil browser terpisah. Evaluator menyimpan CSV hasil, JSON analisis setiap URL, snapshot model, fingerprint extension, serta riwayat SQLite.
-
-Pemeriksaan lokal mencakup kesetaraan input float32 Python dan JavaScript pada 678.115 baris eksperimen dan 6.460 URL arsip. Prediksi diperiksa pada 10.460 URL. Fixture Chromium memeriksa pemuatan, analisis 20 fitur, DOM, penyimpanan hasil, pengaturan blockpage/popup, allow list, dan block list.
-
-Kasus fixture `portal.merdekasiber.com` masih menghasilkan false positive dari model URL sekitar 0,830. Kasus klasifikasi ini dicatat terpisah dalam laporan pengujian fungsi.
-
-Laporan pemeriksaan tersimpan pada `../../perbaikan_v2/reports/extension_*.json`.
+- Seluruh fixture: `python ../../scripts/uji_extension_url20.py`.
+- Replay keputusan pada rekaman live tersimpan: `python ../../scripts/replay_audit.py snapshot OUT.json`, lalu `compare BASELINE.json OUT.json`.
+- Uji live: `../../scripts/Uji_Live_URL20.ps1`.
+- `tools/predict-saved-features.mjs` menghitung ulang probabilitas model dari fitur tersimpan untuk audit offline.

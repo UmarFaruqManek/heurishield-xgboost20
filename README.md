@@ -1,5 +1,7 @@
 # HeuriShield XGBoost20
 
+> **Branch pengembangan v0.7.0** (`refactor/v0.7-audit-clean`): pembersihan kode warisan RuleFit60 dan audit ulang rule/decision policy. Parameter tetap: 20 fitur URL model + 2 informasi pendukung, 9 parameter brand, 8 parameter DOM. Pada branch ini `scripts/cek_acuan_skripsi.py` sengaja gagal karena memverifikasi berkas runtime v0.6.2 yang dibekukan; gunakan tag `skripsi-v0.6.2` untuk acuan naskah.
+
 > **Acuan penulisan dibekukan: v0.6.2 / skripsi-v0.6.2.** Model URL20 TH0,50; 9 parameter utama brand; 8 parameter utama DOM; aturan R01–R19; policy berbasis ID/status tanpa skor klasifikasi. 31 pengujian lulus termasuk 32.768 kombinasi keputusan; enam simulasi unduhan lulus. [Gunakan satu acuan final ini](reports/final_audit_20261109/README.md), bukan laporan percobaan sebelumnya. Kode penelitian tersedia pada tag `skripsi-v0.6.2`.
 
 > Desain lokal v0.5.0 dengan monitor/peringatan unduhan terpisah sudah dibatalkan dan dilepas dari extension aktif. Riwayat pengujiannya disimpan lokal sebagai arsip.
@@ -49,7 +51,7 @@ CSV/SQLite besar disimpan sebagai `.gz` agar setiap berkas sesuai batas unggah G
 1. Clone repository ini.
 2. Buka `chrome://extensions` atau `edge://extensions` dan aktifkan Developer mode.
 3. Pilih **Load unpacked** lalu folder `extension/HeuriShield-URL20-XGBoost`.
-4. Pastikan nama **HeuriShield URL20 XGBoost v2**, versi **0.4.0**.
+4. Pastikan nama **HeuriShield URL20 XGBoost v2** dan versi sesuai `manifest.json`.
 
 Source dan bundle content script sudah disertakan. Browser memerlukan akses jaringan untuk pencarian brand serta informasi registrasi domain. API yang tersedia dalam proyek tetap digunakan melalui modul `src/analyzer/brand` dan `src/analyzer/domain`.
 
@@ -177,7 +179,7 @@ Jalankan daftar URL baru dengan label aktual yang sesuai.
 .\scripts\Uji_Live_URL20.ps1 -InputFile "C:\lokasi\daftar_phishing.txt" -Label phishing
 ```
 
-Launcher memeriksa versi 0.4.0, 20 fitur, threshold 0,50, dan fingerprint berkas extension sebelum pengujian. Hasil baru ditulis di `testing/live`, sedangkan riwayat baru launcher berada di `data/evaluation/history_url20.sqlite`. Riwayat historis publik tersedia di `testing/history`.
+Launcher memeriksa versi extension, 20 fitur, threshold 0,50, dan fingerprint berkas extension sebelum pengujian. Hasil baru ditulis di `testing/live`, sedangkan riwayat baru launcher berada di `data/evaluation/history_url20.sqlite`. Riwayat historis publik tersedia di `testing/history`.
 
 ## Pemeriksaan paket
 

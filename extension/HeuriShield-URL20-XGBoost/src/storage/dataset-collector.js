@@ -1,5 +1,4 @@
 /* Dataset evaluasi terpisah dari riwayat. Label adalah prediksi, bukan ground truth. */
-import { normalizeFeatureRecord } from '../rule/feature-names.js';
 
 export const DATASET_KEY = "evaluationDataset";
 export function datasetRow(analysis, featureNames) {
@@ -10,7 +9,7 @@ export function datasetRow(analysis, featureNames) {
   if (!["http:", "https:"].includes(url.protocol)) return null;
   url.username = ""; url.password = ""; url.search = ""; url.hash = "";
   const row = { url: url.href };
-  const values = normalizeFeatureRecord(analysis.feature_vector.vector);
+  const values = analysis.feature_vector.vector;
   for (const name of featureNames) {
     const value = values[name];
     row[name] = typeof value === "boolean" ? Number(value) : typeof value === "number" && Number.isFinite(value) ? value : null;
@@ -18,8 +17,6 @@ export function datasetRow(analysis, featureNames) {
   row.label = analysis.verdict === "DANGEROUS" ? "phishing" : "legitimate";
   return row;
 }
-
-export const DATASET_FILENAME = "history-extract/hasil-ekstraksi.json";
 
 export function createDatasetCollector(storage, featureNames, makeId = () => crypto.randomUUID()) {
   let writes = Promise.resolve();
@@ -30,11 +27,6 @@ export function createDatasetCollector(storage, featureNames, makeId = () => cry
       const state = saved[DATASET_KEY] || { enabled: true, records: [], savedCount: 0, error: "" };
       // Migrasi antrean lama tanpa menghapus catatan yang belum sempat ditulis.
       if (!state.records) { state.records = state.pending || []; state.savedCount = 0; delete state.pending; }
-      // Pertahankan id, label, dan nilai semua catatan saat memperbarui nama kolom.
-      if (state.featureSchema !== "source-page-v1") {
-        state.records = state.records.map(item => ({ ...item, row: normalizeFeatureRecord(item.row) }));
-        state.featureSchema = "source-page-v1";
-      }
       // Hapus status penulis file lama, bukan hasil ekstraksi yang sudah terkumpul.
       if (state.writerVersion !== "browser-local-v1") {
         state.writerVersion = "browser-local-v1";

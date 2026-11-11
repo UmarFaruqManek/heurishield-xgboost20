@@ -128,7 +128,6 @@ function createStatusCell(verdict) {
 function getDecisionClassLabel(verdict) {
   return {
     SAFE: "Legitimate",
-    WARNING: "Warning",
     DANGEROUS: "Phishing",
     LIMITED: "Analisis Terbatas"
   }[verdict] || VERDICT_LABELS_ID[verdict] || verdict || "Analisis Terbatas";

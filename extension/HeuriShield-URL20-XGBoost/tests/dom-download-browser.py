@@ -91,6 +91,6 @@ with TemporaryDirectory(prefix='hs-dom-download-') as profile,sync_playwright() 
         'R03_R04_live_wiring':True,'credential_values_not_archived':True,
         'separate_warning_removed':True,'downloads_permission_removed':True,
         'downloads_started':0,'public_sites_opened':0,'test':'local mocked page/API in Chromium'}
-    out=extension.parents[1]/'reports/final_audit_20261109';out.mkdir(exist_ok=True,parents=True)
+    out=extension.parents[1]/'experiments/v2/reports';out.mkdir(exist_ok=True,parents=True)
     (out/'browser_test.json').write_text(json.dumps(report,indent=2),encoding='utf-8');print(json.dumps(report,indent=2))
     context.close()

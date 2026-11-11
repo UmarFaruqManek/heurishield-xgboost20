@@ -28,10 +28,6 @@ export async function isProtectionEnabled() {
   return getSetting(STORAGE_KEYS.ENABLED, DEFAULT_SETTINGS.heurishieldEnabled);
 }
 
-export async function setProtectionEnabled(enabled) {
-  await setSetting(STORAGE_KEYS.ENABLED, Boolean(enabled));
-}
-
 export async function getAnalysisByTab(tabId) {
   const result = await chrome.storage.local.get({ [STORAGE_KEYS.ANALYSIS_BY_TAB]: {} });
   return result[STORAGE_KEYS.ANALYSIS_BY_TAB][String(tabId)] || null;
@@ -47,13 +43,6 @@ export async function saveAnalysisForTab(tabId, analysis) {
     analyzed_at: new Date().toISOString()
   };
 
-  await chrome.storage.local.set({ [STORAGE_KEYS.ANALYSIS_BY_TAB]: analysisByTab });
-}
-
-export async function removeAnalysisForTab(tabId) {
-  const result = await chrome.storage.local.get({ [STORAGE_KEYS.ANALYSIS_BY_TAB]: {} });
-  const analysisByTab = result[STORAGE_KEYS.ANALYSIS_BY_TAB];
-  delete analysisByTab[String(tabId)];
   await chrome.storage.local.set({ [STORAGE_KEYS.ANALYSIS_BY_TAB]: analysisByTab });
 }
 
@@ -158,22 +147,6 @@ function buildHistoryReasons(analysis) {
 
 export async function clearUrlHistory() {
   await setSetting(STORAGE_KEYS.URL_HISTORY, []);
-}
-
-export async function getDomainCache() {
-  const result = await chrome.storage.local.get({ [STORAGE_KEYS.DOMAIN_METADATA_CACHE]: {} });
-  return result[STORAGE_KEYS.DOMAIN_METADATA_CACHE];
-}
-
-export async function saveDomainCache(domain, metadata) {
-  const cache = await getDomainCache();
-
-  cache[domain] = {
-    metadata,
-    cached_at: new Date().toISOString()
-  };
-
-  await chrome.storage.local.set({ [STORAGE_KEYS.DOMAIN_METADATA_CACHE]: cache });
 }
 
 let warningContextWrites = Promise.resolve();

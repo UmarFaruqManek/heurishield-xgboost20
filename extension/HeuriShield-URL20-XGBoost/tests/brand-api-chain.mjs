@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { searchBrand } from "../src/analyzer/brand/brand-features.js";
+import { searchBrand } from "../src/analyzer/brand/brand-search-api.js";
 import { analyzeBrandEvidence } from "../src/analyzer/brand/brand-evidence.js";
 import { buildAnalysisExplanation } from "../src/shared/analysis-explanation.js";
 import { decideWithEvidence } from "./decision-fixture.js";

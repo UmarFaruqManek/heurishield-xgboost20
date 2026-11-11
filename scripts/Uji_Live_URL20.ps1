@@ -13,8 +13,8 @@ $extensionRoot = Join-Path $projectRoot 'extension\HeuriShield-URL20-XGBoost'
 $manifest = Get-Content -LiteralPath (Join-Path $extensionRoot 'manifest.json') -Raw | ConvertFrom-Json
 $modelPath = Join-Path $extensionRoot 'src\model\xgboost-url20.json'
 $model = Get-Content -LiteralPath $modelPath -Raw | ConvertFrom-Json
-if ($manifest.version -ne '0.6.2' -or $model.feature_names.Count -ne 20 -or $model.threshold -ne 0.5) {
-    throw 'Konfigurasi extension tidak sesuai paket URL20 v0.6.2 TH0.50.'
+if ($manifest.version -ne '0.7.0' -or $model.feature_names.Count -ne 20 -or $model.threshold -ne 0.5) {
+    throw 'Konfigurasi extension tidak sesuai paket URL20 v0.7.0 TH0.50.'
 }
 
 $readyReport = Join-Path $projectRoot 'experiments\v2\reports\extension_ready.json'

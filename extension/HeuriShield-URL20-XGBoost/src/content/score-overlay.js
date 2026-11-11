@@ -417,8 +417,6 @@
       .hs-wrap[data-tone="danger"] .hs-decision-mark { background: #f3dadd; color: #c91f37; }
       .hs-wrap[data-tone="safe"] .hs-mark { background: #08764f; }
       .hs-wrap[data-tone="safe"] .hs-decision-mark { background: #d9eee6; color: #08764f; }
-      .hs-wrap[data-tone="warn"] .hs-mark { background: #b26200; }
-      .hs-wrap[data-tone="warn"] .hs-decision-mark { background: #f1e2cc; color: #b26200; }
     `;
     return style;
   }
@@ -430,7 +428,6 @@
 
   function toneFor(verdict) {
     if (verdict === "DANGEROUS") return "danger";
-    if (verdict === "WARNING" || verdict === "SUSPICIOUS") return "warn";
     if (verdict === "SAFE") return "safe";
     return "neutral";
   }
@@ -438,8 +435,6 @@
   function labelFor(verdict) {
     return {
       SAFE: "Legitimate",
-      WARNING: "Waspada",
-      SUSPICIOUS: "Mencurigakan",
       DANGEROUS: "Phishing",
       LIMITED: "Terbatas"
     }[verdict] || "Terbatas";
@@ -450,8 +445,6 @@
     if (error) return "Gagal";
     return {
       SAFE: "Legit",
-      WARNING: "Waspada",
-      SUSPICIOUS: "Curiga",
       DANGEROUS: "Phishing",
       LIMITED: "Terbatas"
     }[verdict] || "Terbatas";

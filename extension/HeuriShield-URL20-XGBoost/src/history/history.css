@@ -108,8 +108,6 @@
 }
 
 .hs-pill[data-verdict="SAFE"],
-.hs-pill[data-verdict="WARNING"],
-.hs-pill[data-verdict="SUSPICIOUS"],
 .hs-pill[data-verdict="DANGEROUS"],
 .hs-pill[data-verdict="LIMITED"] {
   justify-content: center;

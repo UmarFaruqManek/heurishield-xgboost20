@@ -1,4 +1,4 @@
-import { searchClearbit, searchBrandfetch } from "./brand-features.js";
+import { searchClearbit, searchBrandfetch } from "./brand-search-api.js";
 import { lookupBrandByDomain } from "./brand-domain-api.js";
 
 // Exact domain match only; never select the first fuzzy directory suggestion.

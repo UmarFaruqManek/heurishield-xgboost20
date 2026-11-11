@@ -1,5 +1,4 @@
 /* File System Access: izin dipilih pengguna, handle diingat di IndexedDB. */
-import { normalizeFeatureRecord } from '../rule/feature-names.js';
 export async function rememberDatasetFile(handle) {
   return withHandleStore('readwrite', store => store.put(handle, 'selected-file'));
 }
@@ -31,11 +30,9 @@ export function mergeDatasetRows(existing, incoming, features) {
   const keys = ['url', ...features, 'label'];
   const merged = [];
   const seen = new Set();
-  for (const raw of [...existing, ...incoming]) {
-    // Catatan lama tetap terbaca; hanya nama kolom yang dimigrasikan saat sinkronisasi.
-    const row = raw && normalizeFeatureRecord(raw);
+  for (const row of [...existing, ...incoming]) {
     if (!row || Object.keys(row).length !== keys.length || keys.some(key => !Object.hasOwn(row, key))) {
-      throw new Error('File harus berisi URL, 60 fitur, dan label. File tidak diubah.');
+      throw new Error(`File harus berisi URL, ${features.length} fitur, dan label. File tidak diubah.`);
     }
     if (!['phishing', 'legitimate'].includes(row.label) || !/^https?:$/.test(new URL(row.url).protocol)) {
       throw new Error('URL atau label tidak valid. File tidak diubah.');

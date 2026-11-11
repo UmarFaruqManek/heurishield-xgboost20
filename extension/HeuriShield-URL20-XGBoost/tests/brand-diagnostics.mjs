@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { searchBrandfetch, searchClearbit } from "../src/analyzer/brand/brand-features.js";
+import { searchBrandfetch, searchClearbit } from "../src/analyzer/brand/brand-search-api.js";
 import { analyzeBrandEvidence } from "../src/analyzer/brand/brand-evidence.js";
 import { analyzeDomEvidence } from "../src/analyzer/dom/dom-evidence.js";
 let calls = 0;

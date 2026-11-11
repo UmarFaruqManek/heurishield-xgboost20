@@ -2,7 +2,7 @@
  * Pusat koordinasi extension: menerima pesan/tab, mengumpulkan fitur dan menjalankan analisis.
  * Menyimpan hasil sebelum menampilkan panel atau mengalihkan tab berisiko ke halaman blokir.
  */
-import { searchBrand, searchBrandfetch } from "../analyzer/brand/brand-features.js";
+import { searchBrand, searchBrandfetch } from "../analyzer/brand/brand-search-api.js";
 import { createBrandLookupCache } from "../analyzer/brand/brand-lookup-cache.js";
 import { lookupBrandByDomain } from "../analyzer/brand/brand-domain-api.js";
 import { searchDomainBrand } from "../analyzer/brand/domain-brand-search.js";
@@ -86,7 +86,6 @@ async function cachedBrandDomainLookup(domain, { forceRefresh = false } = {}) {
   brandDomainPending.set(key, task);
   try { return await task; } finally { brandDomainPending.delete(key); }
 }
-const httpStatusByTab = new Map();
 const initialUrlByTab = new Map();
 const autoAnalysisInFlight = new Set();
 const temporaryBypassByTab = new Map();
@@ -111,21 +110,6 @@ function recordLoginNavigation(tabId, destinationUrl) {
 const runtimeStateReady = ensureRuntimeStateVersion().catch((error) => {
   console.warn("HeuriShield runtime state migration failed:", error?.message || error);
 });
-
-if (chrome.webRequest?.onCompleted) {
-  chrome.webRequest.onCompleted.addListener(
-    (details) => {
-      if (details.tabId >= 0 && details.type === "main_frame") {
-        httpStatusByTab.set(details.tabId, {
-          url: details.url,
-          statusCode: details.statusCode,
-          observedAt: Date.now()
-        });
-      }
-    },
-    { urls: ["http://*/*", "https://*/*"], types: ["main_frame"] }
-  );
-}
 
 chrome.runtime.onInstalled.addListener(async () => {
   const defaults = {
@@ -253,7 +237,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     return false;
   }
 
-  sendResponse({ ok: false, error: "Unsupported V5 message." });
+  sendResponse({ ok: false, error: "Jenis pesan tidak dikenal." });
   return false;
 });
 
@@ -572,28 +556,6 @@ async function collectMainPageEvidence(tabId, finalUrl) {
   return null;
 }
 
-function buildMatchedRules(model) {
-  const guardRule = model?.post_model_guard ? [{
-    id: model.post_model_guard.id || "POST_MODEL_GUARD",
-    reason: model.post_model_guard.reason || "Post-model guard menaikkan risiko halaman.",
-    source: "Brand impersonation guard",
-    severity: model.post_model_guard.severity || "high",
-    feature: model.post_model_guard.feature || "post_model_guard"
-  }] : [];
-
-  const ruleFitRules = (model?.fired_rules || []).slice(0, 6).map((rule) => ({
-    id: `RULEFIT_${rule.id}`,
-    reason: ruleToReason(rule),
-    source: "RuleFit",
-    severity: Math.abs(Number(rule.coefficient || 0)) >= 1 ? "medium" : "low",
-    coefficient: rule.coefficient,
-    direction: rule.direction,
-    feature: rule.conditions?.[0]?.feature || "rulefit_rule"
-  }));
-
-  return [...guardRule, ...ruleFitRules];
-}
-
 async function autoAnalyzeAndBlock(tabId, url) {
   // Hormati status proteksi/daftar pengguna sebelum analisis dan pengalihan otomatis.
   if (!(await isProtectionEnabled())) return;
@@ -780,14 +742,6 @@ async function ensureRuntimeStateVersion() {
   const previous = await chrome.storage.local.get(null);
   await chrome.storage.local.set(classificationRecord(previous));
   await chrome.storage.local.set({ [STORAGE_KEYS.RUNTIME_STATE_VERSION]: ANALYSIS_VERSION });
-}
-
-function getObservedHttpStatus(tabId, finalUrl) {
-  const observed = httpStatusByTab.get(Number(tabId));
-  if (!observed) return null;
-  if (Date.now() - observed.observedAt > 5 * 60 * 1000) return null;
-  if (finalUrl && observed.url && normalizeComparableUrl(finalUrl) !== normalizeComparableUrl(observed.url)) return null;
-  return Number.isInteger(observed.statusCode) ? observed.statusCode : null;
 }
 
 function normalizeComparableUrl(url) {
