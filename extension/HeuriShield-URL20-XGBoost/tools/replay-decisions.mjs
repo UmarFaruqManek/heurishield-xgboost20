@@ -87,7 +87,32 @@ for (const item of input.records || []) {
     brand_status: brand?.claimed_brand_status || null,
     official_domain_match: brand?.official_domain_match ?? null,
     dom_sensitive: dom?.has_sensitive_input === true || dom?.has_password_field === true,
+    parameters: mainParameters(brand, dom, context.domainAgeDays,
+      urlFileExtension(analysis.original_url || analysis.url || item.url)),
     ...(input.include_evidence ? { replayed_brand: brand, replayed_dom: dom } : {}) });
 }
 
 process.stdout.write(JSON.stringify({ records: output }));
+
+// The fixed main parameters (9 brand, 8 DOM) and 2 supporting URL facts, for rule auditing.
+function mainParameters(brand, dom, domainAgeDays, urlExtension) {
+  const value = v => v === undefined ? null : v;
+  return {
+    brand_in_title: value(brand?.brand_in_title), brand_in_heading: value(brand?.brand_in_heading),
+    brand_in_logo: value(brand?.brand_in_logo), claimed_brand: brand?.claimed_brand?.name || null,
+    claimed_brand_status: value(brand?.claimed_brand_status),
+    verified_reference_domain: value(brand?.verified_reference_domain),
+    host_brand_claim: value(brand?.host_brand_claim), official_domain_match: value(brand?.official_domain_match),
+    brand_domain_mismatch: value(brand?.brand_domain_mismatch),
+    has_password_field: value(dom?.has_password_field), has_sensitive_input: value(dom?.has_sensitive_input),
+    form_cross_domain: value(dom?.form_cross_domain), login_button_detected: value(dom?.login_button_detected),
+    login_redirect_detected: value(dom?.login_redirect_detected), has_download_link: value(dom?.has_download_link),
+    download_file_extensions: value(dom?.download_file_extensions),
+    download_target_cross_domain: value(dom?.download_target_cross_domain),
+    domain_age_days: Number.isFinite(domainAgeDays) ? domainAgeDays : null, url_file_extension: value(urlExtension),
+    // Derived flags currently computed inside the brand analyzer (audited, not main parameters).
+    high_confidence_host_impersonation: value(brand?.high_confidence_host_impersonation),
+    high_confidence_credential_impersonation: value(brand?.high_confidence_credential_impersonation),
+    brand_claim_relation: value(brand?.brand_claim_relation)
+  };
+}

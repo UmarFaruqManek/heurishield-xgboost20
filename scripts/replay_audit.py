@@ -44,7 +44,8 @@ def snapshot(out):
                          'label': item['expected_label'], 'replay_level': item['replay_level'],
                          'url_class': item.get('url_model_verdict'),
                          'verdict': item['new_verdict'], 'policy_source': item.get('new_source'),
-                         'matched_rules': item.get('matched_rules', [])})
+                         'matched_rules': item.get('matched_rules', []),
+                         'parameters': item.get('parameters')})
     Path(out).write_text(json.dumps({'records': rows}, indent=1, ensure_ascii=False), encoding='utf-8')
     print(json.dumps(summary(rows), indent=2))
 
