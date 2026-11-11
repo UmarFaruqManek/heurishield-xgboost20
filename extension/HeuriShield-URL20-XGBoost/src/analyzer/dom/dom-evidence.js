@@ -1,38 +1,8 @@
 import { parse as parseDomain } from "../../shared/tldts.js";
 import { analyzeDomDownloadLinks } from './dom-download-features.js';
-import { TRUSTED_OAUTH_PROVIDER_DOMAINS } from '../../utils/constants.js';
 
 const UNKNOWN = "unknown";
-// Only evaluate metadata already available from the page and brand lookup.
-// Absence of a verification result is unknown, never a negative API response.
-export function verifyFormDestinations(dom, brand) {
-  if (!dom) return dom;
-  const reference = brand?.verified_reference_domain;
-  const confirmedConflict = brand?.brand_domain_mismatch === true;
-  const forms = (dom.forms || []).map(form => {
-    if (typeof form.destination_verification === 'boolean') return {
-      ...form,destination_verification_basis:form.destination_verification_basis || 'recorded_evidence'};
-    const target = form.destination_registrable_domain || registrable(form.action_origin);
-    let verified = UNKNOWN, basis = 'unresolved';
-    if (form.action_known === true && target && form.cross_domain === false) {
-      verified = true; basis = 'same_site';
-    } else if (form.action_known === true && target && form.cross_domain === true) {
-      if (reference && target === reference) {
-        verified = true; basis = 'brand_reference';
-      } else if (TRUSTED_OAUTH_PROVIDER_DOMAINS.has(target)) {
-        const provider = target.split('.')[0];
-        if ((dom.controls || []).some(control => control.type === 'oauth_login' &&
-          String(control.provider || '').toLowerCase() === provider)) {
-          verified = true; basis = 'oauth_provider';
-        }
-      } else if (reference && confirmedConflict) {
-        verified = false; basis = 'confirmed_identity_conflict';
-      }
-    }
-    return {...form,destination_verification:verified,destination_verification_basis:basis};
-  });
-  return {...dom,forms};
-}
+
 export function registrable(host) {
   try { return parseDomain(new URL(host).hostname.toLowerCase().replace(/\.$/, ""), { allowPrivateDomains: true }).domain || null; }
   catch { return null; }
@@ -63,7 +33,9 @@ export function analyzeDomEvidence(snapshots, navigation = null) {
     observed_frame_count: frames.length,
     has_password_field: password.length ? true : incomplete ? UNKNOWN : false,
     has_sensitive_input: sensitive.length ? true : incomplete ? UNKNOWN : false,
-    form_cross_domain: relevant.length ? cross : incomplete ? UNKNOWN : false,
+    // Credential fields outside any <form> are submitted by script to an unobserved
+    // destination, so the form destination is unknown rather than same-domain.
+    form_cross_domain: relevant.length ? cross : incomplete || password.length || sensitive.length ? UNKNOWN : false,
     login_button_detected: controls.length ? true : incomplete ? UNKNOWN : false,
     login_redirect_detected: navigation?.observed === true ? true : navigation?.observation_complete ? false : UNKNOWN,
     password_fields: password, sensitive_fields: sensitive,

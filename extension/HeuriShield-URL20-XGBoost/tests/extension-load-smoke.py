@@ -62,7 +62,7 @@ with TemporaryDirectory(prefix="hs-extension-smoke-") as profile, sync_playwrigh
       await chrome.tabs.sendMessage(tab.id, {type:'HEURISHIELD_ANALYSIS_UPDATED', showWarning:true, analysis: {
         verdict:'DANGEROUS', model_result:{ready:true,model_family:'XGBoost'},
         brand_features:{claimed_brand:{name:'Roblox'},
-          high_confidence_host_impersonation:true,brand_claim_relation:'external_domain'}
+          brand_domain_mismatch:true,brand_claim_relation:'external_domain'}
       }});
     }""")
     page.wait_for_timeout(100)

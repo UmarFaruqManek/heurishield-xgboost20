@@ -76,11 +76,12 @@ function renderReasons(reasons) {
     ...items.map((reason) => {
       const item = document.createElement("li");
       const text = String(reason);
-      const prefix = /^(Alamat|Identitas situs|Formulir|Login):\s*/.exec(text);
-      const labels = { Alamat: "Analisis alamat URL", "Identitas situs": "Identitas situs", Formulir: "Formulir", Login: "Alur login" };
+      const prefix = /^(Alamat|Aturan [A-Z]\d+|Identitas situs|Formulir|Login|Unduhan):\s*/.exec(text);
+      const labels = { Alamat: "Analisis alamat URL", "Identitas situs": "Identitas situs", Formulir: "Formulir",
+        Login: "Alur login", Unduhan: "Unduhan" };
       const label = document.createElement("strong");
       label.className = "reason-label";
-      label.textContent = prefix ? labels[prefix[1]] : "Temuan pemeriksaan";
+      label.textContent = !prefix ? "Temuan pemeriksaan" : labels[prefix[1]] || prefix[1];
       const detail = document.createElement("span");
       detail.className = "reason-detail";
       const description = prefix ? text.slice(prefix[0].length) : text;

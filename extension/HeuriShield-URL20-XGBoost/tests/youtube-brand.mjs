@@ -17,7 +17,7 @@ const genericLogin = await analyzeBrandEvidence({ ...home, title: "Sign in", hea
 assert.equal(genericLogin.claimed_brand?.name, "YouTube");
 assert.equal(genericLogin.official_domain_match, true);
 const explanation = buildAnalysisExplanation({ verdict: "SAFE", hostname: "www.youtube.com",
-  model_result: { model_family: "XGBoost" }, brand_features: official, correlation_rules: [],
+  model_result: { model_family: "XGBoost" }, brand_features: official,
   rdap_features: { source_domain_age_days: 1000 } });
 assert.ok(explanation.reasons.some(reason => reason.includes("domain cocok dengan brand YouTube")));
 

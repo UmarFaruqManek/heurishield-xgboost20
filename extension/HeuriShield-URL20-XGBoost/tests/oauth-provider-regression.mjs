@@ -4,8 +4,7 @@ import { extractUrl20Features as extractUrl18Features } from "../src/analyzer/ur
 import { predictProbability } from "../src/model/xgboost-engine.js";
 import { analyzeDomEvidence } from "../src/analyzer/dom/dom-evidence.js";
 import { analyzeBrandEvidence } from "../src/analyzer/brand/brand-evidence.js";
-import { evaluateCorrelation } from "../src/analyzer/correlation/evidence-rules.js";
-import { decideWithEvidence } from "./decision-fixture.js";
+import { judge } from "./pipeline.js";
 
 const model = JSON.parse(readFileSync(new URL("../src/model/xgboost-url20.json", import.meta.url)));
 const state = Array.from({ length: 1800 }, (_, index) =>
@@ -16,23 +15,20 @@ const snapshot = { page_origin: "https://accounts.google.com", title: "Sign in w
   controls: [], forms: [], password_fields: [], sensitive_fields: [], inaccessible_frames: 0 };
 const lookup = async token => ({ lookup_success: true, candidates: token === "google" ?
   [{ name: "Google", domain: "google.com", verified: true, source: "existing_oauth_provider_domains" }] : [] });
-const probability = predictProbability(model, { ...extractUrl18Features(url), domain_age_days: 10658 });
+// The long OAuth state makes the URL model choose phishing for the real provider page.
+assert.ok(predictProbability(model, extractUrl18Features(url)) >= model.threshold);
 const brand = await analyzeBrandEvidence(snapshot, url, { lookup });
 const dom = analyzeDomEvidence([snapshot]);
 assert.equal(brand.official_domain_match, true);
-const context = { probability, domainAgeDays: 10658, sameSite: true,
-  pageRegistrableDomain: "google.com", pageUrl: url, mainSnapshot: snapshot };
-const decision = decideWithEvidence("DANGEROUS", dom, brand,
-  evaluateCorrelation(dom, brand), context);
-assert.equal(decision.source, "verified_oauth_provider_page");
+const decision = judge({ urlClass: "DANGEROUS", dom, brand, domainAgeDays: 10658 });
+assert.deepEqual(decision.matched, ["L1"]);
 assert.equal(decision.verdict, "SAFE");
 
 const fake = url.replace("accounts.google.com", "accounts.google.com.evil.test");
 const fakeSnapshot = { ...snapshot, page_origin: "https://accounts.google.com.evil.test" };
 const fakeBrand = await analyzeBrandEvidence(fakeSnapshot, fake, { lookup });
 const fakeDom = analyzeDomEvidence([fakeSnapshot]);
-assert.equal(decideWithEvidence("DANGEROUS", fakeDom, fakeBrand,
-  evaluateCorrelation(fakeDom, fakeBrand),
-  { ...context, pageUrl: fake, pageRegistrableDomain: "evil.test",
-    mainSnapshot: fakeSnapshot }).verdict, "DANGEROUS");
+const fakeDecision = judge({ urlClass: "DANGEROUS", dom: fakeDom, brand: fakeBrand, domainAgeDays: 10658 });
+assert.deepEqual(fakeDecision.matched, ["P1"]);
+assert.equal(fakeDecision.verdict, "DANGEROUS");
 console.log("OAuth provider categorical correction passed.");

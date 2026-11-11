@@ -6,7 +6,7 @@
   "official_domain_match": false,
   "api_domain_reference_conflict": true,
   "verdict": "DANGEROUS",
-  "decision_source": "corroborated_brand_impersonation",
+  "decision_source": "brand_dom_phishing",
   "test_type": "local_mock_page_and_API",
   "public_target_opened": false
 }

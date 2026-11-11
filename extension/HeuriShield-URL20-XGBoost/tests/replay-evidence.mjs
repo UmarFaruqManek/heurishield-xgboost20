@@ -3,8 +3,7 @@ import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { analyzeBrandEvidence } from "../src/analyzer/brand/brand-evidence.js";
 import { analyzeDomEvidence } from "../src/analyzer/dom/dom-evidence.js";
-import { evaluateCorrelation } from "../src/analyzer/correlation/evidence-rules.js";
-import { decideWithEvidence } from "./decision-fixture.js";
+import { judge } from "./pipeline.js";
 
 const url = "https://www.roblox.com.et/login";
 const snapshot = { title: "Roblox Login", headings: [{ text: "Sign in to Roblox" }], logos: [],
@@ -18,7 +17,7 @@ const domainLookup = async root => ({ lookup_success: true, found: false,
 const brand = await analyzeBrandEvidence(snapshot, url, { lookup, domainLookup,
   domainSearch: async root => ({ queried_domain: root, lookup_success: true, found: false, candidates: [] }) });
 const dom = analyzeDomEvidence([snapshot]);
-const original = decideWithEvidence("SAFE", dom, brand, evaluateCorrelation(dom, brand));
+const original = judge({ urlClass: "SAFE", dom, brand });
 assert.equal(original.verdict, "DANGEROUS");
 const record = { index: 1, url, expected_label: "phishing", analysis_status: "completed",
   old_verdict: original.verdict,
@@ -32,5 +31,6 @@ assert.equal(processResult.status, 0, processResult.stderr);
 const replay = JSON.parse(processResult.stdout).records[0];
 assert.equal(replay.replay_level, "full_snapshot");
 assert.equal(replay.new_verdict, original.verdict);
+assert.deepEqual(replay.matched_rules, original.matched);
 assert.deepEqual(replay.missing_saved_lookups, undefined);
 console.log("Replay evidence OK: saved DOM + brand API responses reproduce the decision offline");

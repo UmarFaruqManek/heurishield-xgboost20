@@ -1,38 +1,39 @@
 import assert from 'node:assert/strict';
-import {analyzeBrandEvidence} from '../src/analyzer/brand/brand-evidence.js';
-import {analyzeDomEvidence,verifyFormDestinations} from '../src/analyzer/dom/dom-evidence.js';
-import {evaluateCorrelation} from '../src/analyzer/correlation/evidence-rules.js';
-import {decideWithEvidence} from '../src/analyzer/correlation/decision-policy.js';
-const snapshot={page_origin:'https://bca.bank.com',title:'Login BCA',headings:[{text:'Masuk BCA'}],
- logos:[],controls:[{type:'native_login'}],password_fields:[{form_index:0}],sensitive_fields:[],
- forms:[{relevant:true,action_known:true,action_origin:'https://receiver.example.net',same_origin:false}],
- inaccessible_frames:0,document_ready_state:'complete'};
-const brand=await analyzeBrandEvidence(snapshot,'https://bca.bank.com/login',{
- lookup:async token=>({lookup_success:true,candidates:token==='bca'?[{name:'BCA',domain:'bca.co.id',verified:true}]:[]})});
-assert.equal(brand.brand_domain_mismatch,true);
-const dom=verifyFormDestinations(analyzeDomEvidence([snapshot]),brand);
-assert.equal(dom.forms[0].destination_verification,false);
-const correlation=evaluateCorrelation(dom,brand,{urlVerdict:'SAFE'});
-for(const id of ['R01','R02','R03','R04','R09','R10'])
- assert.equal(correlation.rules.find(rule=>rule.id===id).status,'matched',id);
-assert.equal(decideWithEvidence('SAFE',correlation.rules).verdict,'DANGEROUS');
-const unresolved=verifyFormDestinations(analyzeDomEvidence([snapshot]),{claimed_brand_status:'unknown'});
-assert.equal(unresolved.forms[0].destination_verification,'unknown');
-assert.equal(evaluateCorrelation(unresolved,{claimed_brand_status:'unknown'}).rules.find(r=>r.id==='R04').status,'undetermined');
-const official=await analyzeBrandEvidence({...snapshot,page_origin:'https://bca.co.id'},'https://bca.co.id/login',{
- lookup:async token=>({lookup_success:true,candidates:token==='bca'?[{name:'BCA',domain:'bca.co.id',verified:true}]:[]})});
-assert.equal(official.brand_domain_mismatch,false);
-const mention=await analyzeBrandEvidence({...snapshot,password_fields:[],controls:[],title:'Panduan BCA',headings:[{text:'Informasi'}]},
- 'https://community.example.net/help',{
- lookup:async token=>({lookup_success:true,candidates:token==='bca'?[{name:'BCA',domain:'bca.co.id',verified:true}]:[]})});
-assert.notEqual(mention.brand_domain_mismatch,true);
-const provider=verifyFormDestinations({...dom,controls:[{type:'oauth_login',provider:'Google'}],forms:[{
- relevant:true,action_known:true,action_origin:'https://accounts.google.com',cross_domain:true}]},brand);
-assert.equal(provider.forms[0].destination_verification,true);
-console.log('Final wiring: confirmed vs potential identity conflict, R02/R03/R04/R10 activation, OAuth and unknown destination passed.');
+import { analyzeBrandEvidence } from '../src/analyzer/brand/brand-evidence.js';
+import { analyzeDomEvidence } from '../src/analyzer/dom/dom-evidence.js';
+import { judge } from './pipeline.js';
 
-const {classifyDomainAge,evaluateDomainAgeRule}=await import('../src/analyzer/domain/domain-age-policy.js');
-const agePolicy=JSON.parse((await import('node:fs')).readFileSync(new URL('../src/model/domain-age-policy.json',import.meta.url),'utf8'));
-assert.equal(evaluateDomainAgeRule(classifyDomainAge(30,agePolicy),dom,brand).status,'matched');
-assert.equal(evaluateDomainAgeRule(classifyDomainAge(null,agePolicy),dom,brand).status,'undetermined');
-assert.equal(evaluateDomainAgeRule(classifyDomainAge(400,agePolicy),dom,brand).status,'not_matched');
+// End-to-end wiring: live analyzer output -> parameters -> P/L rules -> policy.
+const lookup = async token => ({ lookup_success: true,
+  candidates: token === 'bca' ? [{ name: 'BCA', domain: 'bca.co.id', verified: true }] : [] });
+const snapshot = { page_origin: 'https://bca.bank.com', title: 'Login BCA', headings: [{ text: 'Masuk BCA' }],
+  logos: [], controls: [{ type: 'native_login' }], password_fields: [{ form_index: 0 }], sensitive_fields: [],
+  forms: [{ relevant: true, action_known: true, action_origin: 'https://receiver.example.net', same_origin: false }],
+  inaccessible_frames: 0, document_ready_state: 'complete' };
+const brand = await analyzeBrandEvidence(snapshot, 'https://bca.bank.com/login', { lookup });
+const dom = analyzeDomEvidence([snapshot]);
+assert.equal(brand.brand_domain_mismatch, true);
+assert.equal(dom.form_cross_domain, true);
+const phishing = judge({ urlClass: 'SAFE', dom, brand, domainAgeDays: 4000 });
+assert.deepEqual(phishing.matched, ['P1', 'P2']);
+assert.equal(phishing.verdict, 'DANGEROUS');
+assert.equal(phishing.decision.source, 'brand_dom_phishing');
+assert.deepEqual(phishing.decision.reasons, ['P1', 'P2']);
+
+// Domain age: P3 matched when young, undetermined when unknown, not matched when old.
+assert.equal(judge({ urlClass: 'SAFE', dom, brand, domainAgeDays: 30 }).status.P3, 'matched');
+assert.equal(judge({ urlClass: 'SAFE', dom, brand, domainAgeDays: null }).status.P3, 'undetermined');
+assert.equal(judge({ urlClass: 'SAFE', dom, brand, domainAgeDays: 400 }).status.P3, 'not_matched');
+
+// A cross-domain form without any brand identity is not a phishing reason on its own.
+const noBrand = judge({ urlClass: 'SAFE', dom, brand: { claimed_brand_status: 'unknown' }, domainAgeDays: 4000 });
+assert.deepEqual(noBrand.matched, []);
+assert.equal(noBrand.status.P2, 'undetermined');
+
+// Official domain and a mere mention produce no address conflict.
+const official = await analyzeBrandEvidence({ ...snapshot, page_origin: 'https://bca.co.id' }, 'https://bca.co.id/login', { lookup });
+assert.equal(official.brand_domain_mismatch, false);
+const mention = await analyzeBrandEvidence({ ...snapshot, password_fields: [], controls: [], title: 'Panduan BCA',
+  headings: [{ text: 'Informasi' }] }, 'https://community.example.net/help', { lookup });
+assert.notEqual(mention.brand_domain_mismatch, true);
+console.log('Final wiring: analyzer parameters, P1/P2/P3 statuses, policy source and negative controls passed.');

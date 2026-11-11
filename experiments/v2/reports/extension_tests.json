@@ -1,12 +1,12 @@
 {
-  "checks": 33,
-  "passed": 33,
+  "checks": 31,
+  "passed": 31,
   "classification_cases": [
     {
       "classification_case": "portal.merdekasiber.com",
       "expected": "SAFE",
-      "actual": "SAFE",
-      "passed": true
+      "actual": "DANGEROUS",
+      "passed": false
     }
   ],
   "results": [
@@ -49,7 +49,7 @@
     {
       "test": "categorical-boundary.mjs",
       "exit_code": 0,
-      "stdout": "Categorical URL boundary, explicit correction rules and score-free records passed.\n",
+      "stdout": "Categorical URL boundary (inclusive TH 0.50) and score-free records passed.\n",
       "stderr": ""
     },
     {
@@ -61,19 +61,19 @@
     {
       "test": "decision-policy.mjs",
       "exit_code": 0,
-      "stdout": "Decision policy OK: URL baseline, confirmed override, review without unblocking, unknown, OAuth\n",
+      "stdout": "Decision policy: 2187 combinations of URL class and rule status match the policy table.\n",
       "stderr": ""
     },
     {
       "test": "dom-brand-oauth.mjs",
       "exit_code": 0,
-      "stdout": "T01 official login OK\nT02 third party Google button OK\nT03 observed GitHub OAuth navigation OK\nT04 Apple provider is not claimed app OK\nT05 fake provider not rescued by OAuth OK\nT06 provider logo in footer OK\nT07 relative form action OK\nT08 external SSO is not phishing on its own OK\nT09 unresolved JS submit OK\nT10 OTP without password OK\nT11 modal update OK\nT12 inaccessible iframe OK\nT13 deceptive subdomain OK\nT14 returning app remains evaluated OK\nT15 article mention not a claim OK\nT16 unavailable official mapping stays unknown OK\nT17 lookalike provider not official OK\nT18 OAuth secrets excluded OK\nT19 page-local brand claim alone does not confirm credential impersonation OK\n",
+      "stdout": "T01 official login OK\nT02 third party Google button OK\nT03 observed GitHub OAuth navigation OK\nT04 Apple provider is not claimed app OK\nT05 fake provider not rescued by OAuth OK\nT06 provider logo in footer OK\nT07 relative form action OK\nT08 external SSO is not phishing on its own OK\nT09 unresolved JS submit OK\nT10 OTP without password OK\nT11 modal update OK\nT12 inaccessible iframe OK\nT13 deceptive subdomain OK\nT14 returning app remains evaluated OK\nT15 article mention not a claim OK\nT16 unavailable official mapping stays unknown OK\nT17 lookalike provider not official OK\nT18 OAuth secrets excluded OK\nT19 page-local brand claim alone does not confirm impersonation OK\n",
       "stderr": ""
     },
     {
       "test": "dom-download-rules.mjs",
       "exit_code": 0,
-      "stdout": "DOM download rules: R12/R13, URL SAFE correction, official/CDN/PDF negatives, unknown history, JS-only controls and explanations passed.\n",
+      "stdout": "DOM download rules: parameters, P1 address conflict, P4 new-domain executable, PDF/old/official/unknown negatives, explanation passed.\n",
       "stderr": ""
     },
     {
@@ -95,15 +95,15 @@
       "stderr": ""
     },
     {
-      "test": "final-policy-matrix.mjs",
+      "test": "final-wiring-audit.mjs",
       "exit_code": 0,
-      "stdout": "Final decision table: 32768 combinations passed; contextual/supporting rules do not independently override.\n",
+      "stdout": "Final wiring: analyzer parameters, P1/P2/P3 statuses, policy source and negative controls passed.\n",
       "stderr": ""
     },
     {
-      "test": "final-wiring-audit.mjs",
+      "test": "heuristic-rules.mjs",
       "exit_code": 0,
-      "stdout": "Final wiring: confirmed vs potential identity conflict, R02/R03/R04/R10 activation, OAuth and unknown destination passed.\n",
+      "stdout": "Heuristic rules: truth tables for P1-P4/L1-L2 and parameter-only access passed.\n",
       "stderr": ""
     },
     {
@@ -127,19 +127,7 @@
     {
       "test": "official-docs-regression.mjs",
       "exit_code": 0,
-      "stdout": "Verified documentation correction and phishing safeguards OK\n",
-      "stderr": ""
-    },
-    {
-      "test": "parent-site-link.mjs",
-      "exit_code": 0,
-      "stdout": "Parent site link OK: observed subdomain link, apex, HTTP, deceptive host\n",
-      "stderr": ""
-    },
-    {
-      "test": "policy-rule-ids.mjs",
-      "exit_code": 0,
-      "stdout": "Policy uses only R IDs/statuses: both correction directions, conflicts, unknown and fallback passed.\n",
+      "stdout": "Verified documentation correction (L1) and safeguards OK\n",
       "stderr": ""
     },
     {
@@ -151,7 +139,7 @@
     {
       "test": "search-page-regression.mjs",
       "exit_code": 0,
-      "stdout": "Official search page correction and inaccessible iframe safeguards OK\n",
+      "stdout": "Official search page correction (L1) and safeguards OK\n",
       "stderr": ""
     },
     {
@@ -163,13 +151,13 @@
     {
       "test": "verified-content-page.mjs",
       "exit_code": 0,
-      "stdout": "Verified content pages correct URL false positives; incomplete, sensitive and conflicting evidence stay blocked.\n",
+      "stdout": "Verified content pages correct URL false positives; sensitive, unverified, unshown and young cases stay blocked.\n",
       "stderr": ""
     },
     {
       "test": "worker-smoke.mjs",
       "exit_code": 0,
-      "stdout": "{\"verdict\":\"SAFE\",\"model\":\"XGBoost URL20 v2\",\"featureCount\":20}\n{\"verdict\":\"DANGEROUS\",\"model\":\"XGBoost URL20 v2\",\"ageStatus\":\"unknown\"}\n{\"source\":\"https://account.example.com/login\",\"final\":\"https://www.example.com/welcome\"}\n{\"oauthHost\":\"accounts.google.com\",\"oauthDomain\":\"google.com\"}\n{\"classification_case\":\"portal.merdekasiber.com\",\"expected\":\"SAFE\",\"actual\":\"SAFE\",\"passed\":true}\n{\"portalRaw\":\"DANGEROUS\",\"portalFinal\":\"SAFE\",\"source\":\"corroborated_own_domain_review\"}\nManual lists applied to panel and current tab OK\nPopup, persistent action and restored block page OK\n",
+      "stdout": "{\"verdict\":\"SAFE\",\"model\":\"XGBoost URL20 v2\",\"featureCount\":20}\n{\"verdict\":\"DANGEROUS\",\"model\":\"XGBoost URL20 v2\"}\n{\"source\":\"https://account.example.com/login\",\"final\":\"https://www.example.com/welcome\"}\n{\"oauthHost\":\"accounts.google.com\",\"oauthDomain\":\"google.com\"}\n{\"classification_case\":\"portal.merdekasiber.com\",\"expected\":\"SAFE\",\"actual\":\"DANGEROUS\",\"passed\":false}\n{\"portalRaw\":\"DANGEROUS\",\"portalFinal\":\"DANGEROUS\",\"source\":\"url_model\"}\nManual lists applied to panel and current tab OK\nPopup, persistent action and restored block page OK\n",
       "stderr": ""
     },
     {
@@ -199,13 +187,13 @@
     {
       "test": "brand-domain-conflict-smoke.py",
       "exit_code": 0,
-      "stdout": "{\n  \"passed\": true,\n  \"manifest_version\": \"0.7.0\",\n  \"brand\": \"Roblox\",\n  \"reference_domain\": \"roblox.com\",\n  \"official_domain_match\": false,\n  \"api_domain_reference_conflict\": true,\n  \"verdict\": \"DANGEROUS\",\n  \"decision_source\": \"corroborated_brand_impersonation\",\n  \"test_type\": \"local_mock_page_and_API\",\n  \"public_target_opened\": false\n}\n",
+      "stdout": "{\n  \"passed\": true,\n  \"manifest_version\": \"0.7.0\",\n  \"brand\": \"Roblox\",\n  \"reference_domain\": \"roblox.com\",\n  \"official_domain_match\": false,\n  \"api_domain_reference_conflict\": true,\n  \"verdict\": \"DANGEROUS\",\n  \"decision_source\": \"brand_dom_phishing\",\n  \"test_type\": \"local_mock_page_and_API\",\n  \"public_target_opened\": false\n}\n",
       "stderr": ""
     },
     {
       "test": "dom-download-browser.py",
       "exit_code": 0,
-      "stdout": "{\n  \"passed\": true,\n  \"version\": \"0.7.0\",\n  \"download_link_read\": true,\n  \"executable_link_read\": true,\n  \"cross_site_read\": true,\n  \"R13_verdict\": \"DANGEROUS\",\n  \"R13_source\": \"brand_executable_download_phishing\",\n  \"pdf_not_executable\": true,\n  \"removed_link_detected\": true,\n  \"dynamic_link_detected\": true,\n  \"url_suffix_read\": true,\n  \"model_vector_still_20\": true,\n  \"confirmed_brand_mismatch_read\": true,\n  \"form_destination_verification_read\": true,\n  \"R03_R04_live_wiring\": true,\n  \"credential_values_not_archived\": true,\n  \"separate_warning_removed\": true,\n  \"downloads_permission_removed\": true,\n  \"downloads_started\": 0,\n  \"public_sites_opened\": 0,\n  \"test\": \"local mocked page/API in Chromium\"\n}\n",
+      "stdout": "{\n  \"passed\": true,\n  \"version\": \"0.7.0\",\n  \"download_link_read\": true,\n  \"executable_link_read\": true,\n  \"cross_site_read\": true,\n  \"download_page_verdict\": \"DANGEROUS\",\n  \"download_page_source\": \"brand_dom_phishing\",\n  \"pdf_not_executable\": true,\n  \"removed_link_detected\": true,\n  \"dynamic_link_detected\": true,\n  \"url_suffix_read\": true,\n  \"model_vector_still_20\": true,\n  \"confirmed_brand_mismatch_read\": true,\n  \"form_cross_domain_read\": true,\n  \"P1_P2_live_wiring\": true,\n  \"credential_values_not_archived\": true,\n  \"separate_warning_removed\": true,\n  \"downloads_permission_removed\": true,\n  \"downloads_started\": 0,\n  \"public_sites_opened\": 0,\n  \"test\": \"local mocked page/API in Chromium\"\n}\n",
       "stderr": ""
     }
   ]

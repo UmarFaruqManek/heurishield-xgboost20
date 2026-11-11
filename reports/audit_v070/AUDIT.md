@@ -154,3 +154,67 @@ Angka ambang umur (365) adalah konfigurasi heuristik yang harus dinyatakan apa a
 
 - Respons API pada 1.007 rekaman parsial tidak lengkap. Hasil definisi brand baru tidak dapat diputar ulang secara penuh untuk rekaman tersebut, sehingga sebagian pengukuran memerlukan uji live ulang.
 - Data audit adalah data pengembangan; perbaikan yang diukur di sini tidak boleh dilaporkan sebagai hasil uji independen.
+
+## 8. Hasil implementasi v0.7.0
+
+Rancangan bagian 5 disetujui pengguna pada 12 November 2026 dan diimplementasikan. Beberapa butir draf diubah berdasarkan pengukuran replay; perubahan itu dicatat di bawah agar tidak dianggap bagian dari draf awal.
+
+### 8.1 Perbaikan definisi parameter (Tahap 3a)
+
+| Parameter | Definisi v0.7.0 | Masalah yang ditutup |
+|---|---|---|
+| `official_domain_match` | Domain halaman sama dengan domain rujukan brand atau subdomainnya. Jika brand yang sama memiliki domain kanonik terverifikasi provider dengan label sama di akhiran lain, domain kanonik itu yang menjadi rujukan (hanya bila halaman menampilkan brand). Penyewa hosting bersama menghasilkan `unknown` untuk brand platformnya. | Rujukan melingkar (`roblox.ly`, `roblox.com.ml`) dan penyewa hosting (`*.wpengine.com`, `*.craftum.io`, `*.edgeone.dev`, `vmi*.contaboserver.net`). |
+| `brand_domain_mismatch` | `official_domain_match = false` dan hostname memuat nama brand tersebut (`exact` pada akhiran lain, `lookalike`, `subdomain_exact`, `subdomain_lookalike`). Tanpa klaim hostname nilainya `false`. | Sebelumnya bergantung pada flag `high_confidence_*` yang berisi belasan kondisi tersembunyi. |
+| `brand_in_title` / `brand_in_heading` / `brand_in_logo` | Brand yang diklaim (`claimed_brand`) muncul pada judul/heading/logo. Nama lain di halaman dicatat sebagai `mentioned_brands`. | Sebelumnya bernilai true jika kandidat apa pun muncul, misalnya judul Walmart pada `nbpublic.com`. |
+| `form_cross_domain` | Kolom kredensial di luar elemen `<form>` menghasilkan `unknown` (tujuan pengiriman tidak teramati). | Sebelumnya `false`, seolah tujuan terbukti satu domain. |
+| `domain_age_days` | Umur domain halaman yang dianalisis (domain yang sama dengan bukti brand/DOM). | Sebelumnya umur domain URL awal; pada shortener (`s4w.in`) umurnya 6.930 hari padahal halaman berada di `roblox.ly`. |
+
+Flag `high_confidence_host_impersonation`, `high_confidence_credential_impersonation`, `provider_credential_claim`, dan `candidate_host_corroborated` dihapus dari analyzer. Rule hanya menerima 19 nilai parameter (`src/analyzer/rules/parameters.js`); uji `heuristic-rules.mjs` memakai Proxy yang gagal bila rule membaca nilai lain.
+
+### 8.2 Rule dan decision policy final
+
+| ID | Keputusan | Kondisi |
+|---|---|---|
+| P1 | phishing | `brand_domain_mismatch = true` |
+| P2 | phishing | (`has_password_field` ∨ `has_sensitive_input`) ∧ `form_cross_domain = true` ∧ `official_domain_match = false` |
+| P3 | phishing | `domain_age_days ≤ 365` ∧ `official_domain_match = false` ∧ (`has_password_field` ∨ `has_sensitive_input`) |
+| P4 | phishing | `domain_age_days ≤ 365` ∧ `official_domain_match = false` ∧ file executable pada `download_file_extensions` atau `url_file_extension` |
+| L1 | legitimate | `claimed_brand_status = identified` ∧ `official_domain_match = true` ∧ brand tampil (judul/heading/logo) ∧ password tidak teramati ∧ input sensitif tidak teramati ∧ `domain_age_days > 365` |
+| L2 | legitimate | Sama seperti syarat situs resmi L1 ∧ `has_password_field = true` ∧ `form_cross_domain = false` ∧ `domain_age_days > 365` |
+
+Decision policy (`src/analyzer/rules/decision-policy.js`): kelas URL tidak tersedia → LIMITED; ada P matched → phishing; ada L matched → legitimate; selain itu kelas URL. Policy hanya membaca kelas URL dan ID/status rule.
+
+Perubahan terhadap draf bagian 5.3, berdasarkan replay:
+
+1. Draf P1, P2, dan P4 merupakan himpunan bagian dari `brand_domain_mismatch = true` setelah klaim `exact` (label sama, akhiran lain) terbukti informatif: 48 phishing (24 di antaranya lolos dari model URL) dan 1 legitimate (`hologic.de`). Rule disusun ulang agar tidak ada rule yang menjadi himpunan bagian rule lain.
+2. L1 memakai "kredensial tidak teramati" (unknown dihitung tidak teramati) karena iframe lintas origin membuat halaman pencarian Google selalu unknown. Pada replay perubahan ini mengoreksi 6 legitimate tambahan dan tidak meloloskan phishing.
+3. L1 dan L2 dibuat tidak tumpang tindih: L1 untuk halaman tanpa password teramati, L2 untuk login dengan formulir satu domain.
+4. Rule khusus jalur `/docs`, `/search`, halaman OAuth provider, dan tautan situs induk (R14, R15, R17, R18) tidak dipertahankan; kasus tersebut kini ditangani L1/L2 berdasarkan parameter.
+
+### 8.3 Hasil replay (data pengembangan)
+
+1.831 URL unik (`rule_audit_v070.json`):
+
+| | Kelas URL saja | Rule v0.6.2 | Rule v0.7.0 |
+|---|---:|---:|---:|
+| Legitimate benar | 89,58% | 92,65% | **93,25%** |
+| Phishing benar | 74,65% | 76,06% | **80,48%** |
+| False positive / false negative | 139 / 126 | 98 / 119 | **90 / 97** |
+| Keputusan dengan alasan brand/DOM | — | 69 (4%) | **656 (36%)** |
+
+Seluruh 3.636 rekaman (termasuk duplikat antar-run): legitimate 93,98% → 94,58%, phishing 77,66% → 81,06%.
+
+Rincian rule pada data unik: P1 cocok pada 54 phishing dan 1 legitimate; P2 pada 5 phishing; P3 pada 4 phishing; P4 tidak cocok karena data replay hampir tidak berisi phishing unduhan; L1 pada 539 legitimate dan 5 phishing; L2 pada 43 legitimate dan 5 phishing. Sepuluh phishing dengan alasan legitimate sebagian besar adalah *cloaking* (`*.pages.dev` dialihkan ke `facebook.com` asli, sehingga halaman yang dianalisis memang Facebook) dan rekaman parsial yang tidak menyimpan pencarian nama brand kanonik.
+
+### 8.4 Pengujian
+
+- 31/31 pengujian fungsi/integrasi lulus (`python scripts/uji_extension_url20.py`), termasuk 2.187 kombinasi kelas URL × status 6 rule pada `decision-policy.mjs`.
+- Laboratorium unduhan: 7/7 skenario sesuai (`python testing/local/lab-unduhan-heurishield/lab.py --check`), termasuk P4 pada domain baru dan kontrol negatif PDF.
+
+### 8.5 Keterbatasan dan regresi yang diketahui
+
+1. **Domain regional brand** yang tidak diverifikasi provider (contoh `hologic.de`) dapat terkena P1 karena labelnya sama dengan domain kanonik di akhiran lain.
+2. **Login penyedia identitas pada domain lama tanpa klaim hostname** (contoh halaman "Microsoft | Login" pada layanan penyimpanan file) tidak lagi mendapat alasan brand/DOM; keputusan mengikuti kelas URL. Rule lama R10 menangkapnya melalui daftar provider OAuth, tetapi pola yang sama muncul pada Outlook Web App milik universitas.
+3. **Login tanpa elemen `<form>`** tidak dapat memenuhi L2 karena tujuan pengiriman tidak teramati. Fixture `portal.merdekasiber.com` pada `worker-smoke` kini tercatat false positive karena alasan ini.
+4. Halaman tanpa DOM yang terbaca tidak mendapat alasan legitimate (brand tidak teramati tampil).
+5. Angka di atas berasal dari data pengembangan yang dipakai merancang rule. Evaluasi independen harus memakai daftar URL baru melalui uji live.

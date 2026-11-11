@@ -42,8 +42,9 @@ with TemporaryDirectory(prefix='hs-brand-conflict-') as profile,sync_playwright(
     assert b['verified_reference_domain']=='roblox.com',b
     assert b['official_domain_match'] is False,b
     assert b['api_domain_reference_conflict'] is True,b
-    assert b['high_confidence_host_impersonation'] is True,b
+    assert b['brand_domain_mismatch'] is True,b
     assert a['verdict']=='DANGEROUS',a['decision_policy']
+    assert 'P1' in a['decision_policy']['reasons'],a['decision_policy']
     report={'passed':True,'manifest_version':worker.evaluate('()=>chrome.runtime.getManifest().version'),
         'brand':b['claimed_brand']['name'],'reference_domain':b['verified_reference_domain'],
         'official_domain_match':False,'api_domain_reference_conflict':True,'verdict':a['verdict'],

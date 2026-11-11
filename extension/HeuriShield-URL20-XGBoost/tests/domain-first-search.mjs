@@ -60,7 +60,7 @@ const conflict=await analyzeBrandEvidence({title:"Login BCA",headings:[{text:"Ma
 });
 assert.equal(conflict.token_fallback_used,true);
 assert.equal(conflict.claimed_brand.name,"BCA");
-assert.equal(conflict.high_confidence_host_impersonation,true);
+assert.equal(conflict.brand_domain_mismatch,true);
 const hostingLogin = await analyzeBrandEvidence({title:"Microsoft | Login",headings:[],logos:[],
   password_fields:[{}],controls:[{type:"native_login"}]},"https://f005.backblazeb2.com/file/auth00/Hotmailfile.html",{
   domainSearch:async()=>({lookup_success:true,found:true,candidates:[{name:"Backblaze",domain:"backblazeb2.com",verified:false}]}),
@@ -69,5 +69,5 @@ const hostingLogin = await analyzeBrandEvidence({title:"Microsoft | Login",headi
 assert.equal(hostingLogin.candidate_domain_match,true);
 assert.equal(hostingLogin.claimed_brand.name,"Microsoft");
 assert.equal(hostingLogin.official_domain_match,false);
-assert.equal(hostingLogin.high_confidence_credential_impersonation,true);
+assert.equal(hostingLogin.brand_domain_mismatch,false);
 console.log("Domain-first search: exact domain, lazy fallback, provider failure, and conflicting identity passed");

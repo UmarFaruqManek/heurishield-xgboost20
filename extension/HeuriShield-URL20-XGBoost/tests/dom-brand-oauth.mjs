@@ -1,12 +1,13 @@
 import assert from "node:assert/strict";
 import { analyzeDomEvidence, registrable } from "../src/analyzer/dom/dom-evidence.js";
 import { analyzeBrandEvidence } from "../src/analyzer/brand/brand-evidence.js";
-import { evaluateCorrelation } from "../src/analyzer/correlation/evidence-rules.js";
+import { judge } from "./pipeline.js";
 import { sanitizeAuditUrl } from "../src/shared/audit-url.js";
 
 const lookup = async token => ({ lookup_success: true, candidates: ({ google: [{ name: "Google", domain: "google.com", verified: true }], github: [{ name: "GitHub", domain: "github.com", verified: true }], apple: [{ name: "Apple", domain: "apple.com", verified: true }], acme: [{ name: "Acme", domain: "acme.test", verified: true }] })[token] || [] });
 const snap = (origin = "https://acme.test", changes = {}) => ({ page_origin: origin, title: "Acme account", headings: [{ text: "Sign in to Acme", in_main: true }], logos: [], controls: [], forms: [], password_fields: [], sensitive_fields: [], inaccessible_frames: 0, ...changes });
-const rule = (c, id) => c.rules.find(r => r.id === id).status;
+const rule = (dom, brand, id) => judge({ urlClass: "SAFE", dom, brand }).status[id];
+const phishingRules = (dom, brand) => judge({ urlClass: "SAFE", dom, brand }).matched.filter(id => id.startsWith("P"));
 let count = 0;
 async function test(id, fn) { await fn(); count++; process.stdout.write(`${id} OK\n`); }
 
@@ -14,7 +15,7 @@ await test("T01 official login", async () => {
   const s = snap("https://login.acme.test", { password_fields: [{ form_index: 0 }], controls: [{ type: "native_login" }] });
   const d = analyzeDomEvidence([s]); const b = await analyzeBrandEvidence(s, s.page_origin, { lookup });
   assert.equal(d.has_password_field, true); assert.equal(d.login_button_detected, true);
-  assert.equal(b.official_domain_match, true); assert.equal(rule(evaluateCorrelation(d, b), "R03"), "not_matched");
+  assert.equal(b.official_domain_match, true); assert.equal(rule(d, b, "P1"), "not_matched");
 });
 await test("T02 third party Google button", async () => {
   const s = snap("https://shop.test", { title: "Sign in with Google", headings: [{ text: "Continue with Google" }], controls: [{ type: "oauth_login", provider: "Google" }] });
@@ -25,7 +26,8 @@ await test("T03 observed GitHub OAuth navigation", async () => {
   const s = snap("https://app.test", { controls: [{ type: "oauth_login", provider: "GitHub" }] });
   const d = analyzeDomEvidence([s], { observed: true, destination_type: "official_provider" });
   const b = await analyzeBrandEvidence(s, s.page_origin, { lookup });
-  assert.equal(d.login_redirect_detected, true); assert.equal(rule(evaluateCorrelation(d, b), "R06"), "matched");
+  // An observed redirect to the official provider is context, never a phishing reason.
+  assert.equal(d.login_redirect_detected, true); assert.deepEqual(phishingRules(d, b), []);
 });
 await test("T04 Apple provider is not claimed app", async () => {
   const s = snap("https://shop.test", { title: "Store", headings: [], controls: [{ type: "oauth_login", provider: "Apple" }] });
@@ -35,11 +37,7 @@ await test("T05 fake provider not rescued by OAuth", async () => {
   const s = snap("https://google-login.example.test", { title: "Google Login", headings: [{ text: "Sign in to Google" }], password_fields: [{ form_index: 0 }] });
   const b = await analyzeBrandEvidence(s, s.page_origin, { lookup });
   assert.equal(b.official_domain_match, false); assert.equal(b.brand_domain_mismatch, true);
-  assert.equal(rule(evaluateCorrelation(analyzeDomEvidence([s]), b), "R06"), "not_matched");
-  // The live analyzer now supplies the confirmed mismatch from hostname evidence.
-  const confirmed = b;
-  assert.equal(rule(evaluateCorrelation(analyzeDomEvidence([s]), confirmed), "R03"), "matched");
-  assert.equal(rule(evaluateCorrelation(analyzeDomEvidence([s]), confirmed), "R07"), "matched");
+  assert.equal(rule(analyzeDomEvidence([s]), b, "P1"), "matched");
 });
 await test("T06 provider logo in footer", async () => {
   const s = snap("https://shop.test", { title: "Shop", headings: [], logos: [{ text: "Google", context: "footer" }] });
@@ -52,7 +50,7 @@ await test("T07 relative form action", () => {
 await test("T08 external SSO is not phishing on its own", () => {
   const d = analyzeDomEvidence([snap("https://acme.test", { forms: [{ relevant: true, action_known: true, action_origin: "https://sso.vendor.test" }] })]);
   assert.equal(d.form_cross_domain, true);
-  assert.notEqual(rule(evaluateCorrelation(d, { claimed_brand_status: "unknown", official_domain_match: "unknown" }), "R04"), "matched");
+  assert.notEqual(rule(d, { claimed_brand_status: "unknown", official_domain_match: "unknown" }, "P2"), "matched");
 });
 await test("T09 unresolved JS submit", () => {
   assert.equal(analyzeDomEvidence([snap("https://acme.test", { forms: [{ relevant: true, action_known: false, action_origin: null }] })]).form_cross_domain, "unknown");
@@ -75,7 +73,7 @@ await test("T13 deceptive subdomain", async () => {
 });
 await test("T14 returning app remains evaluated", () => {
   const d = analyzeDomEvidence([snap("https://app.test")], { observed: true, destination_type: "same_site" });
-  assert.notEqual(rule(evaluateCorrelation(d, { claimed_brand_status: "unknown", official_domain_match: "unknown" }), "R06"), "matched");
+  assert.deepEqual(phishingRules(d, { claimed_brand_status: "unknown", official_domain_match: "unknown" }), []);
 });
 await test("T15 article mention not a claim", async () => {
   const s = snap("https://blog.test", { title: "Tutorial Login Google", headings: [{ text: "Cara masuk Google" }] });
@@ -90,19 +88,22 @@ await test("T17 lookalike provider not official", async () => {
   const s = snap("https://app.test", { controls: [{ type: "oauth_login", provider: "Google" }] });
   const d = analyzeDomEvidence([s], { observed: true, destination_type: "unverified" });
   const b = await analyzeBrandEvidence(s, s.page_origin, { lookup });
-  assert.notEqual(rule(evaluateCorrelation(d, b), "R06"), "matched");
+  assert.deepEqual(phishingRules(d, b), []);
 });
 await test("T18 OAuth secrets excluded", () => {
   const value = sanitizeAuditUrl("https://app.test/callback?code=secret123&state=abc&token=xyz&view=ok#access_token=hidden");
   assert.equal(value, "https://app.test/callback?view=ok");
 });
-await test("T19 page-local brand claim alone does not confirm credential impersonation", () => {
-  const dom = { has_password_field: true, has_sensitive_input: false, forms: [], controls: [] };
+await test("T19 page-local brand claim alone does not confirm impersonation", () => {
+  // A differing official domain without a hostname claim (partner, SSO, mention)
+  // is not an address conflict; an old domain then has no phishing reason.
+  const dom = { has_password_field: true, has_sensitive_input: false, form_cross_domain: false };
   const brand = { claimed_brand_status: "identified", official_domain_match: false,
-    brand_domain_mismatch: "unknown",
-    high_confidence_credential_impersonation: true, host_brand_claim: "unknown" };
-  assert.notEqual(rule(evaluateCorrelation(dom, brand), "R10"), "matched");
-  assert.equal(evaluateCorrelation(dom, brand).strong_credential_impersonation, false);
-  assert.equal(rule(evaluateCorrelation(dom, { ...brand, host_brand_claim: "lookalike" }), "R10"), "matched");
+    brand_domain_mismatch: false, host_brand_claim: "unknown" };
+  assert.deepEqual(judge({ urlClass: "SAFE", dom, brand, domainAgeDays: 4000 }).matched, []);
+  assert.deepEqual(judge({ urlClass: "SAFE", dom, brand: { ...brand, brand_domain_mismatch: true,
+    host_brand_claim: "lookalike" }, domainAgeDays: 4000 }).matched, ["P1"]);
+  // The same page on a domain registered 20 days ago requests credentials for another brand.
+  assert.deepEqual(judge({ urlClass: "SAFE", dom, brand, domainAgeDays: 20 }).matched, ["P3"]);
 });
 assert.equal(count, 19);

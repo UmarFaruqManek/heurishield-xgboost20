@@ -469,8 +469,7 @@
       if (!evidence) return { label: "Brand", value: "Hasil pemeriksaan tidak tersedia" };
       if (evidence.claimed_brand?.name) {
         const name = evidence.claimed_brand.name;
-        if (evidence.high_confidence_host_impersonation === true ||
-            evidence.high_confidence_credential_impersonation === true) {
+        if (evidence.brand_domain_mismatch === true) {
           return { label: "Brand", value: `Impersonate (${name})` };
         }
         if (evidence.official_domain_match === true) {

@@ -10,16 +10,14 @@ import { extractUrl20Features, ageLookupDomain } from "../analyzer/url/url20-fea
 import { urlFileExtension } from '../analyzer/url/download-file-extension.js';
 import { lookupUrl18Age } from "../analyzer/domain/url18-age.js";
 import { classifyUrl } from "../model/xgboost-engine.js";
-import { classifyDomainAge, evaluateDomainAgeRule } from "../analyzer/domain/domain-age-policy.js";
+import { classifyDomainAge } from "../analyzer/domain/domain-age-policy.js";
 import { auditDomainSuffix } from "../model/suffix-reference.js";
-import { analyzeDomEvidence, verifyFormDestinations } from "../analyzer/dom/dom-evidence.js";
+import { analyzeDomEvidence } from "../analyzer/dom/dom-evidence.js";
 import { analyzeBrandEvidence } from "../analyzer/brand/brand-evidence.js";
-import { parentSiteLinksToPage } from "../analyzer/brand/parent-site-link.js";
-import { evaluateCorrelation } from "../analyzer/correlation/evidence-rules.js";
-import { evaluateCorrectionRules } from "../analyzer/correlation/correction-rules.js";
+import { collectParameters } from "../analyzer/rules/parameters.js";
+import { evaluateRules } from "../analyzer/rules/heuristic-rules.js";
+import { decide } from "../analyzer/rules/decision-policy.js";
 import { classificationRecord } from "../shared/classification-record.js";
-import { decideWithEvidence } from "../analyzer/correlation/decision-policy.js";
-import { TRUSTED_OAUTH_PROVIDER_DOMAINS } from "../utils/constants.js";
 import {
   getAnalysisByTab,
   getPhishingAction,
@@ -36,13 +34,13 @@ import {
   saveWarningContext,
   getWarningContext
 } from "../storage/settings.js";
-import { STORAGE_KEYS } from "../utils/constants.js";
+import { STORAGE_KEYS, TRUSTED_OAUTH_PROVIDER_DOMAINS } from "../utils/constants.js";
 import { buildAnalysisExplanation } from "../shared/analysis-explanation.js";
 import { sanitizeAuditUrl } from "../shared/audit-url.js";
 import { createDatasetCollector } from "../storage/dataset-collector.js";
 import { saveFeatureJsonArchive } from "../storage/feature-archive.js";
 
-const ANALYSIS_VERSION = "url20-phreshphish-v2-final-r01-r19-t050";
+const ANALYSIS_VERSION = "url20-t050-heuristic-rules-v070";
 const METADATA_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
 
 let runtimeResourcesPromise = null;
@@ -399,24 +397,20 @@ async function analyzeActiveTab(message) {
   const manual = await listedAnalysis(finalUrl, tabId);
   if (manual) return saveManualAnalysis(tabId, manual);
 
-  // URL20 reads the original URL; age is separate supporting evidence.
+  // 1. URL Analyzer: the model reads the original URL and returns only a class.
   const model = await getRuntimeResources();
   const urlFeatures = extractUrl20Features(url);
+  const predictedLabel = classifyUrl(model, urlFeatures);
+  const urlClass = predictedLabel === "phishing" ? "DANGEROUS" : "SAFE";
+  // Supporting URL information (not model input). Domain age describes the
+  // analyzed page's domain, the same page whose brand and DOM are observed.
   const [age, suffixAudit] = await Promise.all([
-    lookupUrl18Age(url),
+    lookupUrl18Age(finalUrl),
     auditDomainSuffix(url).catch(error => ({ status: "reference_unavailable", error: error.message }))
   ]);
-  const vector = { ...urlFeatures };
-  const ageKnown = Number.isFinite(age.days);
-  const predictedLabel = classifyUrl(model, vector);
-  const coverage = { provided_features: 20, missing_features: 0, coverage_percent: 100 };
-  const result = { ready: true, model_family: "XGBoost", model_name: "XGBoost URL20 v2",
-    threshold: model.threshold,
-    source_model_sha256: model.source_model_sha256, feature_set: model.feature_set,
-    predicted_label: predictedLabel, verdict: predictedLabel === "phishing" ? "DANGEROUS" : "SAFE",
-    age_known: ageKnown,
-    age_status: age.status, age_attempts: age.attempts || [] };
+  const urlExtension = urlFileExtension(url);
 
+  // 2. DOM and Brand Analyzers observe the current page.
   const existingFrames = evidenceByTab.get(tabId) || new Map();
   const topSnapshot = await collectMainPageEvidence(tabId, finalUrl);
   if (topSnapshot) existingFrames.set(0, topSnapshot);
@@ -428,79 +422,49 @@ async function analyzeActiveTab(message) {
       Date.now() - snapshot.observed_at < 30_000)
     .map(([, snapshot]) => snapshot)] : [];
   const nav = navigationByTab.get(tabId);
-  let domEvidence = analyzeDomEvidence(frames, nav && Date.now() - nav.observed_at < 30000 ? nav : null);
+  const domEvidence = analyzeDomEvidence(frames, nav && Date.now() - nav.observed_at < 30000 ? nav : null);
+  const forceRefresh = message.forceRefresh === true;
   const brandEvidence = await analyzeBrandEvidence(mainSnapshot, finalUrl, {
-    lookup: token => cachedBrandLookup(token, { forceRefresh: message.forceRefresh === true }),
-    domainLookup: root => cachedBrandDomainLookup(root, { forceRefresh: message.forceRefresh === true }),
-    domainSearch: root => cachedDomainBrandSearch(root, { forceRefresh: message.forceRefresh === true }),
+    lookup: token => cachedBrandLookup(token, { forceRefresh }),
+    domainLookup: root => cachedBrandDomainLookup(root, { forceRefresh }),
+    domainSearch: root => cachedDomainBrandSearch(root, { forceRefresh }),
     verifyLookup: searchBrandfetch
   });
-  domEvidence = verifyFormDestinations(domEvidence, brandEvidence);
-  const urlExtension = urlFileExtension(url);
-  const correlation = evaluateCorrelation(domEvidence, brandEvidence,
-    { urlVerdict: result.verdict, urlFileExtension: urlExtension });
+
+  // 3. Rules read only the fixed parameters; 4. policy reads URL class + rule status.
+  const parameters = collectParameters({ brand: brandEvidence, dom: domEvidence,
+    domainAgeDays: age.days, urlFileExtension: urlExtension });
+  const ruleResults = evaluateRules(parameters);
+  const decision = decide(urlClass, ruleResults);
   const agePolicy = await fetchJson("src/model/domain-age-policy.json");
-  const ageEvidence = classifyDomainAge(age.days, agePolicy);
-  // A young age only corroborates observed sensitive-input and brand-conflict evidence.
-  correlation.rules.push(evaluateDomainAgeRule(ageEvidence, domEvidence, brandEvidence));
-  const checkParentSite = result.verdict === "DANGEROUS" &&
-    Number.isFinite(age.days) && age.days >= 1095 &&
-    ageLookupDomain(url) === ageLookupDomain(finalUrl) &&
-    brandEvidence.claimed_brand_status === "identified" &&
-    brandEvidence.brand_claim_relation === "own_domain" &&
-    brandEvidence.brand_in_title === true &&
-    (brandEvidence.brand_in_heading === true || brandEvidence.brand_in_logo === true) &&
-    domEvidence.has_password_field === true && domEvidence.form_cross_domain !== true;
-  const parentSiteLink = checkParentSite ? await parentSiteLinksToPage(finalUrl) : false;
-  const decisionContext = { domainAgeDays: age.days,
-      sameSite: ageLookupDomain(url) === ageLookupDomain(finalUrl), parentSiteLink,
-      pageRegistrableDomain: ageLookupDomain(finalUrl), pageUrl: finalUrl,
-      mainSnapshot };
-  const corrections = evaluateCorrectionRules(result.verdict, domEvidence, brandEvidence, correlation, decisionContext);
-  correlation.rules.push(...corrections.rules);
-  const decision = decideWithEvidence(result.verdict, correlation.rules, corrections);
+  const coverage = { provided_features: 20, missing_features: 0, coverage_percent: 100 };
 
   const analysis = classificationRecord({
     ...base,
     registrable_domain: ageLookupDomain(url) || base.registrable_domain,
     final_url: sanitizeAuditUrl(finalUrl),
     verdict: decision.verdict,
-    evidence: correlation.rules.filter(r => r.status === "matched"),
-    evidence_trace: correlation.rules,
-    matched_rules: correlation.rules.filter(r => r.status === "matched"),
-    correlation_rules: correlation.rules,
-    oauth_context: correlation.oauth_context,
     decision_policy: decision,
-    parent_site_link_observed: parentSiteLink,
-    decision_checklist: {
-      mode: "xgboost_url20_categorical"
-    },
-    model_result: {
-      ...result,
-      targetLabel: predictedLabel,
-      feature_coverage: coverage,
-      features: {
-        provided_features: coverage.provided_features,
-        missing_features: coverage.missing_features,
-        coverage_percent: coverage.coverage_percent
-      }
-    },
+    parameters,
+    rule_results: ruleResults,
+    matched_rules: ruleResults.filter(rule => rule.status === "matched"),
+    model_result: { ready: true, model_family: "XGBoost", model_name: "XGBoost URL20 v2",
+      threshold: model.threshold, source_model_sha256: model.source_model_sha256,
+      feature_set: model.feature_set, predicted_label: predictedLabel, verdict: urlClass,
+      feature_coverage: coverage },
     feature_vector_coverage: coverage,
-    feature_vector: { vector, values: vector },
+    feature_vector: { vector: urlFeatures, values: urlFeatures },
     dom_features: domEvidence,
     // Metadata DOM tanpa isi field untuk menghitung ulang aturan dari arsip pengujian.
     replay_evidence: { snapshots: frames, main_snapshot: mainSnapshot, navigation: nav || null },
-    rdap_features: { original_rdap_available: ageKnown, source_domain_age_days: age.days,
-      age_lookup_status: age.status, provider: age.provider || null,
-      lookup_domain: age.domain || null, created_at: age.created_at || null,
-      checked_at: age.checked_at || null, attempts: age.attempts || [],
-      age_policy: ageEvidence },
+    rdap_features: { page_domain_age_days: age.days, age_lookup_status: age.status,
+      provider: age.provider || null, lookup_domain: age.domain || null,
+      created_at: age.created_at || null, checked_at: age.checked_at || null,
+      attempts: age.attempts || [], age_category: classifyDomainAge(age.days, agePolicy) },
     brand_features: brandEvidence,
     brand_identity: brandEvidence.claimed_brand,
-    url_features: { ...urlFeatures, url_file_extension: urlExtension, original_registrable_domain: ageLookupDomain(url),
-      suffix_reference_audit: suffixAudit },
-    page_status_features: null,
-    dom_analysis: domEvidence,
+    url_features: { ...urlFeatures, url_file_extension: urlExtension,
+      original_registrable_domain: ageLookupDomain(url), suffix_reference_audit: suffixAudit },
     dom_error: null
   });
 

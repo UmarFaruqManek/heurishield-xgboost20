@@ -2,127 +2,161 @@
   "mode": "local_mocked_page_and_api_real_extension",
   "results": [
     {
-      "scenario": "Peniruan brand + installer",
+      "scenario": "Peniruan brand pada alamat + installer",
       "url": "https://bca.portal-lab.test/download",
-      "expected_R13": true,
-      "actual_R13": "matched",
+      "expected_rules": [
+        "P1"
+      ],
+      "matched_rules": [
+        "P1"
+      ],
       "passed": true,
       "verdict": "DANGEROUS",
-      "source": "brand_executable_download_phishing",
+      "source": "brand_dom_phishing",
       "url_model": "DANGEROUS",
-      "url_file_extension": null,
+      "domain_age_days": 9811,
+      "url_file_extension": "unknown",
       "has_download_link": true,
       "download_file_extensions": [
         "exe"
       ],
-      "brand": {
-        "id": "bca.co.id",
-        "name": "BCA",
-        "official_domain": "bca.co.id"
-      },
+      "brand": "BCA",
       "official_domain_match": false,
+      "brand_domain_mismatch": true,
       "feature_count": 20
     },
     {
-      "scenario": "Peniruan brand + PDF",
+      "scenario": "Peniruan brand pada alamat + PDF",
       "url": "https://bca.portal-lab.test/manual",
-      "expected_R13": false,
-      "actual_R13": "not_matched",
+      "expected_rules": [
+        "P1"
+      ],
+      "matched_rules": [
+        "P1"
+      ],
       "passed": true,
       "verdict": "DANGEROUS",
-      "source": "url_model",
+      "source": "brand_dom_phishing",
       "url_model": "DANGEROUS",
-      "url_file_extension": null,
+      "domain_age_days": 9811,
+      "url_file_extension": "unknown",
       "has_download_link": true,
       "download_file_extensions": [
         "pdf"
       ],
-      "brand": {
-        "id": "bca.co.id",
-        "name": "BCA",
-        "official_domain": "bca.co.id"
-      },
+      "brand": "BCA",
       "official_domain_match": false,
+      "brand_domain_mismatch": true,
       "feature_count": 20
     },
     {
-      "scenario": "Brand cocok + installer",
+      "scenario": "Domain resmi brand + installer",
       "url": "https://bca.co.id/download",
-      "expected_R13": false,
-      "actual_R13": "not_matched",
+      "expected_rules": [
+        "L1"
+      ],
+      "matched_rules": [
+        "L1"
+      ],
       "passed": true,
       "verdict": "SAFE",
-      "source": "url_model",
+      "source": "brand_dom_legitimate",
       "url_model": "SAFE",
-      "url_file_extension": null,
+      "domain_age_days": 9811,
+      "url_file_extension": "unknown",
       "has_download_link": true,
       "download_file_extensions": [
         "exe"
       ],
-      "brand": {
-        "id": "bca.co.id",
-        "name": "BCA",
-        "official_domain": "bca.co.id"
-      },
+      "brand": "BCA",
       "official_domain_match": true,
+      "brand_domain_mismatch": false,
       "feature_count": 20
     },
     {
       "scenario": "Tanpa brand + installer",
       "url": "https://portal-lab.test/download",
-      "expected_R13": false,
-      "actual_R13": "not_matched",
+      "expected_rules": [],
+      "matched_rules": [],
       "passed": true,
       "verdict": "DANGEROUS",
       "source": "url_model",
       "url_model": "DANGEROUS",
-      "url_file_extension": null,
+      "domain_age_days": 9811,
+      "url_file_extension": "unknown",
       "has_download_link": true,
       "download_file_extensions": [
         "exe"
       ],
       "brand": null,
       "official_domain_match": "unknown",
+      "brand_domain_mismatch": "unknown",
       "feature_count": 20
     },
     {
-      "scenario": "Peniruan brand tanpa unduhan",
-      "url": "https://bca.portal-lab.test/about",
-      "expected_R13": false,
-      "actual_R13": "not_matched",
+      "scenario": "Brand lain di domain baru + installer",
+      "url": "https://unduh-aplikasi.test/bca",
+      "expected_rules": [
+        "P4"
+      ],
+      "matched_rules": [
+        "P4"
+      ],
+      "passed": true,
+      "verdict": "DANGEROUS",
+      "source": "brand_dom_phishing",
+      "url_model": "DANGEROUS",
+      "domain_age_days": 20,
+      "url_file_extension": "unknown",
+      "has_download_link": true,
+      "download_file_extensions": [
+        "exe"
+      ],
+      "brand": "BCA",
+      "official_domain_match": false,
+      "brand_domain_mismatch": false,
+      "feature_count": 20
+    },
+    {
+      "scenario": "Brand lain di domain baru + PDF",
+      "url": "https://unduh-aplikasi.test/bca-manual",
+      "expected_rules": [],
+      "matched_rules": [],
       "passed": true,
       "verdict": "DANGEROUS",
       "source": "url_model",
       "url_model": "DANGEROUS",
-      "url_file_extension": null,
-      "has_download_link": false,
-      "download_file_extensions": [],
-      "brand": {
-        "id": "bca.co.id",
-        "name": "BCA",
-        "official_domain": "bca.co.id"
-      },
+      "domain_age_days": 20,
+      "url_file_extension": "unknown",
+      "has_download_link": true,
+      "download_file_extensions": [
+        "pdf"
+      ],
+      "brand": "BCA",
       "official_domain_match": false,
+      "brand_domain_mismatch": false,
       "feature_count": 20
     },
     {
-      "scenario": "Akhiran EXE pada URL",
-      "url": "https://bca.portal-lab.test/setup.exe",
-      "expected_R13": true,
-      "actual_R13": "matched",
+      "scenario": "Akhiran EXE pada URL di domain baru",
+      "url": "https://unduh-aplikasi.test/bca-setup.exe",
+      "expected_rules": [
+        "P4"
+      ],
+      "matched_rules": [
+        "P4"
+      ],
       "passed": true,
       "verdict": "DANGEROUS",
-      "source": "brand_executable_download_phishing",
+      "source": "brand_dom_phishing",
       "url_model": "DANGEROUS",
+      "domain_age_days": 20,
       "url_file_extension": "exe",
       "has_download_link": false,
       "download_file_extensions": [],
-      "brand": {
-        "id": "bca.co.id",
-        "name": "BCA",
-        "official_domain": "bca.co.id"
-      },
+      "brand": "BCA",
       "official_domain_match": false,
+      "brand_domain_mismatch": false,
       "feature_count": 20
     }
   ]

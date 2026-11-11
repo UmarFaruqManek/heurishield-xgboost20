@@ -20,8 +20,8 @@ export async function saveFeatureJsonArchive(analysis) {
     verdict: analysis.verdict,
     model_result: compactModelResult(analysis.model_result),
     brand_identity: analysis.brand_identity || null,
-    correlation_rules: analysis.correlation_rules || [],
-    oauth_context: analysis.oauth_context === true,
+    parameters: analysis.parameters || null,
+    rule_results: analysis.rule_results || [],
     decision_policy: analysis.decision_policy || null,
     unresolved_checks: [...(analysis.dom_features?.unresolved_checks || []), ...(analysis.brand_features?.unresolved_checks || [])],
     feature_vector_coverage: analysis.feature_vector_coverage,
@@ -31,8 +31,7 @@ export async function saveFeatureJsonArchive(analysis) {
       url: analysis.url_features || null,
       dom: analysis.dom_features || null,
       rdap: analysis.rdap_features || null,
-      brand: analysis.brand_features || null,
-      status: analysis.page_status_features || null
+      brand: analysis.brand_features || null
     }
   };
 

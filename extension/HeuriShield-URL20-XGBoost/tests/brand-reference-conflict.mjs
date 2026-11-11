@@ -1,8 +1,7 @@
 import assert from 'node:assert/strict';
 import { analyzeBrandEvidence } from '../src/analyzer/brand/brand-evidence.js';
 import { analyzeDomEvidence } from '../src/analyzer/dom/dom-evidence.js';
-import { evaluateCorrelation } from '../src/analyzer/correlation/evidence-rules.js';
-import { decideWithEvidence } from './decision-fixture.js';
+import { judge } from './pipeline.js';
 
 const url='https://www.roblox.com.ml/users/390783638810/profile';
 const page={page_origin:'https://www.roblox.com.ml',title:'Player - Roblox',
@@ -17,15 +16,19 @@ assert.equal(brand.api_domain_reference_conflict,true);
 assert.equal(brand.claimed_brand.name,'Roblox');
 assert.equal(brand.verified_reference_domain,'roblox.com');
 assert.equal(brand.official_domain_match,false);
-assert.equal(brand.high_confidence_host_impersonation,true);
+assert.equal(brand.brand_domain_mismatch,true);
 const dom=analyzeDomEvidence([page]);
-assert.equal(decideWithEvidence('SAFE',dom,brand,evaluateCorrelation(dom,brand)).verdict,'DANGEROUS');
+assert.equal(judge({urlClass:'SAFE',dom,brand}).verdict,'DANGEROUS');
 
 const absent=await analyzeBrandEvidence(null,url,{domainSearch,lookup});
 assert.equal(absent.api_domain_reference_conflict,false);
-assert.equal(absent.high_confidence_host_impersonation,false);
+// Without a readable page there is no page claim, so no canonical comparison.
+assert.equal(absent.canonical_reference_conflict,false);
+assert.notEqual(absent.brand_domain_mismatch,true);
 const article=await analyzeBrandEvidence({...page,title:'Roblox guide and review'},url,{domainSearch,lookup});
-assert.equal(article.high_confidence_host_impersonation,false);
+// v0.7: the domain label itself is the brand on a non-canonical suffix and the
+// page shows Roblox, so an article layout does not remove the address conflict.
+assert.equal(article.brand_domain_mismatch,true);
 const noHeading=await analyzeBrandEvidence({...page,headings:[]},url,{domainSearch,lookup});
 assert.equal(noHeading.api_domain_reference_conflict,false);
 const unavailable=await analyzeBrandEvidence(page,url,{domainSearch,lookup:async()=>({lookup_success:false,candidates:[]})});
@@ -35,9 +38,9 @@ const regional=await analyzeBrandEvidence({...page,page_origin:'https://google.c
   domainSearch:async()=>({found:true,lookup_success:true,candidates:[{name:'Google',domain:'google.com.au',verified:true}]}),
   lookup:async()=>({lookup_success:true,candidates:[{name:'Google',domain:'google.com',verified:true}]})});
 assert.equal(regional.official_domain_match,true);
-assert.equal(regional.high_confidence_host_impersonation,false);
+assert.equal(regional.brand_domain_mismatch,false);
 const own=await analyzeBrandEvidence({...page,page_origin:'https://www.roblox.com'},'https://www.roblox.com/users/1/profile',{
   domainSearch:async()=>({found:true,lookup_success:true,candidates:[{name:'Roblox',domain:'roblox.com',verified:false,claimed:false}]}),lookup});
 assert.equal(own.official_domain_match,true);
-assert.equal(own.high_confidence_host_impersonation,false);
+assert.equal(own.brand_domain_mismatch,false);
 console.log('Canonical-reference conflict: corroborated imitation, absent DOM, article, missing heading, API failure, regional and official domains passed.');

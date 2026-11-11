@@ -1,8 +1,7 @@
 import assert from "node:assert/strict";
 import { brandHostQueries, analyzeBrandEvidence } from "../src/analyzer/brand/brand-evidence.js";
 import { analyzeDomEvidence } from "../src/analyzer/dom/dom-evidence.js";
-import { evaluateCorrelation } from "../src/analyzer/correlation/evidence-rules.js";
-import { decideWithEvidence } from "./decision-fixture.js";
+import { judge } from "./pipeline.js";
 
 const catalog = {
   google: [{ name: "Google", domain: "google.com", verified: true }],
@@ -34,11 +33,9 @@ const impersonation = await analyzeBrandEvidence(page("Google Login", "Sign in t
 assert.equal(impersonation.claimed_brand.name, "Google");
 assert.equal(impersonation.official_domain_match, false);
 assert.equal("authorized_domain_match" in impersonation, false);
-assert.equal(impersonation.potential_mismatch, true);
+assert.equal(impersonation.brand_domain_mismatch, true);
 const dom = analyzeDomEvidence([page("Google Login", "Sign in to Google")]);
-const rules = evaluateCorrelation(dom, impersonation).rules;
-assert.equal(rules.find(r => r.id === "R01").status, "matched");
-assert.equal(rules.find(r => r.id === "R03").status, "matched");
+assert.deepEqual(judge({ urlClass: "SAFE", dom, brand: impersonation }).matched, ["P1"]);
 const typo = await analyzeBrandEvidence(page("Google Login", "Sign in to Google"), "https://oogle-login.example.test", { lookup });
 assert.equal(typo.claimed_brand.name, "Google");
 assert.equal(typo.candidates.find(c => c.name === "Google").approximate, true);
@@ -53,30 +50,28 @@ const bcaDom = analyzeDomEvidence([bcaPage]);
 assert.equal(bcaBrand.claimed_brand?.name, "BCA");
 assert.equal(bcaBrand.official_domain_match, false);
 assert.equal(bcaBrand.host_brand_claim, "subdomain_exact");
-assert.equal(bcaBrand.high_confidence_host_impersonation, true);
-assert.equal(decideWithEvidence("SAFE", bcaDom, bcaBrand,
-  evaluateCorrelation(bcaDom, bcaBrand)).verdict, "DANGEROUS");
+assert.equal(bcaBrand.brand_domain_mismatch, true);
+assert.equal(judge({ urlClass: "SAFE", dom: bcaDom, brand: bcaBrand }).verdict, "DANGEROUS");
 const bcaMention = page("BCA", "Informasi BCA", { page_origin: "https://bca.bank.com",
   password_fields: [], controls: [] });
 const bcaMentionBrand = await analyzeBrandEvidence(bcaMention, bcaUrl, { lookup });
-assert.equal(bcaMentionBrand.high_confidence_host_impersonation, false);
-assert.equal(decideWithEvidence("SAFE", analyzeDomEvidence([bcaMention]), bcaMentionBrand,
-  evaluateCorrelation(analyzeDomEvidence([bcaMention]), bcaMentionBrand)).verdict, "SAFE");
+// v0.7: the page claims BCA (title + heading) on a hostname carrying "bca" outside
+// bca.co.id. That is brand impersonation on the address even without a login form.
+assert.equal(bcaMentionBrand.brand_domain_mismatch, true);
+assert.equal(judge({ urlClass: "SAFE", dom: analyzeDomEvidence([bcaMention]), brand: bcaMentionBrand }).verdict, "DANGEROUS");
 const bcaUnverified = await analyzeBrandEvidence(bcaPage, bcaUrl, { lookup: async token => ({
   lookup_success: true, candidates: token === "bca" ? [{ name: "BCA", domain: "bca.co.id",
     verified: false }] : [] }) });
 assert.equal(bcaUnverified.official_domain_match, "unknown");
 assert.equal(bcaUnverified.candidate_reference_domain, "bca.co.id");
-assert.equal(bcaUnverified.high_confidence_host_impersonation, false);
-assert.equal(decideWithEvidence("SAFE", bcaDom, bcaUnverified,
-  evaluateCorrelation(bcaDom, bcaUnverified)).verdict, "SAFE");
+assert.equal(bcaUnverified.brand_domain_mismatch, "unknown");
+assert.equal(judge({ urlClass: "SAFE", dom: bcaDom, brand: bcaUnverified }).verdict, "SAFE");
 const geminiUrl = "https://gemini.google.com/app";
 const geminiPage = page("Gemini", "Ask Gemini", { page_origin: "https://gemini.google.com",
   password_fields: [], controls: [] });
 const geminiBrand = await analyzeBrandEvidence(geminiPage, geminiUrl, { lookup });
 assert.equal(geminiBrand.official_domain_match, true);
-assert.equal(decideWithEvidence("SAFE", analyzeDomEvidence([geminiPage]), geminiBrand,
-  evaluateCorrelation(analyzeDomEvidence([geminiPage]), geminiBrand)).verdict, "SAFE");
+assert.equal(judge({ urlClass: "SAFE", dom: analyzeDomEvidence([geminiPage]), brand: geminiBrand }).verdict, "SAFE");
 const lookupUnverified = async token => ({ lookup_success: true, candidates:
   token === "roblox" ? [{ name: "Roblox", domain: "roblox.com", verified: false }] : [] });
 const verifyRoblox = async () => ({ lookup_success: true,
@@ -88,23 +83,26 @@ const official = await analyzeBrandEvidence(profile("https://www.roblox.com"), "
 assert.equal(official.official_domain_match, true);
 assert.equal(official.candidate_domain_match, true);
 assert.equal(official.domain_matched_candidate.domain, "roblox.com");
-assert.equal(official.high_confidence_host_impersonation, false);
+assert.equal(official.brand_domain_mismatch, false);
 const community = await analyzeBrandEvidence(page("Roblox community guide", "Roblox community", {
   page_origin: "https://fans.example.test", password_fields: [], controls: [] }),
   "https://fans.example.test", { lookup: lookupUnverified, verifyLookup: verifyRoblox });
-assert.equal(community.high_confidence_host_impersonation, false);
+// A fan page that only mentions Roblox makes no identity claim, so no conflict.
+assert.equal(community.claimed_brand, null);
+assert.notEqual(community.brand_domain_mismatch, true);
 const clone = await analyzeBrandEvidence(profile("https://www.roblox.com.et"), "https://www.roblox.com.et", {
   lookup: lookupUnverified, verifyLookup: verifyRoblox });
 assert.equal(clone.official_domain_match, false);
-assert.equal(clone.high_confidence_host_impersonation, true);
-assert.equal(decideWithEvidence("SAFE", analyzeDomEvidence([profile("https://www.roblox.com.et")]), clone,
-  evaluateCorrelation(analyzeDomEvidence([profile("https://www.roblox.com.et")]), clone)).verdict, "DANGEROUS");
+assert.equal(clone.brand_domain_mismatch, true);
+assert.equal(judge({ urlClass: "SAFE", dom: analyzeDomEvidence([profile("https://www.roblox.com.et")]), brand: clone }).verdict, "DANGEROUS");
 const unverified = await analyzeBrandEvidence(profile("https://www.roblox.com.et"), "https://www.roblox.com.et", {
   lookup: lookupUnverified, verifyLookup: async () => ({ lookup_success: false, candidates: [] }) });
-assert.equal(unverified.official_domain_match, "unknown");
+// The hostname embeds the full reference domain (www.roblox.com.et), which is
+// itself the claim, so the unverified directory reference is still compared.
+assert.equal(unverified.official_domain_match, false);
 assert.equal(unverified.candidate_domain_match, false);
 assert.equal(unverified.reference_status, "directory_candidate");
-assert.equal(unverified.high_confidence_host_impersonation, true);
+assert.equal(unverified.brand_domain_mismatch, true);
 const unverifiedOwnDomain = await analyzeBrandEvidence(page("Sign in", "Sign in", {
   page_origin: "https://app.dicoding.com", password_fields: [] }),
 "https://app.dicoding.com", { lookup: async token => ({ lookup_success: true,
@@ -123,14 +121,13 @@ const dicodingLoginBrand = await analyzeBrandEvidence(dicodingLoginPage,
   dicodingLoginUrl, { lookup });
 const dicodingLoginDom = analyzeDomEvidence([dicodingLoginPage]);
 assert.equal(dicodingLoginBrand.official_domain_match, true);
-assert.equal(decideWithEvidence("DANGEROUS", dicodingLoginDom, dicodingLoginBrand,
-  evaluateCorrelation(dicodingLoginDom, dicodingLoginBrand), {
-    probability: 0.52, domainAgeDays: 1752, sameSite: true,
-    pageRegistrableDomain: "dicoding.com", mainSnapshot: dicodingLoginPage
-  }).source, "verified_own_domain_login");
+const dicodingLogin = judge({ urlClass: "DANGEROUS", dom: dicodingLoginDom, brand: dicodingLoginBrand,
+  domainAgeDays: 1752 });
+assert.deepEqual(dicodingLogin.matched, ["L2"]);
+assert.equal(dicodingLogin.decision.source, "brand_dom_legitimate");
 const typoProfile = await analyzeBrandEvidence(profile("https://r.oblox.com.et"), "https://r.oblox.com.et", {
   lookup: async token => ({ lookup_success: true, candidates: token === "oblox" ?
     [{ name: "Roblox", domain: "roblox.com", verified: false }] : [] }), verifyLookup: verifyRoblox });
 assert.equal(typoProfile.host_brand_claim, "lookalike");
-assert.equal(typoProfile.high_confidence_host_impersonation, true);
+assert.equal(typoProfile.brand_domain_mismatch, true);
 console.log("Brand query flow OK: PSL, host tokens, claim context, mismatch, typo, OAuth");

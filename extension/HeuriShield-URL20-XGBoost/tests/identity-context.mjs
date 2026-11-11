@@ -1,8 +1,7 @@
 import assert from "node:assert/strict";
 import { analyzeBrandEvidence } from "../src/analyzer/brand/brand-evidence.js";
 import { analyzeDomEvidence } from "../src/analyzer/dom/dom-evidence.js";
-import { evaluateCorrelation } from "../src/analyzer/correlation/evidence-rules.js";
-import { decideWithEvidence } from "./decision-fixture.js";
+import { judge } from "./pipeline.js";
 
 const snapshot = {page_origin:"https://agency.example",title:"Non-major Source - Example Agency",
   headings:[{text:"Non-major Source"}],logos:[],forms:[],controls:[],
@@ -14,9 +13,10 @@ const brand = await analyzeBrandEvidence(snapshot,"https://agency.example/resour
 });
 assert.equal(brand.candidates.find(candidate=>candidate.name==="Major").role,"mention");
 const dom = analyzeDomEvidence([snapshot]);
-assert.equal(decideWithEvidence("DANGEROUS",dom,brand,evaluateCorrelation(dom,brand),{
-  pageUrl:"https://agency.example/resources",mainSnapshot:snapshot,pageRegistrableDomain:"agency.example",
-  sameSite:true,domainAgeDays:4000,probability:.70}).verdict,"SAFE");
+// A topic word on the page ("Major") is a mention; the agency's own domain is shown (L1).
+const resources = judge({ urlClass: "DANGEROUS", dom, brand, domainAgeDays: 4000 });
+assert.deepEqual(resources.matched, ["L1"]);
+assert.equal(resources.verdict, "SAFE");
 
 const wp = {page_origin:"https://town.example",title:"Log In ‹ Town of Example — WordPress",
   headings:[{text:"Log In"}],logos:[],controls:[{type:"native_login"}],
@@ -27,7 +27,7 @@ const software = await analyzeBrandEvidence(wp,"https://town.example/wp-login.ph
 });
 assert.equal(software.claimed_brand,null);
 assert.deepEqual(software.software_brands,["WordPress"]);
-assert.equal(software.high_confidence_credential_impersonation,false);
+assert.notEqual(software.brand_domain_mismatch,true);
 assert.equal(software.candidates.find(candidate=>candidate.name==="WordPress").role,"software");
 
 const compact = await analyzeBrandEvidence({...snapshot,title:"Medication Management",headings:[]},
@@ -45,17 +45,19 @@ const loginBrand = await analyzeBrandEvidence(loginSnapshot,"https://agency.exam
   lookup:async()=>({lookup_success:true,candidates:[]})
 });
 const loginDom = analyzeDomEvidence([loginSnapshot]);
-const loginContext = {pageUrl:"https://agency.example/login",mainSnapshot:loginSnapshot,
-  pageRegistrableDomain:"agency.example",sameSite:true,domainAgeDays:4000,probability:.82};
-const decideLogin = (d=loginDom,b=loginBrand,c=loginContext) =>
-  decideWithEvidence("DANGEROUS",d,b,evaluateCorrelation(d,b),c).verdict;
-assert.equal(decideLogin(),"SAFE");
-assert.equal(decideLogin({...loginDom,form_cross_domain:true,
-  forms:[{relevant:true,cross_domain:true,same_origin:false}]}),"DANGEROUS");
-assert.equal(decideLogin({...loginDom,unresolved_checks:["inaccessible_iframe"]}),"DANGEROUS");
-assert.equal(decideLogin(loginDom,{...loginBrand,official_domain_match:null}),"DANGEROUS");
-assert.equal(decideLogin(loginDom,loginBrand,{...loginContext,probability:.95}),"SAFE");
-assert.equal(decideLogin(loginDom,loginBrand,{...loginContext,domainAgeDays:null}),"DANGEROUS");
-assert.equal(decideLogin(loginDom,loginBrand,{...loginContext,
-  mainSnapshot:{...loginSnapshot,page_origin:"https://other.example"}}),"DANGEROUS");
+const decideLogin = ({ d = loginDom, b = loginBrand, age = 4000 } = {}) =>
+  judge({ urlClass: "DANGEROUS", dom: d, brand: b, domainAgeDays: age }).verdict;
+assert.equal(decideLogin(), "SAFE");
+assert.equal(decideLogin({ d: analyzeDomEvidence([{ ...loginSnapshot,
+  forms: [{ relevant: true, action_known: true, action_origin: "https://collector.example.net" }] }]) }), "DANGEROUS");
+// An unreadable iframe leaves the form destination unknown, so L2 is undetermined.
+assert.equal(decideLogin({ d: analyzeDomEvidence([{ ...loginSnapshot, inaccessible_frames: 1 }]) }), "DANGEROUS");
+assert.equal(decideLogin({ b: { ...loginBrand, official_domain_match: null } }), "DANGEROUS");
+assert.equal(decideLogin({ age: null }), "DANGEROUS");
+assert.equal(decideLogin({ age: 200 }), "DANGEROUS");
+// A snapshot from another origin is discarded by the worker: no page evidence.
+const noPage = await analyzeBrandEvidence(null, "https://agency.example/login", {
+  domainSearch: async () => ({ lookup_success: true, found: true, candidates: [{ name: "Example Agency", domain: "agency.example" }] }),
+  lookup: async () => ({ lookup_success: true, candidates: [] }) });
+assert.equal(decideLogin({ d: analyzeDomEvidence([]), b: noPage }), "DANGEROUS");
 console.log("Identity context passed: page topics, software attribution and spaced organization names.");

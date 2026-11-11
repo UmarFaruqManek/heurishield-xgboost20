@@ -1,6 +1,6 @@
 # HeuriShield XGBoost20
 
-> **Branch pengembangan v0.7.0** (`refactor/v0.7-audit-clean`): pembersihan kode warisan RuleFit60 dan audit ulang rule/decision policy. Parameter tetap: 20 fitur URL model + 2 informasi pendukung, 9 parameter brand, 8 parameter DOM. Pada branch ini `scripts/cek_acuan_skripsi.py` sengaja gagal karena memverifikasi berkas runtime v0.6.2 yang dibekukan; gunakan tag `skripsi-v0.6.2` untuk acuan naskah.
+> **Branch pengembangan v0.7.0** (`refactor/v0.7-audit-clean`): kode warisan RuleFit60 dibersihkan; rule R01–R19 diganti P1–P4/L1–L2 yang hanya membaca parameter tetap; definisi parameter brand diperbaiki. Hasil audit dan replay: [reports/audit_v070/AUDIT.md](reports/audit_v070/AUDIT.md). Parameter tetap: 20 fitur URL model + 2 informasi pendukung, 9 parameter brand, 8 parameter DOM. Pada branch ini `scripts/cek_acuan_skripsi.py` sengaja gagal karena memverifikasi berkas runtime v0.6.2 yang dibekukan; gunakan tag `skripsi-v0.6.2` untuk acuan naskah.
 
 > **Acuan penulisan dibekukan: v0.6.2 / skripsi-v0.6.2.** Model URL20 TH0,50; 9 parameter utama brand; 8 parameter utama DOM; aturan R01–R19; policy berbasis ID/status tanpa skor klasifikasi. 31 pengujian lulus termasuk 32.768 kombinasi keputusan; enam simulasi unduhan lulus. [Gunakan satu acuan final ini](reports/final_audit_20261109/README.md), bukan laporan percobaan sebelumnya. Kode penelitian tersedia pada tag `skripsi-v0.6.2`.
 

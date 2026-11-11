@@ -29,7 +29,8 @@ assert.equal(brand.claimed_brand?.name, "Microsoft");
 assert.equal(brand.candidate_reference_domain, "microsoft.com");
 assert.equal(brand.reference_status, "provider_verified");
 assert.equal(brand.official_domain_match, false);
-assert.equal(brand.high_confidence_credential_impersonation, true);
+// No hostname claim: a differing official domain alone is not an address conflict.
+assert.equal(brand.brand_domain_mismatch, false);
 assert.equal(analyzeDomEvidence([{ evidence_incomplete: true, forms: [], password_fields: [] }]).has_password_field, "unknown");
 assert.equal(analyzeDomEvidence([{ evidence_incomplete: true, password_fields: [{}] }]).has_password_field, true);
 console.log("API diagnostics/cooldown, credential title claim and incomplete DOM checks passed");

@@ -2,9 +2,8 @@ import assert from "node:assert/strict";
 import { searchBrand } from "../src/analyzer/brand/brand-search-api.js";
 import { analyzeBrandEvidence } from "../src/analyzer/brand/brand-evidence.js";
 import { buildAnalysisExplanation } from "../src/shared/analysis-explanation.js";
-import { decideWithEvidence } from "./decision-fixture.js";
+import { judge } from "./pipeline.js";
 import { analyzeDomEvidence } from "../src/analyzer/dom/dom-evidence.js";
-import { evaluateCorrelation } from "../src/analyzer/correlation/evidence-rules.js";
 import { extractUrl20Features as extractUrl18Features } from "../src/analyzer/url/url20-features.js";
 import { predictProbability } from "../src/model/xgboost-engine.js";
 import { readFileSync } from "node:fs";
@@ -58,23 +57,24 @@ const portalDom = analyzeDomEvidence([{ page_origin: "https://portal.merdekasibe
   forms: [{ relevant: true, action_known: true, action_origin: "https://portal.merdekasiber.com" }],
   password_fields: [{ form_index: 0 }], sensitive_fields: [], controls: [] }]);
 assert.ok(portalScore >= 0 && portalScore <= 1);
-assert.equal(decideWithEvidence("DANGEROUS", portalDom, merdeka,
-  evaluateCorrelation(portalDom, merdeka),
-  { probability: 0.58, domainAgeDays: 1752, sameSite: true,
-    parentSiteLink: true, pageRegistrableDomain: "merdekasiber.com" }).verdict, "SAFE");
+// Official domain + brand shown + same-domain login form + domain older than 365 days: L2.
+const portal = judge({ urlClass: "DANGEROUS", dom: portalDom, brand: merdeka, domainAgeDays: 1752 });
+assert.deepEqual(portal.matched, ["L2"]);
+assert.equal(portal.verdict, "SAFE");
 const merdekaExplanation = buildAnalysisExplanation({ verdict: "SAFE",
   model_result: { model_family: "XGBoost" }, brand_features: merdeka,
-  rdap_features: { source_domain_age_days: 900 }, correlation_rules: [] });
+  rdap_features: { page_domain_age_days: 900 } });
 assert.ok(merdekaExplanation.reasons.some(reason => reason.includes("Merdeka Siber") &&
   reason.includes("domain cocok dengan brand")));
 const correctedExplanation = buildAnalysisExplanation({ verdict: "SAFE",
   url: "https://portal.merdekasiber.com/", final_url: "https://portal.merdekasiber.com/",
   model_result: { model_family: "XGBoost", verdict: "DANGEROUS", probability_phishing: 0.5809 },
-  decision_policy: { source: "corroborated_own_domain_review", corroboration: "parent_site_link" }, brand_features: merdeka,
-  dom_features: portalDom, rdap_features: { source_domain_age_days: 1752 }, correlation_rules: [] });
+  decision_policy: portal.decision, matched_rules: portal.rules.filter(rule => rule.status === "matched"),
+  brand_features: merdeka, dom_features: portalDom, rdap_features: { page_domain_age_days: 1752 } });
 assert.equal(correctedExplanation.domain, "portal.merdekasiber.com");
 assert.ok(correctedExplanation.reasons.some(reason => reason.includes("Merdeka Siber")));
-assert.ok(correctedExplanation.summary.includes("mengubah penilaian alamat menjadi legitimate"));
+assert.ok(correctedExplanation.summary.includes("mengoreksi penilaian alamat menjadi legitimate"));
+assert.ok(correctedExplanation.reasons.some(reason => reason.startsWith("Aturan L2:")));
 assert.ok(correctedExplanation.reasons.some(reason => reason.includes("domain halaman ini")));
 assert.ok(!correctedExplanation.reasons.some(reason => reason.includes("Umur domain")));
 
@@ -99,6 +99,10 @@ assert.equal(domainFallback.official_domain_match, true);
 const fakeGoogle = await analyzeBrandEvidence(snapshot("Google Login", "Sign in to Google", "", true),
   "https://google-login.example.test/", { lookup });
 assert.equal(fakeGoogle.claimed_brand?.name, "Google");
-assert.equal(fakeGoogle.high_confidence_credential_impersonation, true);
 assert.equal(fakeGoogle.brand_claim_relation, "external_domain");
+assert.equal(fakeGoogle.host_brand_claim, "subdomain_exact");
+assert.equal(fakeGoogle.brand_domain_mismatch, true);
+const fakeGoogleDom = analyzeDomEvidence([{ page_origin: "https://google-login.example.test",
+  forms: [], password_fields: [{ form_index: 0 }], sensitive_fields: [], controls: [] }]);
+assert.deepEqual(judge({ urlClass: "SAFE", dom: fakeGoogleDom, brand: fakeGoogle }).matched, ["P1"]);
 console.log("Brand API chain OK: fallback, domain preference, page ambiguity, impersonation");

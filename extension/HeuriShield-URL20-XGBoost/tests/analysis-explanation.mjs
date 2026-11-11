@@ -26,29 +26,28 @@ assert.ok(official.reasons[2].includes("domain halaman ini"));
 
 const impersonation = buildAnalysisExplanation({ ...base, verdict: "DANGEROUS",
   model_result: { ...base.model_result, verdict: "SAFE" },
-  decision_policy: { source: "confirmed_credential_impersonation" },
+  decision_policy: { source: "brand_dom_phishing", reasons: ["P2"] },
+  matched_rules: [{ id: "P2", status: "matched", reason: "Formulir data akun dikirim ke domain lain." }],
   brand_features: { claimed_brand: { name: "Example" },
     verified_reference_domain: "example.org", official_domain_match: false },
   dom_features: { observed_frame_count: 1, has_password_field: true,
     form_cross_domain: true, forms: [{ relevant: true, cross_domain: true,
-      destination_verification: false, destination_registrable_domain: "receiver.test" }] } });
-assert.ok(impersonation.summary.includes("mengubah penilaian alamat menjadi phishing"));
-assert.ok(impersonation.reasons[1].includes("example.org"));
-assert.ok(impersonation.reasons[2].includes("receiver.test"));
-assert.equal(impersonation.reasons[1], "Identitas situs: halaman menampilkan Example, tetapi domain yang dibuka berbeda dari domain resminya (example.org).");
-assert.doesNotMatch(impersonation.reasons.join(' '), /Hubungan resmi dengan domain ini belum dapat dipastikan/);
-assert.ok(impersonation.reasons[2].includes('berbeda dari domain halaman (example.test)'));
+      destination_registrable_domain: "receiver.test" }] } });
+// Order: URL class, deciding rule, brand identity, form finding.
+assert.equal(impersonation.summary, "Pemeriksaan brand dan halaman menemukan indikasi phishing.");
+assert.equal(impersonation.reasons[1], "Aturan P2: Formulir data akun dikirim ke domain lain.");
+assert.equal(impersonation.reasons[2], "Identitas situs: halaman menampilkan Example, tetapi domain yang dibuka berbeda dari domain resminya (example.org).");
+assert.ok(impersonation.reasons[3].includes("receiver.test"));
+assert.ok(impersonation.reasons[3].includes('berbeda dari domain halaman (example.test)'));
 
-for (const verification of [false, 'unknown', true]) {
+{
   const result = buildAnalysisExplanation({ ...base,
     dom_features: { observed_frame_count: 1, has_password_field: true, form_cross_domain: true,
       forms: [{ relevant: true, cross_domain: true, action_origin: 'https://form-receiver.example.net',
-        source_registrable_domain: 'example.test', destination_registrable_domain: 'example.net',
-        destination_verification: verification }] } });
+        source_registrable_domain: 'example.test', destination_registrable_domain: 'example.net' }] } });
   const reason = result.reasons.at(-1);
   assert.ok(reason.includes('form-receiver.example.net'), 'Show the actual target hostname, not only its parent domain');
   assert.ok(reason.includes('berbeda dari domain halaman (example.test)'));
-  assert.equal(reason.includes('sesuai dengan referensi yang dikenali'), verification === true);
 }
 
 const unverifiedBrand = buildAnalysisExplanation({ ...base,
@@ -70,15 +69,13 @@ const unknown = buildAnalysisExplanation({ ...base,
     form_cross_domain: false, forms: [{ relevant: true, cross_domain: false }] } });
 assert.equal(unknown.reasons.length, 2);
 assert.ok(!unknown.reasons.join(" ").includes("merek yang digunakan"));
-const localReview = buildAnalysisExplanation({ ...base, verdict: "DANGEROUS",
-  decision_policy: { source: "url_model", review_candidate: true,
-    review_reason: "local_login_unverified" },
-  brand_features: { claimed_brand_status: "unknown" },
-  dom_features: { observed_frame_count: 1, has_password_field: true,
-    form_cross_domain: false, forms: [{ relevant: true, cross_domain: false }] } });
-assert.equal(localReview.title, "Terindikasi phishing");
-assert.equal(localReview.reasons.length, 2);
-assert.ok(localReview.limitation.includes("identitas situs belum terverifikasi"));
+assert.equal(unavailable.summary, "Brand dan halaman tidak memberikan alasan khusus; keputusan mengikuti penilaian alamat.");
+// A legitimate reason that overrides a phishing URL class is called a correction.
+const corrected = buildAnalysisExplanation({ ...base, verdict: "SAFE",
+  decision_policy: { source: "brand_dom_legitimate", reasons: ["L1"] },
+  matched_rules: [{ id: "L1", status: "matched", reason: "Domain resmi brand yang ditampilkan." }] });
+assert.match(corrected.summary, /mengoreksi penilaian alamat menjadi legitimate/);
+assert.equal(corrected.reasons[1], "Aturan L1: Domain resmi brand yang ditampilkan.");
 
 console.log("Explanation OK: unavailable evidence, verified domain, impersonation, OAuth");
 

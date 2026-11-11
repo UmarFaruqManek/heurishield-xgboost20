@@ -1,8 +1,7 @@
 import assert from 'node:assert/strict';
 import {analyzeBrandEvidence} from '../src/analyzer/brand/brand-evidence.js';
-import {analyzeDomEvidence,verifyFormDestinations} from '../src/analyzer/dom/dom-evidence.js';
-import {evaluateCorrelation} from '../src/analyzer/correlation/evidence-rules.js';
-import {decideWithEvidence} from './decision-fixture.js';
+import {analyzeDomEvidence} from '../src/analyzer/dom/dom-evidence.js';
+import {judge} from './pipeline.js';
 
 const candidate={name:'PayPal',domain:'paypal.com',verified:true};
 const snapshot={page_origin:'https://paypal.login.com',title:'Login to your PayPal account',
@@ -15,29 +14,35 @@ const deps={
 };
 async function check(page=snapshot,url='https://paypal.login.com/',options=deps){
  const brand=await analyzeBrandEvidence(page,url,options);
- const dom=verifyFormDestinations(analyzeDomEvidence([page]),brand);
- const verdict=decideWithEvidence('SAFE',dom,brand,evaluateCorrelation(dom,brand,{urlVerdict:'SAFE'})).verdict;
- return {brand,dom,verdict};
+ const dom=analyzeDomEvidence([page]);
+ const result=judge({urlClass:'SAFE',dom,brand});
+ return {brand,dom,verdict:result.verdict,matched:result.matched};
 }
 const positive=await check();
 assert.equal(positive.brand.claimed_brand.name,'PayPal');
 assert.equal(positive.brand.verified_reference_domain,'paypal.com');
 assert.equal(positive.brand.host_brand_claim,'subdomain_exact');
 assert.equal(positive.brand.brand_domain_mismatch,true);
-assert.equal(positive.brand.high_confidence_credential_impersonation,true);
+assert.deepEqual(positive.matched,['P1','P2']);
 assert.equal(positive.verdict,'DANGEROUS');
 const same=await check({...snapshot,forms:[{relevant:true,action_known:true,action_origin:'https://paypal.login.com',same_origin:true}]});
 assert.equal(same.verdict,'DANGEROUS','Same-site form is not a brand authorization');
+// No page claim of PayPal: an article, an OAuth button, or an empty title.
 for(const [name,changes] of [
  ['article',{title:'PayPal guide and review'}],
  ['OAuth mention',{title:'Login with PayPal',password_fields:[],controls:[{type:'oauth_login',provider:'PayPal'}]}],
- ['missing password',{password_fields:[]}],
- ['missing native login',{controls:[]}],
  ['no title',{title:''}]
 ]){
  const result=await check({...snapshot,...changes});
  assert.equal(result.verdict,'SAFE',name);
- assert.equal(result.brand.high_confidence_host_impersonation,false,name);
+ assert.notEqual(result.brand.brand_domain_mismatch,true,name);
+}
+// A title-only PayPal claim does not outweigh the domain's own directory identity.
+// It wins only with credential context: password field and native login button.
+for(const [name,changes] of [['missing password',{password_fields:[]}],['missing native login',{controls:[]}]]){
+ const result=await check({...snapshot,...changes});
+ assert.equal(result.verdict,'SAFE',name);
+ assert.notEqual(result.brand.claimed_brand?.name,'PayPal',name);
 }
 const missing=await check(snapshot,'https://paypal.login.com/',{...deps,lookup:async()=>({lookup_success:false,candidates:[]})});
 assert.equal(missing.verdict,'SAFE');

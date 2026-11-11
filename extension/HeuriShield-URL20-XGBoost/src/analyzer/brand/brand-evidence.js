@@ -1,6 +1,7 @@
 import { registrable } from "../dom/dom-evidence.js";
 import { TRUSTED_OAUTH_PROVIDER_DOMAINS } from "../../utils/constants.js";
 import { parse as parseDomain } from "../../shared/tldts.js";
+import { isSharedHostingTenant } from "./shared-hosting.js";
 
 const UNKNOWN = "unknown";
 const norm = x => String(x || "").normalize("NFKC").toLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ").trim();
@@ -21,13 +22,6 @@ export function brandHostQueries(url) {
   return queries.slice(0, 5);
 }
 const hasBrand = (text, name) => new RegExp(`(?:^|\\s)${norm(name).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?:$|\\s)`, "u").test(norm(text));
-function namesCredentialOwner(title, name) {
-  const brand = norm(name).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  // "Login to your Brand account" attributes the native login to Brand.
-  // "Login with Brand" is an OAuth/provider mention, not this attribution.
-  return new RegExp(`^(?:login|log in|signin|sign in|masuk) (?:(?:to|into|ke) )?(?:your )?${brand}(?: |$)`, "u")
-    .test(norm(title));
-}
 function oneEditApart(a, b) {
   if (a.length < 5 || b.length < 5 || Math.abs(a.length - b.length) > 1) return false;
   let i = 0, j = 0, edits = 0;
@@ -49,8 +43,10 @@ function domainMatch(page, official) {
     const host = new URL(page).hostname.toLowerCase().replace(/\.$/, "");
     const root = String(official || "").toLowerCase();
     if (!root || !registrable(`https://${root}`)) return false;
-    // Shared hosting tenants are not made official by a suffix match.
-    return host === root || (registrable(page) === root && host.endsWith(`.${root}`));
+    if (host === root) return true;
+    // A tenant subdomain on shared hosting is not owned by the platform brand.
+    if (isSharedHostingTenant(host, root)) return false;
+    return registrable(page) === root && host.endsWith(`.${root}`);
   } catch { return false; }
 }
 
@@ -181,13 +177,10 @@ export async function analyzeBrandEvidence(snapshot, url, { lookup, domainLookup
     const credentialTitle = inTitle && (snapshot.password_fields || []).length > 0 &&
       (snapshot.controls || []).some(control => control.type === "native_login") &&
       c.rank === 3 && !HOST_GENERIC.has(norm(c.name));
-    const credentialHostClaim = !ownDomain && c.verified === true &&
-      hostClaim === "subdomain_exact" && credentialTitle &&
-      namesCredentialOwner(title, c.name) && !article && !providerOnlyContext && !oauthOnly;
     const claim = Boolean(!software && !oauthOnly && !providerOnlyContext &&
       (verifiedOwnDomain || (c.fromDomainSearch && domainMatch(url, c.domain)) || (!article && ((inTitle && inHeading) ||
         (inLogo && (inTitle || inHeading)) || (inTitle && hostClaim) || credentialTitle))));
-    return { ...c, inTitle, inHeading, inLogo, hostClaim, claim, oauthOnly, article, credentialTitle, credentialHostClaim, software };
+    return { ...c, inTitle, inHeading, inLogo, hostClaim, claim, oauthOnly, article, credentialTitle, software };
   });
   const claims = scored.filter(c => c.claim);
   const claimNames = [...new Set(claims.map(c => norm(c.name)))];
@@ -216,7 +209,7 @@ export async function analyzeBrandEvidence(snapshot, url, { lookup, domainLookup
     new URL(url).hostname.toLowerCase().includes(`${String(candidate.domain).toLowerCase()}.`));
   const conflictingReference = referenceConflicts.length === 1 && !ownClaims.some(candidate => candidate.verified === true)
     ? referenceConflicts[0] : null;
-  const chosen = conflictingReference || (strongExternalClaims.length === 1 && !ownPageClaim
+  let chosen = conflictingReference || (strongExternalClaims.length === 1 && !ownPageClaim
     ? strongExternalClaims[0]
     : ownClaims.length
     ? [...ownClaims].sort((a, b) =>
@@ -229,6 +222,17 @@ export async function analyzeBrandEvidence(snapshot, url, { lookup, domainLookup
       ? claims.filter(c => norm(c.name) === claimNames[0])
         .sort((a, b) => Number(b.verified) - Number(a.verified))[0]
       : null);
+  // Canonical reference check: a directory entry for the visited domain itself
+  // is circular evidence. When the same brand name has a provider-verified
+  // canonical domain elsewhere with the same label (roblox.ly vs roblox.com),
+  // the visited domain is a variant of that brand, not its official domain.
+  // The page itself must show the brand; a directory entry alone is not a claim.
+  const canonicalReference = chosen && chosen.verified !== true && domainMatch(url, chosen.domain) &&
+    (chosen.inTitle || chosen.inHeading || chosen.inLogo)
+    ? scored.find(c => c.verified === true && c.rank === 3 && norm(c.name) === norm(chosen.name) &&
+      !domainMatch(url, c.domain) && hostBrandClaim(url, c) === "exact") || null
+    : null;
+  if (canonicalReference) chosen = canonicalReference;
   let official = UNKNOWN, officialDomain = null;
   let verified = false;
   let verificationResult = null;
@@ -264,41 +268,23 @@ export async function analyzeBrandEvidence(snapshot, url, { lookup, domainLookup
         }
       } catch {}
     }
-    if (verified) {
+    // A full reference domain embedded in the hostname (paypal.com.example.net)
+    // is itself the claim; the directory reference needs no provider attestation.
+    const embedded = new URL(url).hostname.toLowerCase().includes(`${String(chosen.domain).toLowerCase()}.`) &&
+      !domainMatch(url, chosen.domain) && chosen.rank === 3 && chosen.inTitle;
+    if (verified || embedded) {
       officialDomain = verifiedPageDomain || chosen.domain;
       official = domainMatch(url, officialDomain);
+      // On a shared hosting tenant the platform's own brand cannot be confirmed
+      // or refuted (customer page vs. platform-operated subdomain).
+      if (official === false && officialDomain === registrable(url)) official = UNKNOWN;
     }
   }
-  // A different verified reference domain is a potential mismatch. It cannot
-  // prove impersonation on its own, since partner domains may legitimately exist.
+  // brand_domain_mismatch: the page claims a brand whose official domain differs
+  // from the visited one AND the hostname itself carries that brand name.
+  // A differing reference without a hostname claim (partner, SSO, mention) is false.
   const hostClaim = chosen ? hostBrandClaim(url, chosen) : null;
-  // Preserve a directory reference even when its provider does not attest ownership.
-  // Exact/one-edit host claim + page title supports a narrowly scoped allegation;
-  // a page mention or mismatching domain alone never activates it.
-  const embeddedReference = chosen && new URL(url).hostname.toLowerCase()
-    .includes(`${String(chosen.domain).toLowerCase()}.`) && !domainMatch(url, chosen.domain);
-  const candidateHostCorroborated = Boolean(embeddedReference && chosen && chosen.rank === 3 &&
-    !domainMatch(url, chosen.domain) && hostClaim && !chosen.approximate &&
-    chosen.inTitle && !chosen.article && !chosen.oauthOnly &&
-    (!hostClaim.startsWith("subdomain_") ||
-      ((snapshot.password_fields || []).length > 0 && (chosen.inHeading || chosen.inLogo))));
-  const subdomainClaim = hostClaim === "subdomain_exact" || hostClaim === "subdomain_lookalike";
-  const highConfidenceHostImpersonation = candidateHostCorroborated || Boolean(chosen && verified && official === false &&
-    hostClaim && chosen.inTitle && !chosen.article && !chosen.oauthOnly &&
-    (!subdomainClaim || chosen.credentialHostClaim || ((snapshot.password_fields || []).length > 0 &&
-      (chosen.inHeading || chosen.inLogo))));
-  const highConfidenceCredentialImpersonation = Boolean(chosen && verified && official === false &&
-    (snapshot.password_fields || []).length &&
-    (chosen.credentialHostClaim || chosen.inTitle && chosen.inHeading || chosen.inLogo && chosen.inTitle ||
-      (chosen.inTitle && providerDomain(chosen.name) === officialDomain &&
-        (snapshot.controls || []).some(control => control.type === "native_login"))));
-  const providerCredentialClaim = Boolean(highConfidenceCredentialImpersonation &&
-    providerDomain(chosen?.name) === officialDomain && officialDomain &&
-    chosen.inTitle && (snapshot.controls || []).some(control => control.type === "native_login"));
-  // A mismatching reference alone is a potential mismatch (R01).
-  // Confirmed mismatch also requires corroborated hostname/credential identity.
-  const mismatch = official === true ? false : official === false &&
-    (highConfidenceHostImpersonation || providerCredentialClaim) ? true : UNKNOWN;
+  const mismatch = official === true ? false : official === false ? Boolean(hostClaim) : UNKNOWN;
   return {
     observed_at: snapshot.observed_at || null,
     searched_tokens: queries.map(token => ({ token, source: hostQueries.includes(token) ? "hostname" : "page", lookup_success: results[queries.indexOf(token)]?.lookup_success === true })),
@@ -306,18 +292,18 @@ export async function analyzeBrandEvidence(snapshot, url, { lookup, domainLookup
     token_fallback_used: needsTokens,
     canonical_reference_check_used: needsReferenceCheck,
     api_domain_reference_conflict: Boolean(conflictingReference),
-    brand_in_title: !title ? UNKNOWN : candidates.length ? scored.some(c => c.inTitle) : results.some(r => r?.lookup_success) ? false : UNKNOWN,
-    brand_in_heading: !headings.length ? UNKNOWN : candidates.length ? scored.some(c => c.inHeading) : results.some(r => r?.lookup_success) ? false : UNKNOWN,
-    brand_in_logo: snapshot.logos?.length ? scored.some(c => c.inLogo) ? true : logos.length && results.some(r => r?.lookup_success) ? false : UNKNOWN : false,
+    // Page-placement parameters describe the claimed brand only; other names
+    // mentioned on the page are listed in mentioned_brands.
+    brand_in_title: chosen && !domUnavailable ? chosen.inTitle : UNKNOWN,
+    brand_in_heading: chosen && !domUnavailable ? chosen.inHeading : UNKNOWN,
+    brand_in_logo: chosen && !domUnavailable ? chosen.inLogo : UNKNOWN,
     claimed_brand: chosen ? { id: chosen.brandId || chosen.domain, name: chosen.name, official_domain: officialDomain } : null,
     candidate_reference_domain: chosen?.domain || null,
     reference_status: verified ? chosen?.apiDomainMatch && !chosen?.verified
       ? "api_domain_match" : "provider_verified" : chosen ? "directory_candidate" : "unknown",
     verification_basis: verified ? chosen?.apiDomainMatch && !chosen?.verified
       ? "api_domain_match" : "provider_verified" : "unknown",
-    candidate_host_corroborated: candidateHostCorroborated,
-    provider_credential_claim: providerCredentialClaim,
-    embedded_reference_domain: Boolean(embeddedReference),
+    canonical_reference_conflict: Boolean(canonicalReference),
     claimed_brand_status: chosen ? "identified" : claimNames.length > 1 ? "ambiguous" : "unknown",
     candidate_domain_match: matchingDomainCandidates.length > 0,
     domain_matched_candidate: matchedDomainCandidate ? {
@@ -329,8 +315,6 @@ export async function analyzeBrandEvidence(snapshot, url, { lookup, domainLookup
     brand_claim_relation: chosen ? domainMatch(url, chosen.domain) ? "own_domain" : "external_domain" : UNKNOWN,
     verified_reference_domain: officialDomain,
     host_brand_claim: hostClaim || UNKNOWN,
-    high_confidence_host_impersonation: highConfidenceHostImpersonation,
-    high_confidence_credential_impersonation: highConfidenceCredentialImpersonation,
     lookup_replay: {
       domain_search: domainSearchResult,
       searches: queries.map((token, index) => ({ token, lookup_success: results[index]?.lookup_success === true,
@@ -352,7 +336,7 @@ export async function analyzeBrandEvidence(snapshot, url, { lookup, domainLookup
       } : null
     },
     official_domain_match: official,
-    brand_domain_mismatch: mismatch, potential_mismatch: official === false,
+    brand_domain_mismatch: mismatch,
     mentioned_brands: scored.filter(c => !c.claim && (c.inTitle || c.inHeading || c.inLogo || providerNorms.has(norm(c.name)))).map(c => c.name),
     hostname_brand_candidates: scored.filter(c => hostQueries.includes(c.token)).map(c => ({ name: c.name, candidate_domain: c.domain, token: c.token, approximate: c.approximate === true })),
     software_brands: [...new Set(scored.filter(c => c.software).map(c => c.name))],

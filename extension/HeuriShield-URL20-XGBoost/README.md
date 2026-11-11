@@ -12,7 +12,7 @@ Buka `chrome://extensions` atau `edge://extensions`, aktifkan Developer mode, pi
 2. **Informasi pendukung** (bukan input model) — umur domain (`src/analyzer/domain/url18-age.js`, kategori di `src/model/domain-age-policy.json`) dan akhiran file pada URL (`src/analyzer/url/download-file-extension.js`).
 3. **DOM Analyzer** — content script `src/content/dom-brand-observer.js` membaca metadata halaman (tanpa membaca isi field), lalu `src/analyzer/dom/dom-evidence.js` menyusun parameter DOM.
 4. **Brand Analyzer** — `src/analyzer/brand/brand-evidence.js` mencari identitas brand berdasarkan domain terlebih dahulu, lalu token hostname/halaman, melalui `brand-search-api.js` (Clearbit, Brandfetch) dan `brand-domain-api.js`.
-5. **Rule dan decision policy** — `src/analyzer/correlation/` mengevaluasi rule secara logis (tanpa bobot) dan menetapkan keputusan akhir.
+5. **Rule dan decision policy** — `src/analyzer/rules/`. `parameters.js` mengumpulkan 19 parameter (9 brand, 8 DOM, 2 informasi URL pendukung); hanya nilai ini yang dibaca rule. `heuristic-rules.js` mengevaluasi P1–P4 (alasan phishing) dan L1–L2 (alasan legitimate) dengan logika tiga nilai tanpa bobot. `decision-policy.js`: ada P matched → phishing; ada L matched → legitimate; selain itu kelas URL. Rincian dan dasar data: `../../reports/audit_v070/AUDIT.md`.
 6. **Tindakan** — `src/background/service-worker.js` menerapkan allowlist/blocklist, lalu block page (`src/warning/`) atau popup overlay (`src/content/score-overlay.js`).
 7. **Pencatatan** — riwayat, arsip fitur dan dataset lokal di `src/storage/`. Skor/probabilitas klasifikasi tidak disimpan (`src/shared/classification-record.js`).
 
@@ -21,4 +21,5 @@ Buka `chrome://extensions` atau `edge://extensions`, aktifkan Developer mode, pi
 - Seluruh fixture: `python ../../scripts/uji_extension_url20.py`.
 - Replay keputusan pada rekaman live tersimpan: `python ../../scripts/replay_audit.py snapshot OUT.json`, lalu `compare BASELINE.json OUT.json`.
 - Uji live: `../../scripts/Uji_Live_URL20.ps1`.
+- Laboratorium unduhan: `python ../../testing/local/lab-unduhan-heurishield/lab.py --check`.
 - `tools/predict-saved-features.mjs` menghitung ulang probabilitas model dari fitur tersimpan untuk audit offline.
