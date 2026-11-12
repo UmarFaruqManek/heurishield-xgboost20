@@ -65,7 +65,7 @@ const merdekaExplanation = buildAnalysisExplanation({ verdict: "SAFE",
   model_result: { model_family: "XGBoost" }, brand_features: merdeka,
   rdap_features: { page_domain_age_days: 900 } });
 assert.ok(merdekaExplanation.reasons.some(reason => reason.includes("Merdeka Siber") &&
-  reason.includes("domain cocok dengan brand")));
+  reason.includes("situs resmi")));
 const correctedExplanation = buildAnalysisExplanation({ verdict: "SAFE",
   url: "https://portal.merdekasiber.com/", final_url: "https://portal.merdekasiber.com/",
   model_result: { model_family: "XGBoost", verdict: "DANGEROUS", probability_phishing: 0.5809 },
@@ -73,9 +73,9 @@ const correctedExplanation = buildAnalysisExplanation({ verdict: "SAFE",
   brand_features: merdeka, dom_features: portalDom, rdap_features: { page_domain_age_days: 1752 } });
 assert.equal(correctedExplanation.domain, "portal.merdekasiber.com");
 assert.ok(correctedExplanation.reasons.some(reason => reason.includes("Merdeka Siber")));
-assert.ok(correctedExplanation.summary.includes("mengoreksi penilaian alamat menjadi legitimate"));
-assert.ok(correctedExplanation.reasons.some(reason => reason.startsWith("Aturan L2:")));
-assert.ok(correctedExplanation.reasons.some(reason => reason.includes("domain halaman ini")));
+assert.equal(correctedExplanation.summary, "Ini situs resmi Merdeka Siber.");
+assert.ok(correctedExplanation.reasons.some(reason => reason.startsWith("Login resmi:") && reason.endsWith("[L2]")));
+assert.ok(correctedExplanation.reasons.some(reason => reason.includes("sempat terlihat mencurigakan")));
 assert.ok(!correctedExplanation.reasons.some(reason => reason.includes("Umur domain")));
 
 const ismalicious = await analyzeBrandEvidence(

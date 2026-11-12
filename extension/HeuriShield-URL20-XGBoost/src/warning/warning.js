@@ -2,7 +2,7 @@
  * Membaca konteks hasil sebelum redirect dan menampilkan alasan ringkas halaman blokir.
  * Tombol izin menyimpan domain ke Allow list sebelum membuka kembali URL tujuan.
  */
-import { getWarningContext, getAnalysisByTab, addToAllowlist } from "../storage/settings.js";
+import { getWarningContext, getAnalysisByTab, addToAllowlist, normalizeManualDomain } from "../storage/settings.js";
 import { buildAnalysisExplanation } from "../shared/analysis-explanation.js";
 
 const params = new URLSearchParams(location.search);
@@ -45,6 +45,9 @@ async function init() {
       originalUrl = parsed.href;
       elements.continueButton.disabled = false;
       elements.domain.textContent = parsed.hostname;
+      const mainDomain = normalizeManualDomain(parsed.hostname);
+      const hint = document.querySelector("#allowDomainHint");
+      if (hint && mainDomain) hint.textContent = `${mainDomain} beserta semua subdomainnya akan disimpan ke Allow list, lalu halaman ini dibuka kembali.`;
       document.title = `HeuriShield - ${parsed.hostname} diblokir`;
     } catch { renderFallback(); return; }
     const explanation = context.analysis ? buildAnalysisExplanation(context.analysis) : context.explanation || buildAnalysisExplanation(context);
@@ -74,23 +77,26 @@ function renderReasons(reasons) {
   const items = Array.isArray(reasons) && reasons.length ? reasons.slice(0, 3) : ["Detail pemeriksaan belum tersedia."];
   elements.reasonList.replaceChildren(
     ...items.map((reason) => {
+      // Reason format: "Label: sentence. [P1]" (label and rule code optional).
       const item = document.createElement("li");
-      const text = String(reason);
-      const prefix = /^(Alamat|Aturan [A-Z]\d+|Identitas situs|Formulir|Login|Unduhan):\s*/.exec(text);
-      const labels = { Alamat: "Analisis alamat URL", "Identitas situs": "Identitas situs", Formulir: "Formulir",
-        Login: "Alur login", Unduhan: "Unduhan" };
+      let text = String(reason);
+      const code = /\s*\[([PL]\d)\]$/.exec(text);
+      if (code) text = text.slice(0, code.index);
+      const prefix = /^([^:]{2,30}):\s*/.exec(text);
       const label = document.createElement("strong");
       label.className = "reason-label";
-      label.textContent = !prefix ? "Temuan pemeriksaan" : labels[prefix[1]] || prefix[1];
+      label.textContent = prefix ? prefix[1] : "Temuan pemeriksaan";
       const detail = document.createElement("span");
       detail.className = "reason-detail";
-      const description = prefix ? text.slice(prefix[0].length) : text;
-      detail.textContent = description === "dinilai phishing oleh model."
-        ? "Model URL menilai alamat ini sebagai phishing."
-        : description === "tujuan yang tertera berada pada domain halaman ini; pengiriman aktual belum diamati."
-          ? "Formulir mencantumkan tujuan pada domain yang sama dengan halaman ini. Tujuan pengiriman saat formulir digunakan belum diamati."
-          : description;
+      detail.textContent = prefix ? text.slice(prefix[0].length) : text;
       item.append(label, document.createTextNode(" "), detail);
+      if (code) {
+        const tag = document.createElement("small");
+        tag.className = "reason-code";
+        tag.title = "Kode aturan pemeriksaan";
+        tag.textContent = code[1];
+        item.append(document.createTextNode(" "), tag);
+      }
       return item;
     })
   );

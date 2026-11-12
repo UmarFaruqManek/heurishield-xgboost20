@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import { buildAnalysisExplanation } from "../src/shared/analysis-explanation.js";
 
+// Explanations are for ordinary users: each reason is "Label: plain sentence"
+// with real facts, and an optional rule code "[P1]" at the end.
 const base = {
   url: "https://example.test/login",
   final_url: "https://example.test/login",
@@ -8,111 +10,92 @@ const base = {
   decision_policy: { source: "url_model" },
   verdict: "DANGEROUS"
 };
+const login = (target = null, sameDomain = false) => ({ observed_frame_count: 1, has_password_field: true,
+  password_fields: [{ visible: true, form_index: 0 }], sensitive_fields: [],
+  form_cross_domain: target ? true : sameDomain ? false : "unknown",
+  forms: [{ relevant: true, cross_domain: target ? true : sameDomain ? false : "unknown",
+    action_origin: target ? `https://${target}` : "https://example.test" }] });
 
-const unavailable = buildAnalysisExplanation(base);
-assert.deepEqual(unavailable.reasons, [
-  "Alamat: dinilai phishing oleh model."
-]);
-assert.ok(!unavailable.reasons.join(" ").includes("domain resmi"));
+// URL model only: one honest sentence about the address pattern.
+const urlOnly = buildAnalysisExplanation(base);
+assert.deepEqual(urlOnly.reasons, ["Pola alamat: susunan alamat situs ini mirip dengan alamat phishing yang dikenali sistem."]);
+assert.equal(urlOnly.summary, "Alamat situs ini memiliki pola yang mirip dengan alamat phishing.");
+const urlOnlySafe = buildAnalysisExplanation({ ...base, verdict: "SAFE", model_result: { model_family: "XGBoost", verdict: "SAFE" } });
+assert.deepEqual(urlOnlySafe.reasons, ["Pola alamat: susunan alamat situs ini tidak menunjukkan ciri phishing."]);
+assert.equal(urlOnlySafe.title, "Tidak ditemukan indikasi phishing");
 
-const official = buildAnalysisExplanation({ ...base, verdict: "SAFE",
-  model_result: { ...base.model_result, verdict: "SAFE" },
-  brand_features: { claimed_brand: { name: "Example" },
-    verified_reference_domain: "example.test", official_domain_match: true },
-  dom_features: { observed_frame_count: 1, has_password_field: true,
-    form_cross_domain: false, forms: [{ relevant: true, cross_domain: false }] } });
-assert.ok(official.reasons[1].includes("domain cocok dengan brand Example"));
-assert.ok(official.reasons[2].includes("domain halaman ini"));
+// P1 + P2: the deciding reasons come first, name the brand, official domain and
+// data destination, and the URL line explains a disagreeing address model.
+const impersonation = buildAnalysisExplanation({ ...base, url: "https://paypal.login.com/", final_url: "https://paypal.login.com/",
+  model_result: { model_family: "XGBoost", verdict: "SAFE" },
+  decision_policy: { source: "brand_dom_phishing", reasons: ["P1", "P2"] },
+  matched_rules: [{ id: "P1" }, { id: "P2" }],
+  brand_features: { claimed_brand: { name: "PayPal" }, verified_reference_domain: "paypal.com",
+    official_domain_match: false, host_brand_claim: "subdomain_exact" },
+  dom_features: login("receiver.example.net") });
+assert.equal(impersonation.summary, "Situs ini meniru PayPal dan bukan situs resminya.");
+assert.equal(impersonation.reasons[0],
+  "Peniruan alamat: alamat paypal.login.com memakai nama PayPal, padahal situs resmi PayPal adalah paypal.com. [P1]");
+assert.equal(impersonation.reasons[1],
+  "Pengiriman data: kata sandi yang Anda ketik akan dikirim ke receiver.example.net, bukan ke situs resmi PayPal. [P2]");
+assert.equal(impersonation.reasons[2], "Pola alamat: sekilas alamatnya terlihat biasa, tetapi isi halaman menunjukkan penipuan.");
+assert.equal(impersonation.reasons.length, 3, "brand and form findings are not repeated");
+assert.match(impersonation.action, /paypal\.com/);
 
-const impersonation = buildAnalysisExplanation({ ...base, verdict: "DANGEROUS",
-  model_result: { ...base.model_result, verdict: "SAFE" },
-  decision_policy: { source: "brand_dom_phishing", reasons: ["P2"] },
-  matched_rules: [{ id: "P2", status: "matched", reason: "Formulir data akun dikirim ke domain lain." }],
-  brand_features: { claimed_brand: { name: "Example" },
-    verified_reference_domain: "example.org", official_domain_match: false },
-  dom_features: { observed_frame_count: 1, has_password_field: true,
-    form_cross_domain: true, forms: [{ relevant: true, cross_domain: true,
-      destination_registrable_domain: "receiver.test" }] } });
-// Order: URL class, deciding rule, brand identity, form finding.
-assert.equal(impersonation.summary, "Pemeriksaan brand dan halaman menemukan indikasi phishing.");
-assert.equal(impersonation.reasons[1], "Aturan P2: Formulir data akun dikirim ke domain lain.");
-assert.equal(impersonation.reasons[2], "Identitas situs: halaman menampilkan Example, tetapi domain yang dibuka berbeda dari domain resminya (example.org).");
-assert.ok(impersonation.reasons[3].includes("receiver.test"));
-assert.ok(impersonation.reasons[3].includes('berbeda dari domain halaman (example.test)'));
+// Lookalike address wording.
+const lookalike = buildAnalysisExplanation({ ...base, url: "https://t0kopedia.com/", final_url: "https://t0kopedia.com/",
+  decision_policy: { source: "brand_dom_phishing" }, matched_rules: [{ id: "P1" }],
+  brand_features: { claimed_brand: { name: "Tokopedia" }, verified_reference_domain: "tokopedia.com",
+    official_domain_match: false, host_brand_claim: "lookalike" } });
+assert.equal(lookalike.reasons[0], "Peniruan alamat: alamat t0kopedia.com dibuat mirip dengan tokopedia.com, situs resmi Tokopedia. [P1]");
 
-{
-  const result = buildAnalysisExplanation({ ...base,
-    dom_features: { observed_frame_count: 1, has_password_field: true, form_cross_domain: true,
-      forms: [{ relevant: true, cross_domain: true, action_origin: 'https://form-receiver.example.net',
-        source_registrable_domain: 'example.test', destination_registrable_domain: 'example.net' }] } });
-  const reason = result.reasons.at(-1);
-  assert.ok(reason.includes('form-receiver.example.net'), 'Show the actual target hostname, not only its parent domain');
-  assert.ok(reason.includes('berbeda dari domain halaman (example.test)'));
-}
+// P2 via a script endpoint names the service; P3 states the real domain age.
+const telegram = buildAnalysisExplanation({ ...base, decision_policy: { source: "brand_dom_phishing" },
+  matched_rules: [{ id: "P2" }, { id: "P3" }], rdap_features: { page_domain_age_days: 42 },
+  brand_features: { claimed_brand: { name: "BCA" }, verified_reference_domain: "bca.co.id", official_domain_match: false },
+  dom_features: { ...login(), sensitive_fields: [{ type: "otp", visible: true }], credential_exfil_endpoints: ["api.telegram.org"] } });
+assert.match(telegram.reasons[0], /^Pengiriman data: kata sandi dan kode OTP .* Telegram \(api\.telegram\.org\)/);
+assert.equal(telegram.reasons[1], "Situs baru: situs ini baru dibuat 42 hari lalu, tetapi sudah meminta kata sandi dan kode OTP atas nama BCA. [P3]");
 
-const unverifiedBrand = buildAnalysisExplanation({ ...base,
-  brand_features: { claimed_brand: { name: "Example" },
-    official_domain_match: "unknown" } });
-assert.equal(unverifiedBrand.reasons[1],"Identitas situs: nama brand Example ditemukan.");
-assert.ok(!unverifiedBrand.reasons[1].includes("domain resmi Example"));
+// P4: file type, age and brand in one sentence; download action.
+const download = buildAnalysisExplanation({ ...base, decision_policy: { source: "brand_dom_phishing" },
+  matched_rules: [{ id: "P4" }], rdap_features: { page_domain_age_days: 150 },
+  brand_features: { claimed_brand: { name: "BCA" }, verified_reference_domain: "bca.co.id", official_domain_match: false },
+  dom_features: { observed_frame_count: 1, has_download_link: true, download_file_extensions: ["zip"] } });
+assert.match(download.reasons[0], /^Unduhan berbahaya: situs yang baru dibuat 5 bulan lalu ini menawarkan file \.zip atas nama BCA/);
+assert.match(download.summary, /file berbahaya atas nama BCA/);
+assert.match(download.action, /Jangan unduh/);
 
-const oauth = buildAnalysisExplanation({ ...base,
-  dom_features: { observed_frame_count: 1, navigation: {
-    observed: true, destination_type: "official_provider" }, forms: [] } });
-assert.ok(oauth.reasons[1].includes("penyedia identitas resmi"));
-assert.ok(oauth.reasons[1].includes("tidak membuktikan situs asal aman"));
-assert.equal(oauth.title, "Terindikasi phishing");
+// Legitimate decisions are explained too, including a corrected address score.
+const official = buildAnalysisExplanation({ ...base, url: "https://www.google.com/search?q=x", final_url: "https://www.google.com/search?q=x",
+  verdict: "SAFE", decision_policy: { source: "brand_dom_legitimate", reasons: ["L1"] }, matched_rules: [{ id: "L1" }],
+  rdap_features: { page_domain_age_days: 10658 },
+  brand_features: { claimed_brand: { name: "Google" }, verified_reference_domain: "google.com", official_domain_match: true } });
+assert.equal(official.summary, "Ini situs resmi Google.");
+assert.equal(official.reasons[0], "Situs resmi: www.google.com adalah situs resmi Google, sudah ada sejak 29 tahun lalu, dan tidak meminta data akun. [L1]");
+assert.equal(official.reasons[1], "Pola alamat: susunan alamatnya sempat terlihat mencurigakan, tetapi pemeriksaan halaman memastikan ini situs resmi.");
+const officialLogin = buildAnalysisExplanation({ ...base, verdict: "SAFE", model_result: { model_family: "XGBoost", verdict: "SAFE" },
+  decision_policy: { source: "brand_dom_legitimate" }, matched_rules: [{ id: "L2" }], rdap_features: { page_domain_age_days: 1752 },
+  brand_features: { claimed_brand: { name: "Example" }, official_domain_match: true }, dom_features: login(null, true) });
+assert.match(officialLogin.reasons[0], /^Login resmi: ini halaman login resmi Example; .* sejak 4 tahun lalu\. \[L2\]$/);
 
-const unknown = buildAnalysisExplanation({ ...base,
-  brand_features: { claimed_brand_status: "unknown" },
-  dom_features: { observed_frame_count: 1, has_password_field: true,
-    form_cross_domain: false, forms: [{ relevant: true, cross_domain: false }] } });
-assert.equal(unknown.reasons.length, 2);
-assert.ok(!unknown.reasons.join(" ").includes("merek yang digunakan"));
-assert.equal(unavailable.summary, "Brand dan halaman tidak memberikan alasan khusus; keputusan mengikuti penilaian alamat.");
-// A legitimate reason that overrides a phishing URL class is called a correction.
-const corrected = buildAnalysisExplanation({ ...base, verdict: "SAFE",
-  decision_policy: { source: "brand_dom_legitimate", reasons: ["L1"] },
-  matched_rules: [{ id: "L1", status: "matched", reason: "Domain resmi brand yang ditampilkan." }] });
-assert.match(corrected.summary, /mengoreksi penilaian alamat menjadi legitimate/);
-assert.equal(corrected.reasons[1], "Aturan L1: Domain resmi brand yang ditampilkan.");
-
-console.log("Explanation OK: unavailable evidence, verified domain, impersonation, OAuth");
-
-const noForms = buildAnalysisExplanation({...base,
-  brand_features:{claimed_brand:{name:"Liquipedia"},official_domain_match:true,
-    verification_basis:"api_domain_match",verified_reference_domain:"liquipedia.net"},
-  dom_features:{observed_frame_count:1,forms:[],has_password_field:false,
-    has_sensitive_input:false,form_cross_domain:false,unresolved_checks:[]}});
-assert.equal(noForms.reasons[1],"Identitas situs: domain cocok dengan brand Liquipedia.");
-assert.equal(noForms.reasons.length,2);
-assert.ok(!noForms.reasons.some(reason=>reason.startsWith('Formulir:')));
-assert.ok(!noForms.reasons.join(" ").includes("API"));
-const ordinaryForm = buildAnalysisExplanation({...base,
-  dom_features:{observed_frame_count:1,forms:[{relevant:false}],has_password_field:false,
-    has_sensitive_input:false,form_cross_domain:false,unresolved_checks:[]}});
-assert.deepEqual(ordinaryForm.reasons,["Alamat: dinilai phishing oleh model."]);
-const incompleteForms = buildAnalysisExplanation({...base,
-  dom_features:{observed_frame_count:1,forms:[],has_password_field:"unknown",
-    has_sensitive_input:"unknown",form_cross_domain:"unknown",unresolved_checks:["inaccessible_iframe"]}});
-assert.deepEqual(incompleteForms.reasons,["Alamat: dinilai phishing oleh model."]);
-assert.equal(incompleteForms.limitation,"Sebagian isi halaman tidak dapat diperiksa.");
-
-const hiddenFields = { observed_frame_count:1,has_password_field:true,has_sensitive_input:false,
-  password_fields:[{visible:false,form_index:-1},{visible:false,form_index:-1}],
-  sensitive_fields:[],forms:[],form_cross_domain:false,unresolved_checks:[] };
-const ambiguousHome=buildAnalysisExplanation({...base,
-  brand_features:{claimed_brand_status:'ambiguous',claimed_brand:null},dom_features:hiddenFields});
-assert.deepEqual(ambiguousHome.reasons,["Alamat: dinilai phishing oleh model."]);
-const openedModal=buildAnalysisExplanation({...base,
-  brand_features:{claimed_brand_status:'ambiguous',claimed_brand:null},
-  dom_features:{...hiddenFields,password_fields:[{visible:true,form_index:-1},{visible:false,form_index:-1}]}});
-assert.equal(openedModal.reasons.length,2);
-assert.equal(openedModal.reasons[1],"Formulir: ditemukan kolom data akun; tujuan pengirimannya belum teramati.");
-const hiddenForm=buildAnalysisExplanation({...base,dom_features:{...hiddenFields,
-  forms:[{relevant:true,cross_domain:true,action_origin:'https://receiver.example.net',visible:false}]}});
-assert.deepEqual(hiddenForm.reasons,["Alamat: dinilai phishing oleh model."]);
-const unavailableSafe=buildAnalysisExplanation({...base,verdict:'SAFE',
-  model_result:{model_family:'XGBoost',verdict:'SAFE'}});
-assert.deepEqual(unavailableSafe.reasons,["Alamat: dinilai legitimate oleh model."]);
-console.log('Optional explanations: URL-only, unknown/ambiguous brand, hidden modal, opened login and positive form findings passed.');
+// Supporting findings when the URL model decides.
+const unknownTarget = buildAnalysisExplanation({ ...base, dom_features: login() });
+assert.equal(unknownTarget.reasons[1], "Data akun: halaman meminta kata sandi; tujuan pengirimannya belum dapat dipastikan.");
+const platform = buildAnalysisExplanation({ ...base, url: "https://docs.google.com/forms/d/e/x/viewform",
+  final_url: "https://docs.google.com/forms/d/e/x/viewform", verdict: "SAFE", model_result: { model_family: "XGBoost", verdict: "SAFE" },
+  brand_features: { claimed_brand: { name: "Google" }, official_domain_match: "unknown", self_reference_conflict: "path_hosted_user_content" } });
+assert.equal(platform.reasons[1], "Platform: halaman ini dibuat oleh pengguna di layanan Google, bukan oleh Google sendiri.");
+// Hidden credential fields (closed modal) and ambiguous brands add nothing.
+const hidden = buildAnalysisExplanation({ ...base, brand_features: { claimed_brand_status: "ambiguous" },
+  dom_features: { ...login(), password_fields: [{ visible: false, form_index: -1 }], forms: [] } });
+assert.equal(hidden.reasons.length, 1);
+// Limitations are stated plainly.
+const limited = buildAnalysisExplanation({ ...base, rule_results: [{ id: "P3", status: "undetermined" }],
+  dom_features: { observed_frame_count: 1, unresolved_checks: ["inaccessible_iframe"], forms: [] } });
+assert.match(limited.limitation, /Sebagian isi halaman tidak dapat diperiksa/);
+assert.match(limited.limitation, /Umur situs tidak dapat diperiksa/);
+// No technical jargon in user text.
+for (const e of [urlOnly, impersonation, telegram, download, official, officialLogin, platform])
+  assert.ok(!/model|XGBoost|parameter|API|undetermined|Aturan /.test([e.summary, ...e.reasons, e.action].join(" ")), e.summary);
+console.log("Explanation: plain-language phishing and legitimate reasons with real facts and rule codes OK");

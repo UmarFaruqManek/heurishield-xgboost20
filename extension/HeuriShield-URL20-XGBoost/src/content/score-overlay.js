@@ -201,8 +201,24 @@
     const explanation = analysis?.explanation;
     const reasons = STATE.loading ? ["Analisis sedang berjalan."] : STATE.error ? [STATE.error] : explanation?.reasons || ["Detail pemeriksaan belum tersedia. Coba ulang pemeriksaan."];
     shadow.querySelector(".hs-reason-list").replaceChildren(...reasons.slice(0, 3).map(reason => {
+      // Reason format: "Label: sentence. [P1]" (label and rule code optional).
       const item = document.createElement("li");
-      item.textContent = reason;
+      let text = String(reason);
+      const code = /\s*\[([PL]\d)\]$/.exec(text);
+      if (code) text = text.slice(0, code.index);
+      const prefix = /^([^:]{2,30}):\s*/.exec(text);
+      if (prefix) {
+        const label = document.createElement("strong");
+        label.textContent = `${prefix[1]}: `;
+        item.append(label, document.createTextNode(text.slice(prefix[0].length)));
+      } else item.textContent = text;
+      if (code) {
+        const tag = document.createElement("small");
+        tag.className = "hs-rule-code";
+        tag.title = "Kode aturan pemeriksaan";
+        tag.textContent = code[1];
+        item.append(" ", tag);
+      }
       return item;
     }));
     shadow.querySelector(".hs-details").hidden = !STATE.detailsExpanded;
@@ -394,6 +410,7 @@
       .hs-details[hidden] { display: none; }
       .hs-reason-list { margin: 0; padding-left: 18px; color: #253d47; font-size: 13px; line-height: 1.5; }
       .hs-reason-list li + li { margin-top: 8px; }
+      .hs-rule-code { margin-left: 4px; padding: 0 5px; border-radius: 4px; background: #eef2f5; color: #6b7d8c; font-size: 10px; font-weight: 600; vertical-align: 1px; }
       .hs-advice { margin-top: 12px; color: #253d47; font-size: 12px; line-height: 1.5; font-weight: 700; }
       .hs-limitation { margin-top: 12px; color: #735400; font-size: 12px; line-height: 1.5; }
       @media (max-width: 400px) { .hs-wrap { right: 12px; bottom: 12px; } }

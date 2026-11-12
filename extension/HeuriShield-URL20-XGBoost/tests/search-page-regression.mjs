@@ -28,7 +28,8 @@ assert.deepEqual(search.matched, ["L1"]);
 const explanation = buildAnalysisExplanation({ url, final_url: url, verdict: search.verdict,
   model_result: { model_family: "XGBoost", verdict: "DANGEROUS" }, decision_policy: search.decision,
   matched_rules: search.rules.filter(rule => rule.status === "matched"), brand_features: brand, dom_features: dom });
-assert.match(explanation.summary, /mengoreksi penilaian alamat menjadi legitimate/);
+assert.equal(explanation.summary, "Ini situs resmi Google.");
+assert.ok(explanation.reasons.some(reason => reason.includes("sempat terlihat mencurigakan")));
 
 // A matching brand name on a different host cannot undo the URL model.
 const copyUrl = "https://google.com.example.test/search?q=bca";

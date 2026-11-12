@@ -38,7 +38,7 @@ assert.equal(liquipedia.unresolved_checks.includes("official_domain_unverified")
 const explanation = buildAnalysisExplanation({url:"https://liquipedia.net/valorant/VCT/2027/Pacific/Kickoff",
   verdict:"DANGEROUS",model_result:{model_family:"XGBoost",verdict:"DANGEROUS"},
   brand_features:liquipedia});
-assert.ok(explanation.reasons.some(reason=>reason.includes("domain cocok dengan brand Liquipedia")));
+assert.ok(explanation.reasons.some(reason=>reason.includes("cocok dengan situs resmi Liquipedia")));
 const failedApi = await analyzeBrandEvidence(null,"https://example.test",{
   domainSearch:async()=>({lookup_success:false,found:true,candidates:[{name:"Example",domain:"example.test"}]}),
   lookup:async()=>({lookup_success:false,candidates:[]})

@@ -56,7 +56,7 @@ with TemporaryDirectory(prefix='hs-spa-fixture-') as profile, sync_playwright() 
             decision_policy:{source:'url_model'},
             brand_features:{claimed_brand_status:'ambiguous'},dom_features:analyzeDomEvidence([snapshot])});
         }''', evidence)
-    assert explanation_for(hidden)['reasons'] == ['Alamat: dinilai phishing oleh model.']
+    assert explanation_for(hidden)['reasons'] == ['Pola alamat: susunan alamat situs ini mirip dengan alamat phishing yang dikenali sistem.']
     page.locator('#modal').evaluate("el=>el.style.display='block'")
     shown = snapshot()
     assert shown['password_fields'][0]['visible'] is True

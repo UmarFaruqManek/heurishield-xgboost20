@@ -70,7 +70,6 @@ assert.equal(judge({ urlClass: 'SAFE', dom, brand: { claimed_brand_status: 'unkn
 const summary = buildAnalysisExplanation({ url: otherUrl, verdict: 'DANGEROUS',
   model_result: { model_family: 'XGBoost', verdict: 'SAFE' }, decision_policy: youngExe.decision,
   matched_rules: youngExe.rules.filter(rule => rule.status === 'matched'), brand_features: otherBrand, dom_features: otherDom });
-assert.ok(summary.reasons.some(reason => reason.startsWith('Aturan P4:')));
-assert.ok(summary.reasons.some(reason => reason.startsWith('Unduhan:')));
+assert.ok(summary.reasons.some(reason => reason.startsWith('Unduhan berbahaya:') && reason.includes('.exe') && reason.endsWith('[P4]')));
 assert.ok(!summary.reasons.some(reason => /dijeda|malware terbukti/i.test(reason)));
 console.log('DOM download rules: parameters, P1 address conflict, P4 new-domain executable, PDF/old/official/unknown negatives, explanation passed.');

@@ -294,6 +294,7 @@ function manualAnalysis(url, tabId, list) {
     model_result: { ready: false, skipped: "manual_list" },
     decision_policy: { source: allowed ? "manual_allowlist" : "manual_blocklist" },
     manual_list: list,
+    manual_domain: normalizeManualDomain(safeUrl(url)?.hostname || ""),
     matched_rules: allowed ? [] : [{ id: "MANUAL_BLOCKLIST", reason: "Domain ada di daftar blokir manual.", source: "Manual blocklist", severity: "high" }]
   };
   analysis.explanation = buildAnalysisExplanation(analysis);

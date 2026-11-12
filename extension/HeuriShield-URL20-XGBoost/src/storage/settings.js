@@ -4,6 +4,8 @@
  */
 import { classificationRecord } from "../shared/classification-record.js";
 import { DEFAULT_SETTINGS, STORAGE_KEYS } from "../utils/constants.js";
+import { parse as parseDomain } from "../shared/tldts.js";
+import { isSharedHostingTenant } from "../analyzer/brand/shared-hosting.js";
 
 export async function getSetting(key, fallback) {
   const result = await chrome.storage.local.get({ [key]: fallback });
@@ -184,11 +186,22 @@ export async function getAllowlist() {
   return [...new Set((await getSetting(STORAGE_KEYS.ALLOWLIST, [])).map(normalizeManualDomain).filter(Boolean))];
 }
 
-// www is an alias of the same host for manual lists; other subdomains stay distinct.
+// Manual lists work on the registrable domain: listing gemini.google.com stores
+// google.com and covers every google.com subdomain. The Public Suffix List
+// (including private suffixes) keeps tenants separate: user.github.io stays
+// user.github.io. Tenants of other shared-hosting roots also keep their own
+// hostname, so listing one tenant never covers the whole platform.
 export function normalizeManualDomain(value) {
   try {
     const url = new URL(/^https?:\/\//i.test(String(value)) ? String(value) : `https://${value}`);
-    return url.hostname.toLowerCase().replace(/\.$/, "").replace(/^www\./, "");
+    const host = url.hostname.toLowerCase().replace(/\.$/, "");
+    const parsed = parseDomain(host, { allowPrivateDomains: true });
+    if (parsed.isIp || !parsed.domain) return host.replace(/^www\./, "");
+    if (isSharedHostingTenant(host, parsed.domain)) {
+      const tenant = host.slice(0, -(parsed.domain.length + 1)).split(".").at(-1);
+      return `${tenant}.${parsed.domain}`;
+    }
+    return parsed.domain;
   } catch { return ""; }
 }
 

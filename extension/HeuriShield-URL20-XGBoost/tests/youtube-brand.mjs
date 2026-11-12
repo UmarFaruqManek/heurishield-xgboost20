@@ -19,7 +19,7 @@ assert.equal(genericLogin.official_domain_match, true);
 const explanation = buildAnalysisExplanation({ verdict: "SAFE", hostname: "www.youtube.com",
   model_result: { model_family: "XGBoost" }, brand_features: official,
   rdap_features: { source_domain_age_days: 1000 } });
-assert.ok(explanation.reasons.some(reason => reason.includes("domain cocok dengan brand YouTube")));
+assert.ok(explanation.reasons.some(reason => reason.includes("cocok dengan situs resmi YouTube")));
 
 // A copied title on another host is not enough to claim the brand.
 const unrelated = await analyzeBrandEvidence(home, "https://video.example.test/", { lookup });

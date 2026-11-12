@@ -179,7 +179,7 @@ h2 {
 }
 
 .reason-label::after {
-  content: ".";
+  content: ":";
 }
 
 .reason-note {
@@ -343,4 +343,16 @@ a {
   a {
     transition: none;
   }
+}
+
+.reason-code {
+  margin-left: 4px;
+  padding: 0 6px;
+  border-radius: 4px;
+  background: rgba(127, 127, 127, 0.14);
+  color: inherit;
+  opacity: 0.7;
+  font-size: 0.75em;
+  font-weight: 600;
+  vertical-align: 1px;
 }
