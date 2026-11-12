@@ -20,3 +20,8 @@ node_modules/
 /testing/history/history_url20.sqlite
 testing/history/*.sqlite-shm
 testing/history/*.sqlite-wal
+/experiments/v3/data/url20_normalized_splits.csv
+/experiments/v3/data/training_weights.csv
+/experiments/v3/data/cv_train_only_sample.csv
+/experiments/v3/reports/phiusiil_all_predictions.csv
+/experiments/v3/scripts/__pycache__/

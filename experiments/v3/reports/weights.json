@@ -1,0 +1,7 @@
+{
+  "method": "Same v2 class-balanced soft domain cap 20 and endpoint family cap 5; recomputed after WHATWG normalization",
+  "endpoint_family_changes": 45778,
+  "sum": 612713.0,
+  "minimum": 0.003488657116247898,
+  "maximum": 1.432880338254209
+}

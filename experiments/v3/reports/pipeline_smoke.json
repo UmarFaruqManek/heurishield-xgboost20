@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "synthetic_urls": 5,
+  "public_pages_opened": 0,
+  "api_requests": 0,
+  "phiusiil_rows_read": 0,
+  "canonicalization_cases": [
+    "empty_path",
+    "case_and_default_port",
+    "IDN",
+    "octal_IP"
+  ]
+}

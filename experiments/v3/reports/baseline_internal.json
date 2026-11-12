@@ -1,0 +1,32 @@
+{
+  "test": {
+    "rows": 59286,
+    "threshold": 0.5,
+    "tn": 33064,
+    "fp": 1532,
+    "fn": 2834,
+    "tp": 21856,
+    "accuracy_percent": 92.636,
+    "legitimate_correct_percent": 95.572,
+    "phishing_recall_percent": 88.522,
+    "precision_percent": 93.45,
+    "f1_percent": 90.919,
+    "roc_auc_percent": 97.252,
+    "average_precision_percent": 96.889
+  },
+  "supplement_test": {
+    "rows": 6116,
+    "threshold": 0.5,
+    "tn": 1666,
+    "fp": 13,
+    "fn": 71,
+    "tp": 4366,
+    "accuracy_percent": 98.627,
+    "legitimate_correct_percent": 99.226,
+    "phishing_recall_percent": 98.4,
+    "precision_percent": 99.703,
+    "f1_percent": 99.047,
+    "roc_auc_percent": 99.713,
+    "average_precision_percent": 99.904
+  }
+}

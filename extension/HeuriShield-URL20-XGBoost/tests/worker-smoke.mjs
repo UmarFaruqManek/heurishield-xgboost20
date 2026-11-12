@@ -73,7 +73,7 @@ const analysis = await new Promise((resolve, reject) => {
     { tab: { id: 1, url: "https://account.example.com/login" } },
     response => response?.ok ? resolve(response.analysis) : reject(new Error(response?.error || "No response")));
 });
-if (analysis.model_result?.model_name !== "XGBoost URL20 v2" || Object.keys(analysis.feature_vector.vector).length !== 20 || analysis.rdap_features.page_domain_age_days < 1) {
+if (analysis.model_result?.model_name !== "XGBoost URL20 v3" || Object.keys(analysis.feature_vector.vector).length !== 20 || analysis.rdap_features.page_domain_age_days < 1) {
   throw new Error(`Wrong model/age: ${JSON.stringify(analysis.model_result)}`);
 }
 if (analysis.dom_features?.has_password_field !== true || analysis.dom_features?.form_cross_domain !== false || "authorized_domain_match" in (analysis.brand_features || {})) {
@@ -98,7 +98,7 @@ const unknown = await new Promise((resolve, reject) => {
     { tab: { id: 2, url: "https://account.example.invalid/login" } },
     response => response?.ok ? resolve(response.analysis) : reject(new Error(response?.error || "No response")));
 });
-if (unknown.model_result?.model_name !== "XGBoost URL20 v2" || unknown.rdap_features.page_domain_age_days !== null || 'domain_age_days' in unknown.feature_vector.vector) {
+if (unknown.model_result?.model_name !== "XGBoost URL20 v3" || unknown.rdap_features.page_domain_age_days !== null || 'domain_age_days' in unknown.feature_vector.vector) {
   throw new Error(`Unknown age was not kept unknown: ${JSON.stringify(unknown.model_result)}`);
 }
 process.stdout.write(JSON.stringify({ verdict: unknown.verdict, model: unknown.model_result.model_name,
@@ -134,7 +134,7 @@ const portal = await new Promise((resolve, reject) => {
     { tab: { id: 5 } }, response => response?.ok ? resolve(response.analysis) : reject(new Error(response?.error || "No response")));
 });
 if (portal.brand_features?.claimed_brand?.name !== "Merdeka Siber" ||
-    portal.model_result?.model_name !== "XGBoost URL20 v2") {
+    portal.model_result?.model_name !== "XGBoost URL20 v3") {
   throw new Error(`Portal false-positive correction failed: ${JSON.stringify({
     raw: portal.model_result.verdict, final: portal.verdict, decision: portal.decision_policy,
     brand: portal.brand_features?.claimed_brand })}`);

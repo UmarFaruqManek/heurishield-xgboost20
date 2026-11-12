@@ -1,0 +1,10 @@
+{
+  "frozen_at_utc": "2026-11-11T22:17:40.369023+00:00",
+  "hashes": {
+    "XGBoost.joblib": "8d87a5c05a6d478b0d62252d5bc180e9f67889059689c2f4c0bbf26ef476127e",
+    "xgboost-url20.json": "ff16dab32bfac02ea26d6c1c04688491c101c8b61fc4dc5320a4e65f93a265b0",
+    "XGBoost.json": "3e2fa7cbfd891fc3306b66270c9566527739ef9cdeac9727d1b0a8192fe95634"
+  },
+  "threshold": 0.5,
+  "external_evaluation_executed": false
+}

@@ -1,0 +1,9 @@
+{
+  "rows": 678115,
+  "url_changed_rows": 46165,
+  "feature_changed_rows": 46156,
+  "failed_by_split_label": {},
+  "site_key_changes": 3,
+  "normalized_train_holdout_domain_overlap": 0,
+  "endpoint_family_changes": 45778
+}

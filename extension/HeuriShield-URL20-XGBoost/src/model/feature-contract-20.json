@@ -1,5 +1,5 @@
 {
-  "feature_set": "url20-phreshphish-v2",
+  "feature_set": "url20-whatwg-v3",
   "feature_count": 20,
   "features": [
     "url_length",
@@ -24,5 +24,5 @@
     "hostname_sensitive_token_count"
   ],
   "threshold": 0.5,
-  "source_model_sha256": "d623eefd35e9bb4cc028d40172acdd28b75a6ddc99d91a82a1c6dabfbf2f452b"
+  "source_model_sha256": "8d87a5c05a6d478b0d62252d5bc180e9f67889059689c2f4c0bbf26ef476127e"
 }

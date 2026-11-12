@@ -1,0 +1,6 @@
+"row_id","original_url","normalized_url","label","status","error","v2_raw","v2_normalized","v3_raw","v3_normalized","normalized_site","public_suffix","path_present","query_present","url_length","host"
+"0","https://example.com","https://example.com/","legitimate","ok","","phishing","legitimate","phishing","phishing","example.com","com","0","0","20","example.com"
+"1","https://example.com/","https://example.com/","legitimate","ok","","legitimate","legitimate","phishing","phishing","example.com","com","0","0","20","example.com"
+"2","https://EXAMPLE.com:443","https://example.com/","legitimate","ok","","phishing","legitimate","phishing","phishing","example.com","com","0","0","20","example.com"
+"3","https://bücher.de","https://xn--bcher-kva.de/","legitimate","ok","","phishing","phishing","phishing","phishing","xn--bcher-kva.de","de","0","0","25","xn--bcher-kva.de"
+"4","http://0046.0323.0042.0344/","http://38.211.34.228/","legitimate","ok","","phishing","phishing","phishing","phishing","38.211.34.228","","0","0","21","38.211.34.228"

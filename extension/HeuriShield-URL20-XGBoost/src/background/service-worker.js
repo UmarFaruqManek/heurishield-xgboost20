@@ -448,7 +448,7 @@ async function analyzeActiveTab(message) {
     parameters,
     rule_results: ruleResults,
     matched_rules: ruleResults.filter(rule => rule.status === "matched"),
-    model_result: { ready: true, model_family: "XGBoost", model_name: "XGBoost URL20 v2",
+    model_result: { ready: true, model_family: "XGBoost", model_name: "XGBoost URL20 v3",
       threshold: model.threshold, source_model_sha256: model.source_model_sha256,
       feature_set: model.feature_set, predicted_label: predictedLabel, verdict: urlClass,
       feature_coverage: coverage },

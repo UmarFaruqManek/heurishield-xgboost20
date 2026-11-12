@@ -1,0 +1,97 @@
+{
+  "trials": [
+    {
+      "parameters": {
+        "n_estimators": 400,
+        "max_depth": 5,
+        "min_child_weight": 10,
+        "reg_lambda": 3
+      },
+      "cv": {
+        "threshold": 0.44,
+        "min_class_correct_percent": 91.82021774318721,
+        "balanced_accuracy_percent": 91.84033084293218,
+        "legitimate_correct_percent": 91.86044394267712,
+        "phishing_recall_percent": 91.82021774318721
+      },
+      "cv_at_fixed_05": {
+        "rows": 100016,
+        "threshold": 0.5,
+        "tn": 51325,
+        "fp": 3592,
+        "fn": 4462,
+        "tp": 40637,
+        "accuracy_percent": 91.947,
+        "legitimate_correct_percent": 93.459,
+        "phishing_recall_percent": 90.106,
+        "precision_percent": 91.879,
+        "f1_percent": 90.984,
+        "roc_auc_percent": 97.337,
+        "average_precision_percent": 97.131
+      }
+    },
+    {
+      "parameters": {
+        "n_estimators": 500,
+        "max_depth": 7,
+        "min_child_weight": 12,
+        "reg_lambda": 5,
+        "reg_alpha": 0.1
+      },
+      "cv": {
+        "threshold": 0.42,
+        "min_class_correct_percent": 91.91556353799419,
+        "balanced_accuracy_percent": 92.00363278052357,
+        "legitimate_correct_percent": 92.09170202305297,
+        "phishing_recall_percent": 91.91556353799419
+      },
+      "cv_at_fixed_05": {
+        "rows": 100016,
+        "threshold": 0.5,
+        "tn": 51598,
+        "fp": 3319,
+        "fn": 4496,
+        "tp": 40603,
+        "accuracy_percent": 92.186,
+        "legitimate_correct_percent": 93.956,
+        "phishing_recall_percent": 90.031,
+        "precision_percent": 92.443,
+        "f1_percent": 91.221,
+        "roc_auc_percent": 97.418,
+        "average_precision_percent": 97.241
+      }
+    }
+  ],
+  "selected": {
+    "parameters": {
+      "n_estimators": 500,
+      "max_depth": 7,
+      "min_child_weight": 12,
+      "reg_lambda": 5,
+      "reg_alpha": 0.1
+    },
+    "cv": {
+      "threshold": 0.42,
+      "min_class_correct_percent": 91.91556353799419,
+      "balanced_accuracy_percent": 92.00363278052357,
+      "legitimate_correct_percent": 92.09170202305297,
+      "phishing_recall_percent": 91.91556353799419
+    },
+    "cv_at_fixed_05": {
+      "rows": 100016,
+      "threshold": 0.5,
+      "tn": 51598,
+      "fp": 3319,
+      "fn": 4496,
+      "tp": 40603,
+      "accuracy_percent": 92.186,
+      "legitimate_correct_percent": 93.956,
+      "phishing_recall_percent": 90.031,
+      "precision_percent": 92.443,
+      "f1_percent": 91.221,
+      "roc_auc_percent": 97.418,
+      "average_precision_percent": 97.241
+    }
+  },
+  "selection_method": "Identical to v2: maximize minimum class correct at train-only OOF-selected threshold, then balanced accuracy; deployed threshold always 0.50"
+}

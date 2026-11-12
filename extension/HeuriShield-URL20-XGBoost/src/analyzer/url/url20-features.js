@@ -9,7 +9,15 @@ const sensitiveTokens = new Set([
 
 export { ageLookupDomain };
 
-export function extractUrl20Features(input) {
+// Model v3 is trained on WHATWG-normalized URLs, the same form the browser
+// reports for a tab (e.g. "https://a.com" becomes "https://a.com/"). Offline
+// inputs are normalized here so they match what the model sees live.
+export function normalizeUrlForFeatures(input) {
+  try { return new URL(input).href; } catch { return input; }
+}
+
+export function extractUrl20Features(rawInput) {
+  const input = normalizeUrlForFeatures(rawInput);
   const features = extractUrl18Features(input);
   const host = hostnameForFeatures(input);
   const parserHost = host.split(".").map(label => label.replace(/^[-_]+|[-_]+$/g, "") || "x").join(".");

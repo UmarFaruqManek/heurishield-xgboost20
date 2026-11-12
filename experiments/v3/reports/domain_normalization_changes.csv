@@ -1,0 +1,4 @@
+row_id,original_url,url,site_key,normalized_site_key,label,split
+175735,http://0046.0323.0042.0344/qs=op-afbjjaehjcifhdbagkfdcbbackdbbdjeagghebabababakcaebkaccaegkdadbghafefbgbadcc,http://38.211.34.228/qs=op-afbjjaehjcifhdbagkfdcbbackdbbdjeagghebabababakcaebkaccaegkdadbghafefbgbadcc,0046.0323.0042.0344,38.211.34.228,phishing,train
+472461,http://0254.0361.0343.0164/KhLEop/l166CvA7F9FB9i59E6AAy124E0F9qD94Ew0s0k0u5Aj135nBtD75mB95x68D27pD3,http://172.241.227.116/KhLEop/l166CvA7F9FB9i59E6AAy124E0F9qD94Ew0s0k0u5Aj135nBtD75mB95x68D27pD3,0254.0361.0343.0164,172.241.227.116,phishing,train
+659228,http://url\nreferrer,http://url/nreferrer,url\nreferrer,url,phishing,train

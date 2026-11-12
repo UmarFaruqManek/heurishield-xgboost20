@@ -1,0 +1,7 @@
+split,model_mode,rows,threshold,tn,fp,fn,tp,accuracy_percent,legitimate_correct_percent,phishing_recall_percent,precision_percent,f1_percent,roc_auc_percent,average_precision_percent
+test,v2_raw,59286,0.5,33064,1532,2834,21856,92.636,95.572,88.522,93.45,90.919,97.252,96.889
+test,v2_normalized,59286,0.5,33066,1530,3210,21480,92.005,95.578,86.999,93.351,90.063,97.074,96.623
+test,v3_normalized,59286,0.5,32726,1870,2890,21800,91.971,94.595,88.295,92.1,90.157,97.12,96.693
+supplement_test,v2_raw,6116,0.5,1666,13,71,4366,98.627,99.226,98.4,99.703,99.047,99.713,99.904
+supplement_test,v2_normalized,6116,0.5,1666,13,72,4365,98.61,99.226,98.377,99.703,99.036,99.711,99.903
+supplement_test,v3_normalized,6116,0.5,1664,15,69,4368,98.627,99.107,98.445,99.658,99.048,99.717,99.904
