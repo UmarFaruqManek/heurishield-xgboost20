@@ -17,7 +17,9 @@ export const SUPPORTING_URL_PARAMETERS = Object.freeze(["domain_age_days", "url_
 
 const known = value => value === undefined || value === null ? UNKNOWN : value;
 
-export function collectParameters({ brand = null, dom = null, domainAgeDays = null, urlFileExtension = null } = {}) {
+// urlFileExtension: an extension string, null when the URL path has no file
+// extension (definitely no file in the URL), or "unknown"/omitted when unread.
+export function collectParameters({ brand = null, dom = null, domainAgeDays = null, urlFileExtension = UNKNOWN } = {}) {
   // An incomplete download scan cannot prove that no executable is offered,
   // so the observed list is marked with an "unknown" entry.
   const scanIncomplete = (dom?.download_unresolved_checks || []).includes("download_scan_incomplete");
@@ -42,6 +44,6 @@ export function collectParameters({ brand = null, dom = null, domainAgeDays = nu
     download_file_extensions: extensions,
     download_target_cross_domain: known(dom?.download_target_cross_domain),
     domain_age_days: Number.isFinite(domainAgeDays) && domainAgeDays >= 0 ? domainAgeDays : null,
-    url_file_extension: urlFileExtension || UNKNOWN
+    url_file_extension: urlFileExtension === undefined || urlFileExtension === "" ? UNKNOWN : urlFileExtension
   });
 }

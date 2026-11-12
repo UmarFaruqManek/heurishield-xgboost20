@@ -63,5 +63,12 @@ const collected = collectParameters({ brand: { claimed_brand: { name: 'X' }, ext
 assert.deepEqual(Object.keys(collected).sort(), [...ALLOWED].sort());
 assert.deepEqual(collected.download_file_extensions, ['exe', 'unknown']);
 assert.ok(Object.isFrozen(collected));
+// A URL without a file extension (null) is definite evidence of no executable
+// in the URL; only an unread value is unknown.
+assert.equal(collected.url_file_extension, 'unknown');
+assert.equal(collectParameters({ urlFileExtension: null }).url_file_extension, null);
+const noFile = collectParameters({ brand: { claimed_brand_status: 'identified', official_domain_match: false },
+  dom: { download_file_extensions: ['pdf'] }, domainAgeDays: 42, urlFileExtension: null });
+assert.equal(evaluateRules(noFile).find(r => r.id === 'P4').status, 'not_matched');
 assert.ok(RULES.every(rule => typeof rule.reason === 'string' && /^[PL]\d$/.test(rule.id)));
 console.log('Heuristic rules: truth tables for P1-P4/L1-L2 and parameter-only access passed.');
