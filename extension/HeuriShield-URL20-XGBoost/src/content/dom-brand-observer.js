@@ -71,10 +71,18 @@
       try { target = new URL(el.href, location.href); } catch { return null; }
       if (!['https:', 'http:', 'blob:'].includes(target.protocol)) return null;
       const text = clean(el.textContent || attr(el, 'aria-label'));
-      if (!el.hasAttribute('download') && !/\.(?:exe|msi|msix|appx|apk|scr|com|bat|cmd|ps1|vbs|vbe|jse|wsf|jar|zip|rar|7z|iso|pdf|docx?|xlsx?|pptx?|txt|csv|dmg|pkg|deb|rpm)$/i.test(target.pathname) && !/(?:download|unduh|installer)/i.test(text)) return null;
+      if (!el.hasAttribute('download') && !/\.(?:exe|msi|msix|appx|apk|scr|com|bat|cmd|ps1|vbs|vbe|js|jse|wsf|hta|lnk|msc|xll|jar|zip|rar|7z|iso|img|vhdx?|cab|pdf|docx?|xlsx?|pptx?|txt|csv|dmg|pkg|deb|rpm)$/i.test(target.pathname) && !/(?:download|unduh|installer)/i.test(text)) return null;
       target.username = ''; target.password = ''; target.search = ''; target.hash = '';
       return { url: target.href, filename_hint: attr(el, 'download') || null, download_attribute: el.hasAttribute('download'), text };
     }).filter(Boolean);
+    // Script-based credential submission: known data-collection endpoints used by
+    // phishing kits, found in inline scripts or form/onsubmit attributes. Only the
+    // endpoint service name is kept, never script content or field values.
+    const exfilPattern = /(api\.telegram\.org\/bot|discord(?:app)?\.com\/api\/webhooks|hooks\.slack\.com\/services|formspree\.io\/f\/|getform\.io\/f\/|formsubmit\.co\/|submit-form\.com\/|formcarry\.com\/s\/|script\.google\.com\/macros\/s\/|webhook\.site\/|\.m\.pipedream\.net|m\.pipedream\.net)/gi;
+    const scriptText = [...all("script:not([src])").map(el => el.textContent || ""),
+      ...all("form").map(el => `${attr(el, "action")} ${attr(el, "onsubmit")}`)].join("\n").slice(0, 400000);
+    const credentialExfilEndpoints = [...new Set([...scriptText.matchAll(exfilPattern)]
+      .map(match => match[1].toLowerCase().replace(/^\./, "").split("/")[0]))].slice(0, 5);
     const unresolvedDownloadControls=all('button,[role="button"]').filter(el=>!el.closest('a[href]')&&/(?:download|unduh|installer)/i.test(clean(el.textContent||attr(el,'aria-label')))).length;
     const downloadPage = { links: downloadCandidates.slice(0,30), truncated: downloadCandidates.length>30,
       unresolved_controls: unresolvedDownloadControls };
@@ -82,6 +90,7 @@
       evidence_incomplete: document.readyState === "loading" ||
         (!document.title && !headings.length && !forms.length && !controls.length),
       title: clean(document.title), headings, logos, controls, forms, software_attributions: softwareAttributions, download_page: downloadPage,
+      credential_exfil_endpoints: credentialExfilEndpoints,
       password_fields: password.map((el, i) => ({ id: `password-${i}`, form_index: all("form").indexOf(el.form), visible: visible(el) })), sensitive_fields: sensitive, inaccessible_frames: inaccessibleFrames, observed_at: Date.now(), page_origin: location.origin, interaction: interaction && Date.now() - interaction.at < 15000 ? interaction : null };
     return snapshot;
   }

@@ -44,10 +44,19 @@ for(const [name,changes] of [['missing password',{password_fields:[]}],['missing
  assert.equal(result.verdict,'SAFE',name);
  assert.notEqual(result.brand.claimed_brand?.name,'PayPal',name);
 }
+// PayPal is in the local brand registry: a failed or unverified API lookup
+// is backed by the registry and the impersonation is still confirmed.
 const missing=await check(snapshot,'https://paypal.login.com/',{...deps,lookup:async()=>({lookup_success:false,candidates:[]})});
-assert.equal(missing.verdict,'SAFE');
+assert.equal(missing.verdict,'DANGEROUS');
 const unverified=await check(snapshot,'https://paypal.login.com/',{...deps,lookup:async t=>({lookup_success:true,candidates:t==='paypal'?[{...candidate,verified:false}]:[]})});
-assert.equal(unverified.verdict,'SAFE','Unknown reference must not be promoted to confirmed impersonation');
+assert.equal(unverified.verdict,'DANGEROUS');
+// A brand outside the registry keeps the original guarantee: without a
+// verified reference, an unknown reference is not promoted to impersonation.
+const acmePage={...snapshot,title:'Login to your Acmepay account',page_origin:'https://acmepay.login.com'};
+const acmeMissing=await check(acmePage,'https://acmepay.login.com/',{...deps,lookup:async()=>({lookup_success:false,candidates:[]})});
+assert.equal(acmeMissing.verdict,'SAFE');
+const acmeUnverified=await check(acmePage,'https://acmepay.login.com/',{...deps,lookup:async t=>({lookup_success:true,candidates:t==='acmepay'?[{name:'Acmepay',domain:'acmepay.com',verified:false}]:[]})});
+assert.equal(acmeUnverified.verdict,'SAFE','Unknown reference must not be promoted to confirmed impersonation');
 const official=await check({...snapshot,page_origin:'https://www.paypal.com'},'https://www.paypal.com/login',{
  ...deps,domainSearch:async()=>({lookup_success:true,found:true,candidates:[candidate]})});
 assert.equal(official.brand.official_domain_match,true);

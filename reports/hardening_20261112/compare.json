@@ -1,0 +1,367 @@
+{
+  "baseline": {
+    "records": 3636,
+    "by_label": {
+      "legitimate": {
+        "evaluated": 2176,
+        "correct": 2058,
+        "percent": 94.58
+      },
+      "phishing": {
+        "evaluated": 734,
+        "correct": 595,
+        "percent": 81.06
+      }
+    }
+  },
+  "current": {
+    "records": 3636,
+    "by_label": {
+      "legitimate": {
+        "evaluated": 2176,
+        "correct": 2058,
+        "percent": 94.58
+      },
+      "phishing": {
+        "evaluated": 734,
+        "correct": 628,
+        "percent": 85.56
+      }
+    }
+  },
+  "missing": 0,
+  "verdict_changes": 33,
+  "trace_changes": 74,
+  "changed": [
+    {
+      "key": [
+        "archive",
+        875,
+        "https://www.roblox.ly/users/2101656425/profile"
+      ],
+      "before": "SAFE",
+      "after": "DANGEROUS",
+      "label": "phishing"
+    },
+    {
+      "key": [
+        "archive",
+        880,
+        "https://s4w.in/roblox-com-users-3123101649888-profile"
+      ],
+      "before": "SAFE",
+      "after": "DANGEROUS",
+      "label": "phishing"
+    },
+    {
+      "key": [
+        "archive",
+        881,
+        "https://www.roblox.ly/users/1182310753/profile"
+      ],
+      "before": "SAFE",
+      "after": "DANGEROUS",
+      "label": "phishing"
+    },
+    {
+      "key": [
+        "archive",
+        882,
+        "https://www.roblox.com.et/users/8177702111/profile"
+      ],
+      "before": "SAFE",
+      "after": "DANGEROUS",
+      "label": "phishing"
+    },
+    {
+      "key": [
+        "archive",
+        888,
+        "https://www.roblox.ly/users/728250758/profile"
+      ],
+      "before": "SAFE",
+      "after": "DANGEROUS",
+      "label": "phishing"
+    },
+    {
+      "key": [
+        "archive",
+        918,
+        "https://www.roblox.ly/users/3816422122/profile"
+      ],
+      "before": "SAFE",
+      "after": "DANGEROUS",
+      "label": "phishing"
+    },
+    {
+      "key": [
+        "archive",
+        968,
+        "https://www.roblox.ly/users/7676313166/profile"
+      ],
+      "before": "SAFE",
+      "after": "DANGEROUS",
+      "label": "phishing"
+    },
+    {
+      "key": [
+        "archive",
+        997,
+        "https://www.roblox.com.et/communities/8433115774/Etheria-Fan-Group"
+      ],
+      "before": "SAFE",
+      "after": "DANGEROUS",
+      "label": "phishing"
+    },
+    {
+      "key": [
+        "archive",
+        1043,
+        "https://www.roblox.com.ml/users/363785394743/profile"
+      ],
+      "before": "SAFE",
+      "after": "DANGEROUS",
+      "label": "phishing"
+    },
+    {
+      "key": [
+        "archive",
+        1045,
+        "https://www.roblox.com.ml/users/433057026128/profile"
+      ],
+      "before": "SAFE",
+      "after": "DANGEROUS",
+      "label": "phishing"
+    },
+    {
+      "key": [
+        "archive",
+        1065,
+        "https://www.roblox.ly/communities/9481378920/ShyClothing"
+      ],
+      "before": "SAFE",
+      "after": "DANGEROUS",
+      "label": "phishing"
+    },
+    {
+      "key": [
+        "archive",
+        1077,
+        "https://www.roblox.et/users/9290022524/profile"
+      ],
+      "before": "SAFE",
+      "after": "DANGEROUS",
+      "label": "phishing"
+    },
+    {
+      "key": [
+        "archive",
+        1078,
+        "https://s4w.in/roblox-com-users-929001422524-profile"
+      ],
+      "before": "SAFE",
+      "after": "DANGEROUS",
+      "label": "phishing"
+    },
+    {
+      "key": [
+        "archive",
+        1079,
+        "https://www.roblox.et/communities/4372504931/Black-Girlys-Clothing#!/about"
+      ],
+      "before": "SAFE",
+      "after": "DANGEROUS",
+      "label": "phishing"
+    },
+    {
+      "key": [
+        "url20_v040_phishing_20261106_035533",
+        63,
+        "https://www.roblox.ly/users/2101656425/profile"
+      ],
+      "before": "SAFE",
+      "after": "DANGEROUS",
+      "label": "phishing"
+    },
+    {
+      "key": [
+        "url20_v040_phishing_20261106_035533",
+        69,
+        "https://s4w.in/roblox-com-users-3123101649888-profile"
+      ],
+      "before": "SAFE",
+      "after": "DANGEROUS",
+      "label": "phishing"
+    },
+    {
+      "key": [
+        "url20_v040_phishing_20261106_035533",
+        70,
+        "https://www.roblox.ly/users/1182310753/profile"
+      ],
+      "before": "SAFE",
+      "after": "DANGEROUS",
+      "label": "phishing"
+    },
+    {
+      "key": [
+        "url20_v040_phishing_20261106_035533",
+        71,
+        "https://www.roblox.com.et/users/8177702111/profile"
+      ],
+      "before": "SAFE",
+      "after": "DANGEROUS",
+      "label": "phishing"
+    },
+    {
+      "key": [
+        "url20_v040_phishing_20261106_035533",
+        83,
+        "https://www.roblox.ly/users/728250758/profile"
+      ],
+      "before": "SAFE",
+      "after": "DANGEROUS",
+      "label": "phishing"
+    },
+    {
+      "key": [
+        "url20_v040_phishing_20261106_035533",
+        187,
+        "https://www.roblox.ly/users/3816422122/profile"
+      ],
+      "before": "SAFE",
+      "after": "DANGEROUS",
+      "label": "phishing"
+    },
+    {
+      "key": [
+        "url20_v040_phishing_20261107_020800",
+        3,
+        "https://www.roblox.ly/users/7676313166/profile"
+      ],
+      "before": "SAFE",
+      "after": "DANGEROUS",
+      "label": "phishing"
+    },
+    {
+      "key": [
+        "url20_v040_phishing_20261107_020800",
+        65,
+        "https://www.roblox.com.et/communities/8433115774/Etheria-Fan-Group"
+      ],
+      "before": "SAFE",
+      "after": "DANGEROUS",
+      "label": "phishing"
+    },
+    {
+      "key": [
+        "url20_v040_phishing_20261107_020800",
+        165,
+        "https://www.roblox.com.ml/users/363785394743/profile"
+      ],
+      "before": "SAFE",
+      "after": "DANGEROUS",
+      "label": "phishing"
+    },
+    {
+      "key": [
+        "url20_v040_phishing_20261107_020800",
+        168,
+        "https://www.roblox.com.ml/users/433057026128/profile"
+      ],
+      "before": "SAFE",
+      "after": "DANGEROUS",
+      "label": "phishing"
+    },
+    {
+      "key": [
+        "url20_v040_phishing_20261107_020800",
+        237,
+        "https://www.roblox.ly/communities/9481378920/ShyClothing"
+      ],
+      "before": "SAFE",
+      "after": "DANGEROUS",
+      "label": "phishing"
+    },
+    {
+      "key": [
+        "url20_v040_phishing_20261107_020800",
+        280,
+        "https://www.roblox.et/users/9290022524/profile"
+      ],
+      "before": "SAFE",
+      "after": "DANGEROUS",
+      "label": "phishing"
+    },
+    {
+      "key": [
+        "url20_v040_phishing_20261107_020800",
+        281,
+        "https://s4w.in/roblox-com-users-929001422524-profile"
+      ],
+      "before": "SAFE",
+      "after": "DANGEROUS",
+      "label": "phishing"
+    },
+    {
+      "key": [
+        "url20_v040_phishing_20261107_020800",
+        282,
+        "https://www.roblox.et/communities/4372504931/Black-Girlys-Clothing#!/about"
+      ],
+      "before": "SAFE",
+      "after": "DANGEROUS",
+      "label": "phishing"
+    },
+    {
+      "key": [
+        "url20_v062_phishing_20261111_012825",
+        48,
+        "https://roblox.rw/users/149150538518313/profile"
+      ],
+      "before": "SAFE",
+      "after": "DANGEROUS",
+      "label": "phishing"
+    },
+    {
+      "key": [
+        "url20_v062_phishing_20261111_012825",
+        114,
+        "https://s4w.in/www-roblox-com-users-194820084-profile"
+      ],
+      "before": "SAFE",
+      "after": "DANGEROUS",
+      "label": "phishing"
+    },
+    {
+      "key": [
+        "url20_v062_phishing_20261111_012825",
+        118,
+        "https://www.roblox.rw/communities/798653507563/Aura-Hub#!/about"
+      ],
+      "before": "SAFE",
+      "after": "DANGEROUS",
+      "label": "phishing"
+    },
+    {
+      "key": [
+        "url20_v062_phishing_20261111_012825",
+        233,
+        "https://www.roblox.com.ml/users/364403390646/profile"
+      ],
+      "before": "SAFE",
+      "after": "DANGEROUS",
+      "label": "phishing"
+    },
+    {
+      "key": [
+        "url20_v062_phishing_20261111_012825",
+        262,
+        "https://www.roblox.ly/users/7406425618/profile"
+      ],
+      "before": "SAFE",
+      "after": "DANGEROUS",
+      "label": "phishing"
+    }
+  ]
+}

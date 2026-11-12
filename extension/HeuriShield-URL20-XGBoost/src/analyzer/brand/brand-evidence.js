@@ -1,7 +1,8 @@
 import { registrable } from "../dom/dom-evidence.js";
 import { TRUSTED_OAUTH_PROVIDER_DOMAINS } from "../../utils/constants.js";
 import { parse as parseDomain } from "../../shared/tldts.js";
-import { isSharedHostingTenant } from "./shared-hosting.js";
+import { isSharedHostingTenant, isPathHostedUserContent } from "./shared-hosting.js";
+import { registryEntry, registryEntryByName, registryKeys } from "./brand-registry.js";
 
 const UNKNOWN = "unknown";
 const norm = x => String(x || "").normalize("NFKC").toLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ").trim();
@@ -130,6 +131,27 @@ export async function analyzeBrandEvidence(snapshot, url, { lookup, domainLookup
       } else candidates.push({ name: token, domain, verified: true, source: "existing_oauth_provider_domains", token });
     }
   }
+  // Local brand registry: curated official domains for frequently imitated
+  // brands. Exact tokens come from the hostname and page; lookalike tokens
+  // (one edit, e.g. shoopee/t0kopedia) only from the hostname.
+  const addRegistry = (token, key, approximate) => {
+    const entry = registryEntry(key);
+    if (!entry) return;
+    for (const domain of entry.domains) {
+      const known = candidates.find(c => norm(c.name) === norm(entry.name) && c.domain === domain);
+      if (known) { known.verified = true; known.reference_source = "local_brand_registry"; continue; }
+      candidates.push({ name: entry.name, domain, verified: true, source: "local_brand_registry", token,
+        rank: approximate ? 2 : 3, approximate, apiDomainMatch: domainMatch(url, domain) });
+    }
+  };
+  for (const token of new Set([...queries, ...hostQueries, ...queryText.flatMap(safeTokens)])) {
+    if (registryEntry(token)) addRegistry(token, token, false);
+  }
+  for (const token of hostQueries) {
+    if (registryEntry(token)) continue;
+    const key = registryKeys().find(k => oneEditApart(token.replace(/\s/g, ""), k));
+    if (key) addRegistry(token, key, true);
+  }
   // A generic token may return many unrelated brands. The domain directory is
   // still needed when none of those results identifies the visited domain.
   if (!candidates.some(c => domainMatch(url, c.domain)) && domainLookup) {
@@ -209,7 +231,10 @@ export async function analyzeBrandEvidence(snapshot, url, { lookup, domainLookup
     new URL(url).hostname.toLowerCase().includes(`${String(candidate.domain).toLowerCase()}.`));
   const conflictingReference = referenceConflicts.length === 1 && !ownClaims.some(candidate => candidate.verified === true)
     ? referenceConflicts[0] : null;
-  let chosen = conflictingReference || (strongExternalClaims.length === 1 && !ownPageClaim
+  // One brand can have several official domains (registry: bca.co.id, klikbca.com);
+  // count distinct brand names, not candidate rows.
+  const strongExternalNames = new Set(strongExternalClaims.map(c => norm(c.name)));
+  let chosen = conflictingReference || (strongExternalNames.size === 1 && !ownPageClaim
     ? strongExternalClaims[0]
     : ownClaims.length
     ? [...ownClaims].sort((a, b) =>
@@ -238,8 +263,15 @@ export async function analyzeBrandEvidence(snapshot, url, { lookup, domainLookup
   let verificationResult = null;
   let verificationQuery = null;
   let domainResult = null;
+  // Provider attestation (verified flag, verification lookup, verified domain
+  // entry, or the local registry) versus a bare directory entry for this domain.
+  let providerVerified = false;
+  let selfReferenceConflict = null;
+  let claimReference = null;
+  let canonicalSearch = null;
   if (chosen) {
     verified = chosen.verified === true || chosen.apiDomainMatch === true;
+    providerVerified = chosen.verified === true;
     // The first parallel lookup can return Clearbit while Brandfetch times out.
     // Retry the claimed external reference when it has no provider verification.
     const verificationHostClaim = hostBrandClaim(url, chosen);
@@ -254,6 +286,7 @@ export async function analyzeBrandEvidence(snapshot, url, { lookup, domainLookup
         verificationResult = response;
         verified = response?.lookup_success === true && (response.candidates || []).some(c =>
           c.verified === true && c.domain === chosen.domain && norm(c.name) === norm(chosen.name));
+        providerVerified = providerVerified || verified;
       } catch {}
     }
     let verifiedPageDomain = null;
@@ -264,6 +297,7 @@ export async function analyzeBrandEvidence(snapshot, url, { lookup, domainLookup
         domainResult = response;
         if (response?.lookup_success && response?.found && response?.brand_verified === true && norm(response.brand_name) === norm(chosen.name)) {
           verified = true;
+          providerVerified = true;
           verifiedPageDomain = root;
         }
       } catch {}
@@ -279,11 +313,62 @@ export async function analyzeBrandEvidence(snapshot, url, { lookup, domainLookup
       // or refuted (customer page vs. platform-operated subdomain).
       if (official === false && officialDomain === registrable(url)) official = UNKNOWN;
     }
+    // A registry brand is official on ANY of its listed domains.
+    const registered = registryEntryByName(chosen.name);
+    if (official === false && registered) {
+      const own = registered.domains.find(domain => domainMatch(url, domain));
+      if (own) { official = true; officialDomain = own; providerVerified = true; }
+    }
+    if (registered && registered.domains.some(domain => domainMatch(url, domain))) providerVerified = true;
+    // Self-reference guard. An unattested directory entry for the visited domain
+    // only shows the directory knows this domain; it is not proof of ownership.
+    // The brand NAME is looked up: its primary domain must be the visited one.
+    //   - visited label imitates the name (robiox vs roblox) and the name points
+    //     elsewhere: the domain is not official (false);
+    //   - same label, other suffix (roblox.com.ml vs roblox.com): could be a
+    //     legitimate country domain, so ownership stays unknown.
+    if (official === true && !providerVerified) {
+      // Diacritics are not part of a hostname (Fundación -> fundacion).
+      const fold = value => norm(value).normalize("NFKD").replace(/\p{M}/gu, "").replace(/\s/g, "");
+      const brandLabel = fold(chosen.name);
+      const visitedLabel = fold(domainLabel);
+      const sameLabel = visitedLabel === brandLabel;
+      const imitatesName = !sameLabel && oneEditApart(visitedLabel, brandLabel);
+      if (sameLabel || imitatesName) {
+        let response = queries.includes(brandLabel) ? results[queries.indexOf(brandLabel)] : null;
+        if (!response && imitatesName && lookup) {
+          try { response = await lookup(brandLabel); } catch { response = { lookup_success: false, candidates: [] }; }
+          canonicalSearch = { token: brandLabel, response };
+        }
+        // The primary domain the directory gives for this brand NAME. Only a
+        // domain whose label spells the brand name is a canonical comparison;
+        // an unrelated domain (co.winona.mn.us) says nothing about this one.
+        // The directory's FIRST answer for the name is its primary domain.
+        const first = (response?.candidates || []).find(c => c.domain && norm(c.name) === norm(chosen.name)) || null;
+        const primary = first && fold(parseDomain(String(first.domain), { allowPrivateDomains: true }).domainWithoutSuffix) === brandLabel
+          ? first : null;
+        if (primary && !domainMatch(url, primary.domain)) {
+          selfReferenceConflict = primary.domain;
+          if (imitatesName) { official = false; officialDomain = primary.domain; claimReference = primary; }
+          else official = UNKNOWN;
+        } else if (!primary && imitatesName) {
+          selfReferenceConflict = "name_imitation_unresolved";
+          official = UNKNOWN;
+        }
+      }
+    }
+    // User content on a platform path (docs.google.com/forms/..., sharemyhtml.com/p/...)
+    // is not operated by the platform brand, so the platform cannot vouch for it.
+    if (official === true && isPathHostedUserContent(url) &&
+        registrable(`https://${officialDomain}`) === registrable(url)) {
+      official = UNKNOWN;
+      selfReferenceConflict = selfReferenceConflict || "path_hosted_user_content";
+    }
   }
   // brand_domain_mismatch: the page claims a brand whose official domain differs
   // from the visited one AND the hostname itself carries that brand name.
   // A differing reference without a hostname claim (partner, SSO, mention) is false.
-  const hostClaim = chosen ? hostBrandClaim(url, chosen) : null;
+  const hostClaim = chosen ? hostBrandClaim(url, claimReference || chosen) : null;
   const mismatch = official === true ? false : official === false ? Boolean(hostClaim) : UNKNOWN;
   return {
     observed_at: snapshot.observed_at || null,
@@ -304,6 +389,8 @@ export async function analyzeBrandEvidence(snapshot, url, { lookup, domainLookup
     verification_basis: verified ? chosen?.apiDomainMatch && !chosen?.verified
       ? "api_domain_match" : "provider_verified" : "unknown",
     canonical_reference_conflict: Boolean(canonicalReference),
+    self_reference_conflict: selfReferenceConflict,
+    reference_provider_attested: providerVerified,
     claimed_brand_status: chosen ? "identified" : claimNames.length > 1 ? "ambiguous" : "unknown",
     candidate_domain_match: matchingDomainCandidates.length > 0,
     domain_matched_candidate: matchedDomainCandidate ? {
@@ -317,9 +404,13 @@ export async function analyzeBrandEvidence(snapshot, url, { lookup, domainLookup
     host_brand_claim: hostClaim || UNKNOWN,
     lookup_replay: {
       domain_search: domainSearchResult,
-      searches: queries.map((token, index) => ({ token, lookup_success: results[index]?.lookup_success === true,
-        provider_attempts: results[index]?.provider_attempts || [],
-        candidates: (results[index]?.candidates || []).map(c => ({ name: c.name, domain: c.domain,
+      // The canonical name search (self-reference guard) is recorded with the
+      // ordinary searches so saved evidence can be replayed offline.
+      searches: [...queries.map((token, index) => [token, results[index]]),
+        ...(canonicalSearch ? [[canonicalSearch.token, canonicalSearch.response]] : [])]
+        .map(([token, response]) => ({ token, lookup_success: response?.lookup_success === true,
+        provider_attempts: response?.provider_attempts || [],
+        candidates: (response?.candidates || []).map(c => ({ name: c.name, domain: c.domain,
           verified: c.verified === true, source: c.source, score_source: c.score_source || null,
           brandId: c.brandId || null })) })),
       verification: verificationResult ? { token: verificationQuery, lookup_success: verificationResult.lookup_success === true,

@@ -27,6 +27,10 @@ export function analyzeDomEvidence(snapshots, navigation = null) {
   }));
   const relevant = forms.filter(f => f.relevant);
   const cross = relevant.some(f => f.cross_domain === true) ? true : relevant.some(f => f.cross_domain === UNKNOWN) || incomplete ? UNKNOWN : false;
+  // A page requesting credentials whose scripts reference a known data-collection
+  // endpoint (e.g. Telegram Bot API) sends those values to another domain.
+  const exfil = [...new Set(frames.flatMap(s => Array.isArray(s.credential_exfil_endpoints) ? s.credential_exfil_endpoints : []))];
+  const exfilWithCredentials = exfil.length > 0 && (password.length > 0 || sensitive.length > 0);
   return {
     ...analyzeDomDownloadLinks(frames,incomplete),
     observed_at: Math.max(...frames.map(s => Number(s.observed_at || 0))),
@@ -35,7 +39,8 @@ export function analyzeDomEvidence(snapshots, navigation = null) {
     has_sensitive_input: sensitive.length ? true : incomplete ? UNKNOWN : false,
     // Credential fields outside any <form> are submitted by script to an unobserved
     // destination, so the form destination is unknown rather than same-domain.
-    form_cross_domain: relevant.length ? cross : incomplete || password.length || sensitive.length ? UNKNOWN : false,
+    form_cross_domain: exfilWithCredentials ? true : relevant.length ? cross : incomplete || password.length || sensitive.length ? UNKNOWN : false,
+    credential_exfil_endpoints: exfil,
     login_button_detected: controls.length ? true : incomplete ? UNKNOWN : false,
     login_redirect_detected: navigation?.observed === true ? true : navigation?.observation_complete ? false : UNKNOWN,
     password_fields: password, sensitive_fields: sensitive,

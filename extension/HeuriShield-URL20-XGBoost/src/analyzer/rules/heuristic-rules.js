@@ -47,7 +47,7 @@ export const RULES = Object.freeze([
     reason: `Domain berumur paling lama ${NEW_DOMAIN_MAX_DAYS} hari meminta data akun atas nama brand lain.`,
     evaluate: p => and(domainAgeAtMost(p, NEW_DOMAIN_MAX_DAYS), is(p.official_domain_match, false), credentialRequested(p)) },
   { id: "P4", decision: "phishing", name: "new_domain_download_brand_conflict",
-    reason: `Domain berumur paling lama ${NEW_DOMAIN_MAX_DAYS} hari menawarkan file yang dapat dijalankan atas nama brand lain.`,
+    reason: `Domain berumur paling lama ${NEW_DOMAIN_MAX_DAYS} hari menawarkan file yang dapat dijalankan (atau arsip pembawanya) atas nama brand lain.`,
     evaluate: p => and(domainAgeAtMost(p, NEW_DOMAIN_MAX_DAYS), is(p.official_domain_match, false), executableOffered(p)) },
   { id: "L1", decision: "legitimate", name: "verified_official_site",
     reason: "Domain resmi brand yang ditampilkan, tanpa permintaan data akun yang teramati.",

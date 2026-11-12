@@ -50,6 +50,41 @@ export const SHARED_HOSTING_ROOTS = new Set([
   "zendesk.com"
 ]);
 
+/*
+ * Platform yang menyimpan konten buatan pengguna pada PATH, bukan subdomain.
+ * Halaman pada path ini dibuat pengguna, sehingga brand platform (mis. Google
+ * pada docs.google.com/forms) tidak dapat dipastikan sebagai identitas halaman.
+ * Kunci: hostname persis; nilai: pola path konten pengguna.
+ */
+export const PATH_HOSTED_USER_CONTENT = new Map([
+  ["sharemyhtml.com", /^\/p\//],
+  ["sites.google.com", /^\/(?:view|site|u\/\d+\/d)\//],
+  ["docs.google.com", /^\/(?:forms|document|presentation|spreadsheets|drawings)\//],
+  ["drive.google.com", /^\/(?:file|drive\/folders)\//],
+  ["script.google.com", /^\/macros\//],
+  ["storage.googleapis.com", /^\/[^/]+\//],
+  ["forms.office.com", /^\/./],
+  ["forms.gle", /^\/./],
+  ["onedrive.live.com", /^\/./],
+  ["1drv.ms", /^\/./],
+  ["www.dropbox.com", /^\/(?:s|scl)\//],
+  ["ipfs.io", /^\/ipfs\//],
+  ["dweb.link", /^\/ipfs\//],
+  ["cloudflare-ipfs.com", /^\/ipfs\//],
+  ["telegra.ph", /^\/./],
+  ["notion.so", /^\/./],
+  ["linktr.ee", /^\/./]
+]);
+
+/** True when the URL is user-created content stored on a path of a platform host. */
+export function isPathHostedUserContent(url) {
+  try {
+    const parsed = new URL(url);
+    const pattern = PATH_HOSTED_USER_CONTENT.get(parsed.hostname.toLowerCase().replace(/\.$/, ""));
+    return Boolean(pattern && pattern.test(parsed.pathname));
+  } catch { return false; }
+}
+
 /** True when hostname is a tenant subdomain of a shared hosting root (not the root or www). */
 export function isSharedHostingTenant(hostname, registrableDomain) {
   const host = String(hostname || "").toLowerCase().replace(/\.$/, "");

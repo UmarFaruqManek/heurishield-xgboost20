@@ -31,9 +31,12 @@ const article=await analyzeBrandEvidence({...page,title:'Roblox guide and review
 assert.equal(article.brand_domain_mismatch,true);
 const noHeading=await analyzeBrandEvidence({...page,headings:[]},url,{domainSearch,lookup});
 assert.equal(noHeading.api_domain_reference_conflict,false);
+// Brand API down: Roblox is in the local registry (roblox.com), so the
+// directory entry for roblox.com.ml still cannot make it official.
 const unavailable=await analyzeBrandEvidence(page,url,{domainSearch,lookup:async()=>({lookup_success:false,candidates:[]})});
-assert.equal(unavailable.api_domain_reference_conflict,false);
-assert.equal(unavailable.official_domain_match,true);
+assert.equal(unavailable.official_domain_match,false);
+assert.equal(unavailable.verified_reference_domain,'roblox.com');
+assert.equal(unavailable.brand_domain_mismatch,true);
 const regional=await analyzeBrandEvidence({...page,page_origin:'https://google.com.au',title:'Google',headings:[{text:'Google'}]},'https://google.com.au',{
   domainSearch:async()=>({found:true,lookup_success:true,candidates:[{name:'Google',domain:'google.com.au',verified:true}]}),
   lookup:async()=>({lookup_success:true,candidates:[{name:'Google',domain:'google.com',verified:true}]})});

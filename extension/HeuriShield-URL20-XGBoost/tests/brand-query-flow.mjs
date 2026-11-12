@@ -62,10 +62,12 @@ assert.equal(judge({ urlClass: "SAFE", dom: analyzeDomEvidence([bcaMention]), br
 const bcaUnverified = await analyzeBrandEvidence(bcaPage, bcaUrl, { lookup: async token => ({
   lookup_success: true, candidates: token === "bca" ? [{ name: "BCA", domain: "bca.co.id",
     verified: false }] : [] }) });
-assert.equal(bcaUnverified.official_domain_match, "unknown");
+// BCA is in the local brand registry, so an unverified API reference is
+// attested by the registry: bca.bank.com is not an official BCA domain.
+assert.equal(bcaUnverified.official_domain_match, false);
 assert.equal(bcaUnverified.candidate_reference_domain, "bca.co.id");
-assert.equal(bcaUnverified.brand_domain_mismatch, "unknown");
-assert.equal(judge({ urlClass: "SAFE", dom: bcaDom, brand: bcaUnverified }).verdict, "SAFE");
+assert.equal(bcaUnverified.brand_domain_mismatch, true);
+assert.equal(judge({ urlClass: "SAFE", dom: bcaDom, brand: bcaUnverified }).verdict, "DANGEROUS");
 const geminiUrl = "https://gemini.google.com/app";
 const geminiPage = page("Gemini", "Ask Gemini", { page_origin: "https://gemini.google.com",
   password_fields: [], controls: [] });
@@ -101,7 +103,8 @@ const unverified = await analyzeBrandEvidence(profile("https://www.roblox.com.et
 // itself the claim, so the unverified directory reference is still compared.
 assert.equal(unverified.official_domain_match, false);
 assert.equal(unverified.candidate_domain_match, false);
-assert.equal(unverified.reference_status, "directory_candidate");
+// Roblox is in the local brand registry, which attests the reference.
+assert.equal(unverified.reference_status, "provider_verified");
 assert.equal(unverified.brand_domain_mismatch, true);
 const unverifiedOwnDomain = await analyzeBrandEvidence(page("Sign in", "Sign in", {
   page_origin: "https://app.dicoding.com", password_fields: [] }),
